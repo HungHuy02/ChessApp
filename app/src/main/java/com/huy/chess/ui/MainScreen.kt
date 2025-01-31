@@ -20,13 +20,21 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.huy.chess.designsystem.ChessTopAppBar
 import com.huy.chess.navigation.bottomnavigation.BottomNavScreens
 import com.huy.chess.ui.home.HomeScreen
+import com.huy.chess.R
 
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
     Scaffold(
+        topBar = {
+            ChessTopAppBar(
+                title = stringResource(R.string.app_name),
+                isHomeScreen = true
+            )
+        },
         bottomBar = {
             val listScreens = listOf(
                 BottomNavScreens.Home,

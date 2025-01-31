@@ -15,17 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
+    fontSize: TextUnit = 40.sp,
     textColor: Color,
     backgroundColor: Color = Color.Black,
     painter: Painter? = null,
-    iconPosition: IconPosition,
+    iconPosition: IconPosition
 ) {
     Button(
         onClick = onClick,
@@ -34,17 +37,18 @@ fun AppButton(
             containerColor = backgroundColor,
             contentColor = textColor
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
             .background(color = Color.Gray, shape = RoundedCornerShape(10.dp))
             .padding(top = 0.8.dp)
             .background(Color.Blue, shape = RoundedCornerShape(10.dp))
             .padding(bottom = 1.dp)
     ) {
-        when(iconPosition) {
+        when (iconPosition) {
             IconPosition.NONE -> Text(
                 text = text,
-                fontSize = 40.sp
+                fontSize = fontSize
             )
+
             IconPosition.START -> {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -60,11 +64,12 @@ fun AppButton(
                     )
                     Text(
                         text = "text",
-                        fontSize = 40.sp,
+                        fontSize = fontSize,
                         modifier = Modifier
                     )
                 }
             }
+
             IconPosition.NEXT_TO_TEXT -> {
                 Icon(
                     painter = painter!!,
@@ -75,7 +80,7 @@ fun AppButton(
                 )
                 Text(
                     text = "text",
-                    fontSize = 40.sp,
+                    fontSize = fontSize,
                     modifier = Modifier
                 )
             }
