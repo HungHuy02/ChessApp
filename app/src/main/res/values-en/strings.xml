@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Chess</string>
+    <string name="play_online_text">Play online</string>
+    <string name="login_text">Login</string>
+    <string name="register_text">Register</string>
+    <string name="solve_puzzles_text">Solve Puzzles</string>
+    <string name="play_online_dec_text">min vs Random</string>
+    <string name="solve_puzzles_dec_text">Start Your Journey!</string>
+    <string name="daily_puzzle_text">Daily Puzzle</string>
+    <string name="daily_puzzles_dec_text">Solved By</string>
+    <string name="play_with_bot_text">Play Computer</string>
+    <string name="play_with_bot_dec_text">Stockfish - Challenge</string>
+    <string name="study_text">Take Lessons</string>
+    <string name="study_dec_text">Learn something new!</string>
+    <string name="home_text">Home</string>
+    <string name="puzzle_text">Puzzles</string>
+    <string name="learn_text">Learn</string>
+    <string name="more_options_text">More</string>
+    <string name="play_text">Play</string>
+</resources>

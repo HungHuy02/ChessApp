@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Chess</string>
+    <string name="play_online_text">Chơi trực tuyến</string>
+    <string name="login_text">Đăng nhập</string>
+    <string name="register_text">Đăng ký</string>
+    <string name="solve_puzzles_text">Giải các câu đố</string>
+    <string name="play_online_dec_text">Đấu với ai đó cùng cấp độ với bạn!</string>
+    <string name="solve_puzzles_dec_text">Tìm bước đi đúng đắn</string>
+    <string name="daily_puzzle_text">Câu đố hàng ngày</string>
+    <string name="daily_puzzles_dec_text">Đã giải bởi</string>
+    <string name="play_with_bot_text">Chơi với máy</string>
+    <string name="play_with_bot_dec_text">Stockfish - Tùy Chỉnh</string>
+    <string name="study_text">Học Hỏi</string>
+    <string name="study_dec_text">Học những điều mới</string>
+    <string name="home_text">Trang chủ</string>
+    <string name="puzzle_text">Câu đố</string>
+    <string name="learn_text">Học</string>
+    <string name="more_options_text">Thêm nữa</string>
+    <string name="play_text">Chơi</string>
 </resources>
