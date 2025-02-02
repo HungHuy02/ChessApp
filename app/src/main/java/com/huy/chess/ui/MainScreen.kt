@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -24,6 +28,7 @@ import com.huy.chess.designsystem.ChessTopAppBar
 import com.huy.chess.navigation.bottomnavigation.BottomNavScreens
 import com.huy.chess.ui.home.HomeScreen
 import com.huy.chess.R
+import com.huy.chess.ui.theme.Gray900
 
 @Composable
 fun MainScreen() {
@@ -42,7 +47,10 @@ fun MainScreen() {
                 BottomNavScreens.Study,
                 BottomNavScreens.MoreOptions
             )
-            BottomAppBar {
+            BottomAppBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface
+            ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
@@ -70,7 +78,10 @@ fun MainScreen() {
                                 launchSingleTop = true
                                 restoreState = true
                             }
-                        }
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+
+                        )
                     )
                 }
             }
