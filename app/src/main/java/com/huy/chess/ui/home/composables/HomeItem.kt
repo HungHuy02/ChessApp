@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,8 +26,14 @@ fun HomeItems(fen: String, title: String, description: String, @DrawableRes icon
     Row(modifier = Modifier.fillMaxWidth()) {
         RenderChessBoardFromFEN(fen = fen, size = 100.dp)
         Column(modifier = Modifier.padding(start = 16.dp)) {
-            Text(title)
-            Text(description)
+            Text(
+                text = title,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Text(
+                text = description,
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Icon(
                 painter = painterResource(icon),
                 contentDescription = null,
