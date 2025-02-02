@@ -6,16 +6,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
@@ -24,11 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.huy.chess.R
-import com.huy.chess.ui.theme.ChessTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,7 +50,8 @@ fun ChessTopAppBar(
                 TextButton(onClick = {}) {
                     Text(
                         text = stringResource(R.string.login_text),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -66,7 +60,7 @@ fun ChessTopAppBar(
             if (isHomeScreen) {
                 Button(
                     onClick = {},
-                    contentPadding = PaddingValues(0.dp),
+                    contentPadding = PaddingValues(horizontal = 4.dp),
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -80,7 +74,8 @@ fun ChessTopAppBar(
                 ) {
                     Text(
                         text = stringResource(R.string.register_text),
-                        color = MaterialTheme.colorScheme.onPrimary
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }

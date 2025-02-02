@@ -28,17 +28,19 @@ fun HomeItems(fen: String, title: String, description: String, @DrawableRes icon
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
                 text = title,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.titleMedium
             )
             Text(
                 text = description,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium
             )
             Icon(
                 painter = painterResource(icon),
                 contentDescription = null,
                 tint = Color.Unspecified,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(40.dp)
             )
         }
     }

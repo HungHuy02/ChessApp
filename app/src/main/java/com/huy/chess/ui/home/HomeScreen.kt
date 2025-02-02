@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.huy.chess.ui.home.composables.HomeItems
-import com.huy.chess.utils.Constants
 import com.huy.chess.R
 import com.huy.chess.designsystem.AppButton
 import com.huy.chess.designsystem.IconPosition
+import com.huy.chess.ui.home.composables.HomeItems
+import com.huy.chess.utils.Constants
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {

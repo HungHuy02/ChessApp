@@ -16,17 +16,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun AppButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
-    fontSize: TextUnit = 40.sp,
     textColor: Color,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     painter: Painter? = null,
     iconPosition: IconPosition
@@ -47,7 +46,7 @@ fun AppButton(
         when (iconPosition) {
             IconPosition.NONE -> Text(
                 text = text,
-                fontSize = fontSize
+                style = textStyle
             )
 
             IconPosition.START -> {
@@ -65,8 +64,7 @@ fun AppButton(
                     )
                     Text(
                         text = "text",
-                        fontSize = fontSize,
-                        modifier = Modifier
+                        style = textStyle
                     )
                 }
             }
@@ -81,8 +79,7 @@ fun AppButton(
                 )
                 Text(
                     text = "text",
-                    fontSize = fontSize,
-                    modifier = Modifier
+                    style = textStyle
                 )
             }
         }
