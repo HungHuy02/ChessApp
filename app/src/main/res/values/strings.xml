@@ -17,4 +17,15 @@
     <string name="learn_text">Học</string>
     <string name="more_options_text">Thêm nữa</string>
     <string name="play_text">Chơi</string>
+    <string name="register_with_email_text">Đăng ký với Email</string>
+    <string name="or_text">Hoặc</string>
+    <string name="continue_with_google_text">Tiếp tục với Google</string>
+    <string name="continue_with_facebook_text">Tiếp tục với Facebook</string>
+    <string name="create_your_account_text">Tạo tài khoản Chess của bạn</string>
+    <string name="login_with_facebook_text">Đăng nhập với Facebook</string>
+    <string name="login_with_google_text">Đăng nhập bằng Google</string>
+    <string name="or_enter_with_text">hoặc nhập với</string>
+    <string name="password_placeholder">Mật khẩu</string>
+    <string name="forgot_password_text">Quên/Đặt lại mật khẩu?</string>
+    <string name="account_placeholder">Tên người dùng hoặc thư điện tử</string>
 </resources>

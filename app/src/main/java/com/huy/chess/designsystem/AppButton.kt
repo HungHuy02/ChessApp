@@ -24,7 +24,7 @@ fun AppButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
-    textColor: Color,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
     textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     painter: Painter? = null,
@@ -63,7 +63,7 @@ fun AppButton(
                             .align(Alignment.CenterStart)
                     )
                     Text(
-                        text = "text",
+                        text = text,
                         style = textStyle
                     )
                 }
@@ -78,7 +78,7 @@ fun AppButton(
                         .size(20.dp)
                 )
                 Text(
-                    text = "text",
+                    text = text,
                     style = textStyle
                 )
             }
