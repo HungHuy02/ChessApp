@@ -20,7 +20,7 @@ import com.huy.chess.designsystem.AppButton
 import com.huy.chess.designsystem.IconPosition
 import com.huy.chess.ui.login.composables.TextWithFullDivider
 import com.huy.chess.ui.login.composables.AccountTextField
-import com.huy.chess.ui.login.composables.PasswordTextField
+import com.huy.chess.designsystem.PasswordTextField
 
 @Composable
 fun LoginScreen() {
