@@ -28,4 +28,15 @@
     <string name="password_placeholder">Mật khẩu</string>
     <string name="forgot_password_text">Quên/Đặt lại mật khẩu?</string>
     <string name="account_placeholder">Tên người dùng hoặc thư điện tử</string>
+    <string name="email_text">Thư điện tử</string>
+    <string name="your_email_text">Email của bạn là gì?</string>
+    <string name="continue_text">Tiếp tục</string>
+    <string name="create_password_text">Tạo một mật khẩu</string>
+    <string name="select_name_text">Chọn tên người dùng</string>
+    <string name="username_dec_text">Đây là những gì bạn bè của bạn và những người chơi khác sẽ thấy khi bạn chơi</string>
+    <string name="login_name_text">Tên đăng nhập</string>
+    <string name="word_limit_text" translatable="false">/25</string>
+    <string name="terms_of_use_p1">Bằng việc đăng ký, tôi chấp nhận</string>
+    <string name="terms_of_use_p2">Điều khoản dịch vụ</string>
+    <string name="create_account_text">Tạo tài khoản</string>
 </resources>
