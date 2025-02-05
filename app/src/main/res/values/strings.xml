@@ -39,4 +39,35 @@
     <string name="terms_of_use_p1">Bằng việc đăng ký, tôi chấp nhận</string>
     <string name="terms_of_use_p2">Điều khoản dịch vụ</string>
     <string name="create_account_text">Tạo tài khoản</string>
+    <string name="time_text">Thời gian</string>
+    <string name="super_flash_text">Siêu chớp</string>
+    <string name="one_minute_text">1 phút</string>
+    <string name="one_minute_plus_one_text" translatable="false">1 | 1</string>
+    <string name="two_minute_plus_one_text" translatable="false">2 | 1</string>
+    <string name="flash_text">Chớp</string>
+    <string name="three_minute_text">3 phút</string>
+    <string name="three_minute_plus_two_text" translatable="false">3 | 2</string>
+    <string name="five_minute_text">5 phút</string>
+    <string name="five_minute_plus_five_text" translatable="false">5 | 5</string>
+    <string name="fast_text">Nhanh</string>
+    <string name="ten_minute_text">10 phút</string>
+    <string name="fifteen_minute_plus_ten" translatable="false">15 | 10</string>
+    <string name="thirty_minute">30 phút</string>
+    <string name="new_game_text">Bắt đầu ván cờ</string>
+    <string name="play_with_friend_text">Chơi với một người bạn</string>
+    <string name="play_bot_text">Chơi với máy</string>
+    <string name="more_text">Thêm nữa</string>
+    <string name="custom_game_text">Tùy chỉnh ván đấu</string>
+    <string name="pass_and_play_text">2 người 1 máy</string>
+    <string name="daily_text">Hằng ngày</string>
+    <string name="one_day">1 ngày</string>
+    <string name="three_days_text">3 ngày</string>
+    <string name="seven_days_text">7 ngày</string>
+    <string name="two_days_text">2 ngày</string>
+    <string name="five_days_text">5 ngày</string>
+    <string name="fourteen_days">14 ngày</string>
+    <string name="five_min_plus_two" translatable="false">5 | 2</string>
+    <string name="ten_min_plus_5" translatable="false">10 | 5</string>
+    <string name="twenty_min">20 phút</string>
+    <string name="sixty_min">60 phút</string>
 </resources>
