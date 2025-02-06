@@ -81,4 +81,11 @@
     <string name="select_initial_time_text">%1$d phút</string>
     <string name="select_bonus_time">%1$d s</string>
     <string name="custom_text">Tùy chỉnh</string>
+    <string name="play_with_friend_offline">Chơi với bạn offline</string>
+    <string name="time_control_text">Điều khiển thời gian</string>
+    <string name="no_time_text">Không có</string>
+    <string name="white_text">Trắng</string>
+    <string name="black_text">Đen</string>
+    <string name="opponent_text">Đấu thủ</string>
+    <string name="rotate_board_text">Xoay bàn cờ</string>
 </resources>

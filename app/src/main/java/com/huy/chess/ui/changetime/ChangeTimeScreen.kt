@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
-import com.huy.chess.ui.changetime.composables.RowTimeButton
-import com.huy.chess.ui.changetime.composables.TimeSlider
+import com.huy.chess.designsystem.RowTimeButton
 
 @Composable
 fun ChangeTimeScreen() {

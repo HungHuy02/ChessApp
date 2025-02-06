@@ -1,12 +1,12 @@
-package com.huy.chess.ui.changetime.composables
+package com.huy.chess.designsystem
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.huy.chess.ui.changetime.composables.TimeButton
 
 @Composable
 fun RowTimeButton(
