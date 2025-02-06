@@ -71,4 +71,11 @@
     <string name="select_initial_time_text">%1$d min</string>
     <string name="select_bonus_time">%1$d sec</string>
     <string name="custom_text">Custom</string>
+    <string name="play_with_friend_offline">Play with a friend offline</string>
+    <string name="time_control_text">Time Control</string>
+    <string name="no_time_text">None</string>
+    <string name="white_text">White</string>
+    <string name="black_text">Black</string>
+    <string name="opponent_text">Opponent</string>
+    <string name="rotate_board_text">Board Rotates</string>
 </resources>
