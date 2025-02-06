@@ -78,4 +78,7 @@
     <string name="black_text">Black</string>
     <string name="opponent_text">Opponent</string>
     <string name="rotate_board_text">Board Rotates</string>
+    <string name="play_with_color_text">Play with piece</string>
+    <string name="level_text">Level</string>
+    <string name="suggest_text">Suggestion</string>
 </resources>

@@ -88,4 +88,17 @@
     <string name="black_text">Đen</string>
     <string name="opponent_text">Đấu thủ</string>
     <string name="rotate_board_text">Xoay bàn cờ</string>
+    <string name="play_with_color_text">Chơi với quân</string>
+    <string name="stockfish_text" translatable="false">Stockfish 17</string>
+    <string name="level_text">Độ khó</string>
+    <string name="suggest_text">Gợi ý</string>
+    <string name="takeback_text" translatable="false">Takeback</string>
+    <string name="one_text" translatable="false">1</string>
+    <string name="two_text" translatable="false">2</string>
+    <string name="three_text" translatable="false">3</string>
+    <string name="four_text" translatable="false">4</string>
+    <string name="five_text" translatable="false">5</string>
+    <string name="six_text" translatable="false">6</string>
+    <string name="sevent_text" translatable="false">7</string>
+    <string name="eight_text" translatable="false">8</string>
 </resources>
