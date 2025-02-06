@@ -1,4 +1,4 @@
-package com.huy.chess.ui.setuptwopeople.composables
+package com.huy.chess.designsystem
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

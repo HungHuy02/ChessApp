@@ -1,4 +1,4 @@
-package com.huy.chess.ui.setuptwopeople
+package com.huy.chess.ui.setupbot
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -22,31 +22,37 @@ import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.designsystem.AppButton
 import com.huy.chess.designsystem.IconPosition
-import com.huy.chess.designsystem.RowTimeButton
-import com.huy.chess.ui.changetime.composables.TimeButton
-import com.huy.chess.ui.setuptwopeople.composables.NameArea
 import com.huy.chess.designsystem.RowItem
 import com.huy.chess.designsystem.RowItemWithSwitch
+import com.huy.chess.designsystem.RowTimeButton
+import com.huy.chess.ui.changetime.composables.TimeButton
+import com.huy.chess.ui.setupbot.composables.IconWithText
+import com.huy.chess.ui.setupbot.composables.LevelSelect
+import com.huy.chess.ui.setupbot.composables.PieceSelect
 
 @Composable
-fun SetupTwoPeopleScreen() {
+fun SetupBotScreen() {
     var showTimeControl by remember {
         mutableStateOf(false)
     }
-
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
+        IconWithText()
         Text(
-            text = stringResource(R.string.play_with_friend_offline),
-            style = MaterialTheme.typography.labelMedium,
+            text = stringResource(R.string.play_with_color_text),
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
-        NameArea()
+        PieceSelect()
+        Text(
+            text = stringResource(R.string.level_text),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        LevelSelect()
         RowItem(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.time_control_text),
@@ -80,21 +86,25 @@ fun SetupTwoPeopleScreen() {
             }
         }
         RowItemWithSwitch(
-            label = stringResource(R.string.rotate_board_text),
+            label = stringResource(R.string.suggest_text),
+            modifier = Modifier.fillMaxWidth()
+        )
+        RowItemWithSwitch(
+            label = stringResource(R.string.takeback_text),
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            modifier = Modifier.fillMaxWidth(),
             onClick = {},
             text = stringResource(R.string.play_text),
-            iconPosition = IconPosition.NONE
+            iconPosition = IconPosition.NONE,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
 
-@Composable
 @Preview
+@Composable
 private fun Preview() {
-    SetupTwoPeopleScreen()
+    SetupBotScreen()
 }
