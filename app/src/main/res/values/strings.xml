@@ -101,4 +101,15 @@
     <string name="six_text" translatable="false">6</string>
     <string name="sevent_text" translatable="false">7</string>
     <string name="eight_text" translatable="false">8</string>
+    <string name="setting_text">Cài đặt</string>
+    <string name="profile_text">Hồ sơ</string>
+    <string name="stats_text">Thống kê</string>
+    <string name="friend_text">Bạn bè</string>
+    <string name="analysis_text">Phân tích</string>
+    <string name="vision_text">Tầm nhìn</string>
+    <string name="puzzle_rush_text">Câu đố nhanh</string>
+    <string name="next_lesson_text">Bài học tiếp theo</string>
+    <string name="learn_an_opening_text">Học khai cuộc</string>
+    <string name="lesson_library_text">Thư viện bài học</string>
+    <string name="message_text">Tin nhắn</string>
 </resources>
