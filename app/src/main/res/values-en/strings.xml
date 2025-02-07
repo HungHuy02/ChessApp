@@ -81,4 +81,15 @@
     <string name="play_with_color_text">Play with piece</string>
     <string name="level_text">Level</string>
     <string name="suggest_text">Suggestion</string>
+    <string name="setting_text">Setting</string>
+    <string name="profile_text">Profile</string>
+    <string name="stats_text">Stats</string>
+    <string name="friend_text">Friends</string>
+    <string name="analysis_text">Analysis</string>
+    <string name="vision_text">Visison</string>
+    <string name="puzzle_rush_text">Puzzle Rush</string>
+    <string name="next_lesson_text">Next Lesson</string>
+    <string name="learn_an_opening_text">Learn an Opening</string>
+    <string name="lesson_library_text">Lesson Library</string>
+    <string name="message_text">Messages</string>
 </resources>
