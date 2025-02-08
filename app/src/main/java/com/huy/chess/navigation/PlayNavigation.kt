@@ -1,5 +1,6 @@
 package com.huy.chess.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -9,16 +10,37 @@ import com.huy.chess.ui.setupbot.SetupBotScreen
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleScreen
 import kotlinx.serialization.Serializable
 
-@Serializable object Play
-@Serializable object NewGame
-@Serializable object ChangeTime
-@Serializable object SetupBot
-@Serializable object SetupTwoPeople
+@Serializable
+object Play
 
-fun NavGraphBuilder.playDestination() {
+@Serializable
+object NewGame
+
+@Serializable
+object ChangeTime
+
+@Serializable
+object SetupBot
+
+@Serializable
+object SetupTwoPeople
+
+fun NavGraphBuilder.playDestination(
+    navController: NavController
+) {
     navigation<Play>(startDestination = NewGame) {
         composable<NewGame> {
-            NewGameScreen()
+            NewGameScreen(
+                navigateToChangeTime = {
+                    navController.navigate(ChangeTime)
+                },
+                navigateToSetupBot = {
+                    navController.navigate(SetupBot)
+                },
+                navigateToSetupTwoPeople = {
+                    navController.navigate(SetupTwoPeople)
+                }
+            )
         }
         composable<ChangeTime> {
             ChangeTimeScreen()

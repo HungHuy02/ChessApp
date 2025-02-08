@@ -16,9 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.huy.chess.R
 
 @Composable
-fun TimeButton(modifier: Modifier = Modifier) {
+fun TimeButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Button(
-        onClick = {},
+        onClick = onClick,
         modifier = modifier
     ) {
         Row (
@@ -46,5 +49,5 @@ fun TimeButton(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 private fun Preview() {
-    TimeButton(modifier = Modifier.fillMaxWidth())
+    TimeButton(modifier = Modifier.fillMaxWidth(), {})
 }

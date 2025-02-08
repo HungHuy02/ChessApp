@@ -20,7 +20,9 @@ import com.huy.chess.designsystem.IconPosition
 import com.huy.chess.designsystem.PasswordTextField
 
 @Composable
-fun PasswordInputScreen() {
+fun PasswordInputScreen(
+    navigateToProfileSetup: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,) {
         Text(
@@ -32,7 +34,7 @@ fun PasswordInputScreen() {
         PasswordTextField(modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            onClick = {},
+            onClick = navigateToProfileSetup,
             text = stringResource(R.string.continue_text),
             iconPosition = IconPosition.NONE,
             modifier = Modifier.fillMaxWidth()
@@ -43,5 +45,5 @@ fun PasswordInputScreen() {
 @Preview
 @Composable
 private fun Preview() {
-    PasswordInputScreen()
+    PasswordInputScreen({})
 }

@@ -25,6 +25,7 @@ import com.huy.chess.R
 import com.huy.chess.designsystem.ChessTopAppBar
 import com.huy.chess.navigation.BottomNavScreens
 import com.huy.chess.navigation.Main
+import com.huy.chess.navigation.Play
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.bottomDestination
 import com.huy.chess.navigation.playDestination
@@ -85,9 +86,13 @@ fun MainScreen() {
             exitTransition = { ExitTransition.None },
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
-            bottomDestination()
-            authDestination()
-            playDestination()
+            bottomDestination(
+                onNavigateToPlay = {
+                    navController.navigate(Play)
+                }
+            )
+            authDestination(navController)
+            playDestination(navController)
         }
     }
 }

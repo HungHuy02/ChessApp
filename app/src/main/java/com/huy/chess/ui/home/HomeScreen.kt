@@ -18,10 +18,11 @@ import com.huy.chess.ui.home.composables.HomeItems
 import com.huy.chess.utils.Constants
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-
+fun HomeScreen(
+    navigateToPlayScreen: () -> Unit
+) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .padding(horizontal = 16.dp)
     ) {
         LazyColumn(
@@ -76,12 +77,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         }
 
         AppButton(
-            onClick = {},
+            onClick = navigateToPlayScreen,
             text = stringResource(R.string.play_text),
             textColor = Color.White,
             iconPosition = IconPosition.NONE,
             modifier = Modifier.fillMaxWidth()
-
         )
     }
 
