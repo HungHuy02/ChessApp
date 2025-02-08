@@ -19,13 +19,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.huy.chess.R
 import com.huy.chess.designsystem.ChessTopAppBar
-import com.huy.chess.navigation.bottomnavigation.BottomNavScreens
-import com.huy.chess.ui.home.HomeScreen
+import com.huy.chess.navigation.BottomNavScreens
+import com.huy.chess.navigation.Main
+import com.huy.chess.navigation.authDestination
+import com.huy.chess.navigation.bottomDestination
+import com.huy.chess.navigation.playDestination
 
 @Composable
 fun MainScreen() {
@@ -38,12 +40,6 @@ fun MainScreen() {
             )
         },
         bottomBar = {
-            val listScreens = listOf(
-                BottomNavScreens.Home,
-                BottomNavScreens.Puzzles,
-                BottomNavScreens.Study,
-                BottomNavScreens.MoreOptions
-            )
             BottomAppBar(
                 containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onSurface
@@ -51,12 +47,10 @@ fun MainScreen() {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
-                listScreens.forEach { navigationItem ->
+                BottomNavScreens.items.forEach { navigationItem ->
                     NavigationBarItem(
                         selected = currentDestination?.hierarchy?.any {
-                            it.route.equals(
-                                navigationItem.route
-                            )
+                            it.route.equals(navigationItem::class.qualifiedName)
                         } == true,
                         label = {
                             Text(text = stringResource(navigationItem.label))
@@ -68,7 +62,7 @@ fun MainScreen() {
                             )
                         },
                         onClick = {
-                            navController.navigate(navigationItem.route) {
+                            navController.navigate(navigationItem) {
                                 popUpTo(navController.graph.findStartDestination().id) {
                                     saveState = true
                                 }
@@ -86,26 +80,14 @@ fun MainScreen() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = BottomNavScreens.Home.route,
+            startDestination = Main,
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
-            composable(route = BottomNavScreens.Home.route) {
-                HomeScreen()
-            }
-
-            composable(route = BottomNavScreens.Puzzles.route) {
-
-            }
-
-            composable(route = BottomNavScreens.Study.route) {
-
-            }
-
-            composable(route = BottomNavScreens.MoreOptions.route) {
-
-            }
+            bottomDestination()
+            authDestination()
+            playDestination()
         }
     }
 }
