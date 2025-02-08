@@ -20,7 +20,9 @@ import com.huy.chess.designsystem.IconPosition
 import com.huy.chess.ui.emailinput.composables.EmailTextField
 
 @Composable
-fun EmailInputScreen() {
+fun EmailInputScreen(
+    navigateToPasswordInput: () -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,) {
         Text(
@@ -32,7 +34,7 @@ fun EmailInputScreen() {
         EmailTextField(modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            onClick = {},
+            onClick = navigateToPasswordInput,
             text = stringResource(R.string.continue_text),
             iconPosition = IconPosition.NONE,
             modifier = Modifier.fillMaxWidth()
@@ -43,5 +45,5 @@ fun EmailInputScreen() {
 @Preview
 @Composable
 private fun Preview() {
-    EmailInputScreen()
+    EmailInputScreen({})
 }

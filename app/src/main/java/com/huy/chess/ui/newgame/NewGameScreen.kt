@@ -27,7 +27,11 @@ import com.huy.chess.ui.newgame.composables.SameButton
 import com.huy.chess.ui.newgame.composables.TimeButton
 
 @Composable
-fun NewGameScreen() {
+fun NewGameScreen(
+    navigateToChangeTime: () -> Unit,
+    navigateToSetupBot: () -> Unit,
+    navigateToSetupTwoPeople: () -> Unit
+) {
     var showMore by remember {
         mutableStateOf(false)
     }
@@ -37,7 +41,9 @@ fun NewGameScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        TimeButton(modifier = Modifier.fillMaxWidth())
+        TimeButton(modifier = Modifier.fillMaxWidth()) {
+            navigateToChangeTime()
+        }
         AppButton(
             onClick = {},
             text = stringResource(R.string.new_game_text),
@@ -52,7 +58,7 @@ fun NewGameScreen() {
             painter = painterResource(R.drawable.handshake_8c90be47)
         )
         SameButton(
-            onClick = {},
+            onClick = navigateToSetupBot,
             text = stringResource(R.string.play_with_bot_text),
             painter = painterResource(R.drawable.cute_bot_32735490)
         )
@@ -83,7 +89,7 @@ fun NewGameScreen() {
                     painter = painterResource(R.drawable.tune_24px)
                 )
                 SameButton(
-                    onClick = {},
+                    onClick = navigateToSetupTwoPeople,
                     text = stringResource(R.string.pass_and_play_text),
                     painter = painterResource(R.drawable.friends)
                 )
@@ -95,5 +101,5 @@ fun NewGameScreen() {
 @Preview
 @Composable
 private fun Preview() {
-    NewGameScreen()
+    NewGameScreen({},{},{})
 }

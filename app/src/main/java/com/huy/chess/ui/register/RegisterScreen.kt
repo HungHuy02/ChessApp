@@ -24,7 +24,9 @@ import com.huy.chess.ui.register.composables.TextWithDivider
 import com.huy.chess.ui.theme.ChessTheme
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(
+    navigateToEmailInput: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +44,7 @@ fun RegisterScreen() {
         )
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = navigateToEmailInput,
             text = stringResource(R.string.register_with_email_text),
             iconPosition = IconPosition.NONE
         )
@@ -76,7 +78,7 @@ private fun Preview() {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            RegisterScreen()
+            RegisterScreen({})
         }
     }
 

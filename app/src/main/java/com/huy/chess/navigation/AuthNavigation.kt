@@ -1,5 +1,6 @@
 package com.huy.chess.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -17,19 +18,27 @@ import kotlinx.serialization.Serializable
 @Serializable object PasswordInput
 @Serializable object ProfileSetup
 
-fun NavGraphBuilder.authDestination() {
+fun NavGraphBuilder.authDestination(
+    navController: NavController
+) {
     navigation<Auth>(startDestination = Login) {
         composable<Login> {
             LoginScreen()
         }
         composable<Register> {
-            RegisterScreen()
+            RegisterScreen {
+                navController.navigate(EmailInput)
+            }
         }
         composable<EmailInput> {
-            EmailInputScreen()
+            EmailInputScreen {
+                navController.navigate(PasswordInput)
+            }
         }
         composable<PasswordInput> {
-            PasswordInputScreen()
+            PasswordInputScreen {
+                navController.navigate(ProfileSetup)
+            }
         }
         composable<ProfileSetup> {
             ProfileSetupScreen()
