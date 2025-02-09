@@ -1,4 +1,4 @@
-package com.huy.chess.designsystem
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

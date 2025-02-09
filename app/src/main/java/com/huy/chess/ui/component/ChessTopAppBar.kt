@@ -1,4 +1,4 @@
-package com.huy.chess.designsystem
+package com.huy.chess.ui.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -26,9 +27,13 @@ import com.huy.chess.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChessTopAppBar(
-    title: String,
+    title: String? = null,
     @DrawableRes icon: Int? = null,
-    isHomeScreen: Boolean
+    isHomeScreen: Boolean,
+    showBackIcon: Boolean,
+    onBackIconClick: () -> Unit = {},
+    onRegisterButtonClick: () -> Unit = {},
+    onLoginButtonClick: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -39,15 +44,17 @@ fun ChessTopAppBar(
                         contentDescription = "icon"
                     )
                 }
-                Text(
-                    text = title,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
+                title?.let {
+                    Text(
+                        text = title,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         },
         navigationIcon = {
             if (isHomeScreen) {
-                TextButton(onClick = {}) {
+                TextButton(onClick = onLoginButtonClick) {
                     Text(
                         text = stringResource(R.string.login_text),
                         color = MaterialTheme.colorScheme.onSurface,
@@ -55,17 +62,29 @@ fun ChessTopAppBar(
                     )
                 }
             }
+            if (showBackIcon) {
+                IconButton(
+                    onClick = onBackIconClick,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.arrow_back_24px),
+                        contentDescription = "back icon",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
         },
         actions = {
             if (isHomeScreen) {
                 Button(
-                    onClick = {},
+                    onClick = onRegisterButtonClick,
                     contentPadding = PaddingValues(horizontal = 4.dp),
                     shape = MaterialTheme.shapes.small,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
                     ),
-                    modifier = Modifier.height(32.dp)
+                    modifier = Modifier
+                        .height(32.dp)
                         .padding(end = 8.dp)
                         .background(color = Color.Gray, shape = MaterialTheme.shapes.small)
                         .padding(top = 0.2.dp)

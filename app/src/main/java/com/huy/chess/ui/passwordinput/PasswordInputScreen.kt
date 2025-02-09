@@ -15,30 +15,35 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
-import com.huy.chess.designsystem.AppButton
-import com.huy.chess.designsystem.IconPosition
-import com.huy.chess.designsystem.PasswordTextField
+import com.huy.chess.ui.component.AppButton
+import com.huy.chess.ui.component.BaseScreen
+import com.huy.chess.ui.component.IconPosition
+import com.huy.chess.ui.component.PasswordTextField
 
 @Composable
 fun PasswordInputScreen(
     navigateToProfileSetup: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,) {
-        Text(
-            text = stringResource(R.string.create_password_text),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-        Spacer(modifier = Modifier.size(16.dp))
-        PasswordTextField(modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.weight(1f))
-        AppButton(
-            onClick = navigateToProfileSetup,
-            text = stringResource(R.string.continue_text),
-            iconPosition = IconPosition.NONE,
-            modifier = Modifier.fillMaxWidth()
-        )
+    BaseScreen(
+        showBackIcon = true
+    ) {
+        Column(modifier = Modifier.fillMaxSize().padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,) {
+            Text(
+                text = stringResource(R.string.create_password_text),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.size(16.dp))
+            PasswordTextField(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.weight(1f))
+            AppButton(
+                onClick = navigateToProfileSetup,
+                text = stringResource(R.string.continue_text),
+                iconPosition = IconPosition.NONE,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
     }
 }
 

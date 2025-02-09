@@ -1,4 +1,4 @@
-package com.huy.chess.designsystem
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
