@@ -5,11 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import com.huy.chess.R
-import com.huy.chess.designsystem.AppButton
-import com.huy.chess.designsystem.IconPosition
+import com.huy.chess.ui.component.AppButton
+import com.huy.chess.ui.component.IconPosition
 
 @Composable
 fun SameButton(

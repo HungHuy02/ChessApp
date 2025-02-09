@@ -6,8 +6,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.huy.chess.R
-import com.huy.chess.moreoptions.MoreOptionsScreen
 import com.huy.chess.ui.home.HomeScreen
+import com.huy.chess.ui.moreoptions.MoreOptionsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable object Main

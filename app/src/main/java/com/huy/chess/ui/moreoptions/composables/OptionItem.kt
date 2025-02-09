@@ -1,4 +1,4 @@
-package com.huy.chess.moreoptions.composables
+package com.huy.chess.ui.moreoptions.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
