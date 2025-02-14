@@ -92,4 +92,6 @@
     <string name="learn_an_opening_text">Learn an Opening</string>
     <string name="lesson_library_text">Lesson Library</string>
     <string name="message_text">Messages</string>
+    <string name="back_text">Back</string>
+    <string name="forward_text">Forward</string>
 </resources>

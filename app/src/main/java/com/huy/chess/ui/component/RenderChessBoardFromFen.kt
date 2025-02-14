@@ -37,53 +37,60 @@ fun RenderChessBoardFromFEN(
         Image(
             painter = painterResource(R.drawable.chess_board),
             contentDescription = null,
-            modifier = Modifier.size(size)
+            modifier = Modifier
+                .size(size)
                 .clip(MaterialTheme.shapes.small)
         )
         Column(
             modifier = Modifier.size(size)
         ) {
-            rows.map {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    it.forEach {
-                        if (!it.isDigit()) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                            ) {
-                                Image(
-                                    painter = painterResource(
-                                        when (it) {
-                                            'p' -> R.drawable.bpawn
-                                            'r' -> R.drawable.brook
-                                            'b' -> R.drawable.bbishop
-                                            'n' -> R.drawable.bknight
-                                            'q' -> R.drawable.bqueen
-                                            'k' -> R.drawable.bknight
-                                            'P' -> R.drawable.wpawn
-                                            'R' -> R.drawable.wrook
-                                            'B' -> R.drawable.wbishop
-                                            'N' -> R.drawable.wknight
-                                            'Q' -> R.drawable.wqueen
-                                            else -> R.drawable.wking
-                                        }
-
-                                    ),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Inside
-                                )
-                            }
-                        } else {
-                            for (i in 1..it.toString().toInt()) {
+            rows.forEach { string ->
+                if (string == "8") {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f)
+                    )
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        string.forEach {
+                            if (!it.isDigit()) {
                                 Box(
                                     modifier = Modifier
                                         .fillMaxHeight()
                                         .weight(1f)
+                                ) {
+                                    Image(
+                                        painter = painterResource(
+                                            when (it) {
+                                                'p' -> R.drawable.bpawn
+                                                'r' -> R.drawable.brook
+                                                'b' -> R.drawable.bbishop
+                                                'n' -> R.drawable.bknight
+                                                'q' -> R.drawable.bqueen
+                                                'k' -> R.drawable.bknight
+                                                'P' -> R.drawable.wpawn
+                                                'R' -> R.drawable.wrook
+                                                'B' -> R.drawable.wbishop
+                                                'N' -> R.drawable.wknight
+                                                'Q' -> R.drawable.wqueen
+                                                else -> R.drawable.wking
+                                            }
+
+                                        ),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Inside
+                                    )
+                                }
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .weight((it - '0').toFloat())
                                 )
                             }
                         }
@@ -99,7 +106,7 @@ fun RenderChessBoardFromFEN(
 @Composable
 private fun Preview() {
     RenderChessBoardFromFEN(
-        fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        fen = "rnbqkbnr/pppppppp/8/8/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 1",
         size = 240.dp
     )
 }
