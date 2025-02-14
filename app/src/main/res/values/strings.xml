@@ -112,4 +112,6 @@
     <string name="learn_an_opening_text">Học khai cuộc</string>
     <string name="lesson_library_text">Thư viện bài học</string>
     <string name="message_text">Tin nhắn</string>
+    <string name="back_text">Quay lại</string>
+    <string name="forward_text">Tiếp</string>
 </resources>
