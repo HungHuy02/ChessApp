@@ -19,12 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
-import com.huy.chess.ui.component.RenderChessBoardFromFEN
+import com.huy.chess.ui.component.ChessBoard
 
 @Composable
 fun HomeItems(fen: String, title: String, description: String, @DrawableRes icon: Int) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        RenderChessBoardFromFEN(fen = fen, size = 100.dp)
+        ChessBoard(fen = fen, size = 100.dp)
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
                 text = title,
