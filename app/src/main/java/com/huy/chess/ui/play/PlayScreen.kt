@@ -13,11 +13,10 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.huy.chess.ui.component.BaseScreen
-import com.huy.chess.ui.component.RenderChessBoardFromFEN
+import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.play.composables.NotationPane
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.Timer
-import com.huy.chess.utils.Constants
 
 @Composable
 fun PlayScreen() {
@@ -40,9 +39,7 @@ fun PlayScreen() {
                 }
             )
 
-            RenderChessBoardFromFEN(
-                fen = Constants.START_FEN,
-                size = size.dp,
+            ChessBoard(
                 modifier = Modifier
                     .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
