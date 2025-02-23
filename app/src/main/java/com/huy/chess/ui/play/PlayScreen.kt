@@ -22,58 +22,54 @@ import com.huy.chess.ui.play.composables.Timer
 fun PlayScreen() {
     val size = LocalConfiguration.current.screenWidthDp
     var list by remember { mutableStateOf(listOf("")) }
-    BaseScreen(
-        showBackIcon = true
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
     ) {
-        ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            val (pane, board, timerTop, timerBottom, bar) = createRefs()
-            NotationPane(
-                notations = list,
-                modifier = Modifier.constrainAs(pane) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-            )
+        val (pane, board, timerTop, timerBottom, bar) = createRefs()
+        NotationPane(
+            notations = list,
+            modifier = Modifier.constrainAs(pane) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+            }
+        )
 
-            ChessBoard(
-                modifier = Modifier
-                    .constrainAs(board) {
+        ChessBoard(
+            modifier = Modifier
+                .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
                     bottom.linkTo(parent.bottom)
                 }
-            )
+        )
 
-            Timer(
-                time = 0,
-                isWhite = true,
-                modifier = Modifier.constrainAs(timerTop) {
-                    top.linkTo(board.bottom, margin = 10.dp)
-                    end.linkTo(parent.end)
-                }
-            )
+        Timer(
+            time = 0,
+            isWhite = true,
+            modifier = Modifier.constrainAs(timerTop) {
+                top.linkTo(board.bottom, margin = 10.dp)
+                end.linkTo(parent.end)
+            }
+        )
 
-            Timer(
-                time = 0,
-                isWhite = false,
-                modifier = Modifier.constrainAs(timerBottom) {
-                    top.linkTo(timerTop.bottom, margin = 10.dp)
-                    end.linkTo(timerTop.end)
-                }
-            )
+        Timer(
+            time = 0,
+            isWhite = false,
+            modifier = Modifier.constrainAs(timerBottom) {
+                top.linkTo(timerTop.bottom, margin = 10.dp)
+                end.linkTo(timerTop.end)
+            }
+        )
 
-            PlayScreenBottomBar(
-                modifier = Modifier.constrainAs(bar) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                }
-            )
-        }
+        PlayScreenBottomBar(
+            modifier = Modifier.constrainAs(bar) {
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+            }
+        )
     }
 }
 

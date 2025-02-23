@@ -28,58 +28,54 @@ import com.huy.chess.ui.profilesetup.composables.UserNameTextField
 
 @Composable
 fun ProfileSetupScreen() {
-    BaseScreen(
-        showBackIcon = true
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)) {
-            Text(
-                text = stringResource(R.string.select_name_text),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Text(
-                text = stringResource(R.string.username_dec_text),
-                style = MaterialTheme.typography.displaySmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)) {
+        Text(
+            text = stringResource(R.string.select_name_text),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Text(
+            text = stringResource(R.string.username_dec_text),
+            style = MaterialTheme.typography.displaySmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
 
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                ImagePicker(modifier = Modifier.padding(end = 8.dp))
-                UserNameTextField(modifier = Modifier.fillMaxWidth())
-            }
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                text = buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
-                        append(stringResource(R.string.terms_of_use_p1))
-                    }
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    ) {
-                        append(stringResource(R.string.terms_of_use_p2))
-                    }
-                }
-            )
-
-            AppButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {},
-                text = stringResource(R.string.create_account_text),
-                iconPosition = IconPosition.NONE
-            )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ImagePicker(modifier = Modifier.padding(end = 8.dp))
+            UserNameTextField(modifier = Modifier.fillMaxWidth())
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Text(
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onSurface)) {
+                    append(stringResource(R.string.terms_of_use_p1))
+                }
+                withStyle(
+                    style = SpanStyle(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ) {
+                    append(stringResource(R.string.terms_of_use_p2))
+                }
+            }
+        )
+
+        AppButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {},
+            text = stringResource(R.string.create_account_text),
+            iconPosition = IconPosition.NONE
+        )
     }
 }
 
