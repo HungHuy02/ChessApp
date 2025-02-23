@@ -24,26 +24,22 @@ import com.huy.chess.ui.emailinput.composables.EmailTextField
 fun EmailInputScreen(
     navigateToPasswordInput: () -> Unit
 ) {
-    BaseScreen(
-        showBackIcon = true
-    ) {
-        Column(modifier = Modifier.fillMaxSize().padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,) {
-            Text(
-                text = stringResource(R.string.your_email_text),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Spacer(modifier = Modifier.size(16.dp))
-            EmailTextField(modifier = Modifier.fillMaxWidth())
-            Spacer(modifier = Modifier.weight(1f))
-            AppButton(
-                onClick = navigateToPasswordInput,
-                text = stringResource(R.string.continue_text),
-                iconPosition = IconPosition.NONE,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,) {
+        Text(
+            text = stringResource(R.string.your_email_text),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Spacer(modifier = Modifier.size(16.dp))
+        EmailTextField(modifier = Modifier.fillMaxWidth())
+        Spacer(modifier = Modifier.weight(1f))
+        AppButton(
+            onClick = navigateToPasswordInput,
+            text = stringResource(R.string.continue_text),
+            iconPosition = IconPosition.NONE,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

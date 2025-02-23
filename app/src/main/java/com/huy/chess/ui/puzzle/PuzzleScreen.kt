@@ -23,42 +23,38 @@ import com.huy.chess.ui.component.IconPosition
 
 @Composable
 fun PuzzleScreen() {
-    BaseScreen(
-        title = stringResource(R.string.puzzle_text)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+        ChessBoard()
+        Column (
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .background(Color.Gray)
+                .padding(8.dp)
+                .align(Alignment.BottomCenter)
         ) {
-            ChessBoard()
-            Column (
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier
-                    .background(Color.Gray)
-                    .padding(8.dp)
-                    .align(Alignment.BottomCenter)
-            ) {
-                AppButton(
-                    onClick = {},
-                    text = stringResource(R.string.solve_puzzles_text),
-                    iconPosition = IconPosition.NONE,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                AppButton(
-                    onClick = {},
-                    text = stringResource(R.string.puzzle_rush_text),
-                    iconPosition = IconPosition.NEXT_TO_TEXT,
-                    painter = painterResource(R.drawable.puzzles),
-                    modifier = Modifier.fillMaxWidth()
-                )
-                AppButton(
-                    onClick = {},
-                    text = stringResource(R.string.daily_puzzle_text),
-                    iconPosition = IconPosition.NEXT_TO_TEXT,
-                    painter = painterResource(R.drawable.dailypuzzle),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
+            AppButton(
+                onClick = {},
+                text = stringResource(R.string.solve_puzzles_text),
+                iconPosition = IconPosition.NONE,
+                modifier = Modifier.fillMaxWidth()
+            )
+            AppButton(
+                onClick = {},
+                text = stringResource(R.string.puzzle_rush_text),
+                iconPosition = IconPosition.NEXT_TO_TEXT,
+                painter = painterResource(R.drawable.puzzles),
+                modifier = Modifier.fillMaxWidth()
+            )
+            AppButton(
+                onClick = {},
+                text = stringResource(R.string.daily_puzzle_text),
+                iconPosition = IconPosition.NEXT_TO_TEXT,
+                painter = painterResource(R.drawable.dailypuzzle),
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }

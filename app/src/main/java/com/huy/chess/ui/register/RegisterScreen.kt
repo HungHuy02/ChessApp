@@ -27,51 +27,47 @@ import com.huy.chess.ui.theme.ChessTheme
 fun RegisterScreen(
     navigateToEmailInput: () -> Unit
 ) {
-    BaseScreen(
-        showBackIcon = true
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, top = 60.dp, end = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 16.dp, top = 60.dp, end = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.create_your_account_text),
-                style = MaterialTheme.typography.titleLarge
-            )
-            Image(
-                painter = painterResource(R.drawable.register_image),
-                contentDescription = "register image"
-            )
-            AppButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = navigateToEmailInput,
-                text = stringResource(R.string.register_with_email_text),
-                iconPosition = IconPosition.NONE
-            )
+        Text(
+            text = stringResource(R.string.create_your_account_text),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Image(
+            painter = painterResource(R.drawable.register_image),
+            contentDescription = "register image"
+        )
+        AppButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = navigateToEmailInput,
+            text = stringResource(R.string.register_with_email_text),
+            iconPosition = IconPosition.NONE
+        )
 
-            TextWithDivider(modifier = Modifier.fillMaxWidth())
+        TextWithDivider(modifier = Modifier.fillMaxWidth())
 
-            AppButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {},
-                text = stringResource(R.string.continue_with_google_text),
-                textStyle = MaterialTheme.typography.titleMedium,
-                painter = painterResource(R.drawable.google),
-                iconPosition = IconPosition.START
-            )
+        AppButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {},
+            text = stringResource(R.string.continue_with_google_text),
+            textStyle = MaterialTheme.typography.titleMedium,
+            painter = painterResource(R.drawable.google),
+            iconPosition = IconPosition.START
+        )
 
-            AppButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {},
-                text = stringResource(R.string.continue_with_facebook_text),
-                textStyle = MaterialTheme.typography.titleMedium,
-                painter = painterResource(R.drawable.facebook),
-                iconPosition = IconPosition.START
-            )
-        }
+        AppButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {},
+            text = stringResource(R.string.continue_with_facebook_text),
+            textStyle = MaterialTheme.typography.titleMedium,
+            painter = painterResource(R.drawable.facebook),
+            iconPosition = IconPosition.START
+        )
     }
 }
 

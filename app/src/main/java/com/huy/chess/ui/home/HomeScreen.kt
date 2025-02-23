@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.BaseScreen
@@ -22,73 +23,67 @@ import com.huy.chess.utils.Constants
 fun HomeScreen(
     navigateToPlayScreen: () -> Unit
 ) {
-    BaseScreen(
-        title = stringResource(R.string.app_name),
-        isHomeScreen = true
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 16.dp),
+            modifier = Modifier.weight(1f)
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-                item {
-                    HomeItems(
-                        fen = Constants.START_FEN,
-                        title = stringResource(R.string.play_online_text),
-                        description = stringResource(R.string.play_online_dec_text),
-                        icon = R.drawable.playwhite_cea685ba
-                    )
-                }
-
-                item {
-                    HomeItems(
-                        fen = Constants.START_FEN,
-                        title = stringResource(R.string.solve_puzzles_text),
-                        description = stringResource(R.string.solve_puzzles_dec_text),
-                        icon = R.drawable.puzzles
-                    )
-                }
-
-                item {
-                    HomeItems(
-                        fen = Constants.START_FEN,
-                        title = stringResource(R.string.daily_puzzle_text),
-                        description = stringResource(R.string.daily_puzzles_dec_text),
-                        icon = R.drawable.dailypuzzle
-                    )
-                }
-
-                item {
-                    HomeItems(
-                        fen = Constants.START_FEN,
-                        title = stringResource(R.string.play_with_bot_text),
-                        description = stringResource(R.string.play_with_bot_dec_text),
-                        icon = R.drawable.stockfish
-                    )
-                }
-
-                item {
-                    HomeItems(
-                        fen = Constants.START_FEN,
-                        title = stringResource(R.string.study_text),
-                        description = stringResource(R.string.study_dec_text),
-                        icon = R.drawable.lessons
-                    )
-                }
+            item {
+                HomeItems(
+                    fen = Constants.START_FEN,
+                    title = stringResource(R.string.play_online_text),
+                    description = stringResource(R.string.play_online_dec_text),
+                    icon = R.drawable.playwhite_cea685ba
+                )
             }
 
-            AppButton(
-                onClick = navigateToPlayScreen,
-                text = stringResource(R.string.play_text),
-                textColor = Color.White,
-                iconPosition = IconPosition.NONE,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
+            item {
+                HomeItems(
+                    fen = Constants.START_FEN,
+                    title = stringResource(R.string.solve_puzzles_text),
+                    description = stringResource(R.string.solve_puzzles_dec_text),
+                    icon = R.drawable.puzzles
+                )
+            }
 
+            item {
+                HomeItems(
+                    fen = Constants.START_FEN,
+                    title = stringResource(R.string.daily_puzzle_text),
+                    description = stringResource(R.string.daily_puzzles_dec_text),
+                    icon = R.drawable.dailypuzzle
+                )
+            }
+
+            item {
+                HomeItems(
+                    fen = Constants.START_FEN,
+                    title = stringResource(R.string.play_with_bot_text),
+                    description = stringResource(R.string.play_with_bot_dec_text),
+                    icon = R.drawable.stockfish
+                )
+            }
+
+            item {
+                HomeItems(
+                    fen = Constants.START_FEN,
+                    title = stringResource(R.string.study_text),
+                    description = stringResource(R.string.study_dec_text),
+                    icon = R.drawable.lessons
+                )
+            }
+        }
+
+        AppButton(
+            onClick = navigateToPlayScreen,
+            text = stringResource(R.string.play_text),
+            textColor = Color.White,
+            iconPosition = IconPosition.NONE,
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }

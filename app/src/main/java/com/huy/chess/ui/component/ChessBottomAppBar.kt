@@ -1,5 +1,6 @@
 package com.huy.chess.ui.component
 
+import android.util.Log
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +16,10 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.huy.chess.navigation.BottomNavScreens
+import com.huy.chess.navigation.Home
+import com.huy.chess.navigation.MoreOptions
+import com.huy.chess.navigation.Puzzles
+import com.huy.chess.navigation.Study
 
 @Composable
 fun ChessBottomAppBar(
@@ -28,9 +33,17 @@ fun ChessBottomAppBar(
         val currentDestination = navBackStackEntry?.destination
 
         BottomNavScreens.items.forEach { navigationItem ->
+            Log.e("tag", "test")
+
+            val screen = when (navigationItem) {
+                BottomNavScreens.Home -> Home
+                BottomNavScreens.MoreOptions -> MoreOptions
+                BottomNavScreens.Puzzles -> Puzzles
+                BottomNavScreens.Study -> Study
+            }
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any {
-                    it.route.equals(navigationItem::class.qualifiedName)
+                    it.route.equals(screen::class.qualifiedName)
                 } == true,
                 label = {
                     Text(text = stringResource(navigationItem.label))
@@ -42,7 +55,7 @@ fun ChessBottomAppBar(
                     )
                 },
                 onClick = {
-                    navController.navigate(navigationItem) {
+                    navController.navigate(screen) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
                         }
