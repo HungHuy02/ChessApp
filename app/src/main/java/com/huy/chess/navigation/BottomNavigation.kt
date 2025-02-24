@@ -1,21 +1,16 @@
 package com.huy.chess.navigation
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import com.huy.chess.R
 import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.home.HomeScreen
 import com.huy.chess.ui.moreoptions.MoreOptionsScreen
 import com.huy.chess.ui.puzzle.PuzzleScreen
 import kotlinx.serialization.Serializable
-import java.util.Objects
 
-@Serializable object Main
 @Serializable object Home
 @Serializable object Puzzles
 @Serializable object Study
@@ -51,51 +46,44 @@ sealed class BottomNavScreens(
 }
 
 fun NavGraphBuilder.bottomDestination(
-    navController: NavController,
-    onNavigateToPlay: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    navController: NavController
 ) {
-    navigation<Main>(startDestination = Home) {
-        composable<Home> {
-            BaseScreen(
-                navController = navController,
-                title = stringResource(R.string.app_name),
-                isHomeScreen = true,
-                onLoginButtonClick = onNavigateToLogin,
-                onRegisterButtonClick = onNavigateToRegister
-            ) {
-                HomeScreen {
-                    onNavigateToPlay()
-                }
-            }
+    composable<Home> {
+        BaseScreen(
+            navController = navController,
+            title = stringResource(R.string.app_name),
+            isHomeScreen = true,
+            onLoginButtonClick = { navController.navigate(Login) },
+            onRegisterButtonClick = { navController.navigate(Register) }
+        ) {
+            HomeScreen { navController.navigate(Play) }
         }
+    }
 
-        composable<Puzzles> {
-            BaseScreen(
-                navController = navController,
-                title = stringResource(R.string.puzzle_text),
-            ) {
-                PuzzleScreen()
-            }
+    composable<Puzzles> {
+        BaseScreen(
+            navController = navController,
+            title = stringResource(R.string.puzzle_text),
+        ) {
+            PuzzleScreen()
         }
+    }
 
-        composable<Study> {
-            BaseScreen(
-                navController = navController,
-                title = stringResource(R.string.study_text),
-            ) {
+    composable<Study> {
+        BaseScreen(
+            navController = navController,
+            title = stringResource(R.string.study_text),
+        ) {
 
-            }
         }
+    }
 
-        composable<MoreOptions> {
-            BaseScreen(
-                navController = navController,
-                title = stringResource(R.string.more_options_text),
-            ) {
-                MoreOptionsScreen()
-            }
+    composable<MoreOptions> {
+        BaseScreen(
+            navController = navController,
+            title = stringResource(R.string.more_options_text),
+        ) {
+            MoreOptionsScreen()
         }
     }
 }

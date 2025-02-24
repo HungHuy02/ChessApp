@@ -13,20 +13,11 @@ import com.huy.chess.ui.setupbot.SetupBotScreen
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleScreen
 import kotlinx.serialization.Serializable
 
-@Serializable
-object Play
-
-@Serializable
-object NewGame
-
-@Serializable
-object ChangeTime
-
-@Serializable
-object SetupBot
-
-@Serializable
-object SetupTwoPeople
+@Serializable object Play
+@Serializable object NewGame
+@Serializable object ChangeTime
+@Serializable object SetupBot
+@Serializable object SetupTwoPeople
 
 fun NavGraphBuilder.playDestination(
     navController: NavController
@@ -35,31 +26,28 @@ fun NavGraphBuilder.playDestination(
         composable<NewGame> {
             BaseScreen(
                 title = stringResource(R.string.new_game_text),
-                showBackIcon = true
+                showBackIcon = true,
+                onBackIconClick = { navController.popBackStack() }
             ) {
                 NewGameScreen(
-                    navigateToChangeTime = {
-                        navController.navigate(ChangeTime)
-                    },
-                    navigateToSetupBot = {
-                        navController.navigate(SetupBot)
-                    },
-                    navigateToSetupTwoPeople = {
-                        navController.navigate(SetupTwoPeople)
-                    }
+                    navigateToChangeTime = { navController.navigate(ChangeTime) },
+                    navigateToSetupBot = { navController.navigate(SetupBot) },
+                    navigateToSetupTwoPeople = { navController.navigate(SetupTwoPeople) }
                 )
             }
         }
         composable<ChangeTime> {
             BaseScreen(
-                showBackIcon = true
+                showBackIcon = true,
+                onBackIconClick = { navController.popBackStack() }
             ) {
                 ChangeTimeScreen()
             }
         }
         composable<SetupBot> {
             BaseScreen(
-                showBackIcon = true
+                showBackIcon = true,
+                onBackIconClick = { navController.popBackStack() }
             ) {
                 SetupBotScreen()
             }
@@ -67,7 +55,8 @@ fun NavGraphBuilder.playDestination(
         composable<SetupTwoPeople> {
             BaseScreen(
                 title = stringResource(R.string.pass_and_play_text),
-                showBackIcon = true
+                showBackIcon = true,
+                onBackIconClick = { navController.popBackStack() }
             ) {
                 SetupTwoPeopleScreen()
             }

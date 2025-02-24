@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
-import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.emailinput.composables.EmailTextField
 
