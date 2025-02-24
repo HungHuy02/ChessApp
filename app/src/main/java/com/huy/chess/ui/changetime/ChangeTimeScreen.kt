@@ -1,6 +1,12 @@
 package com.huy.chess.ui.changetime
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
-import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.component.RowTimeButton
 
 @Composable
@@ -61,7 +66,13 @@ fun ChangeTimeScreen() {
             text2 = stringResource(R.string.three_minute_plus_two_text),
             text3 = stringResource(R.string.five_minute_text)
         )
-        AnimatedVisibility(showMore) {
+        AnimatedVisibility(
+            visible = showMore,
+            enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
+            exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    shrinkVertically(animationSpec = tween(500, easing = FastOutSlowInEasing))
+        ) {
             RowTimeButton(
                 text1 = stringResource(R.string.five_minute_plus_five_text),
                 text2 = stringResource(R.string.five_min_plus_two)
@@ -76,7 +87,13 @@ fun ChangeTimeScreen() {
             text2 = stringResource(R.string.fifteen_minute_plus_ten),
             text3 = stringResource(R.string.thirty_minute)
         )
-        AnimatedVisibility(showMore) {
+        AnimatedVisibility(
+            visible = showMore,
+            enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
+            exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    shrinkVertically(animationSpec = tween(500, easing = FastOutSlowInEasing))
+        ) {
             RowTimeButton(
                 text1 = stringResource(R.string.ten_min_plus_5),
                 text2 = stringResource(R.string.twenty_min),
@@ -92,20 +109,26 @@ fun ChangeTimeScreen() {
             text2 = stringResource(R.string.three_days_text),
             text3 = stringResource(R.string.seven_days_text)
         )
-        AnimatedVisibility(showMore) {
-            RowTimeButton(
-                text1 = stringResource(R.string.two_days_text),
-                text2 = stringResource(R.string.five_days_text),
-                text3 = stringResource(R.string.fourteen_days)
-            )
-        }
-        AnimatedVisibility(showMore) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                IconWithText(
-                    painter = painterResource(R.drawable.build_24px),
-                    text = stringResource(R.string.custom_text)
+        AnimatedVisibility(
+            visible = showMore,
+            enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
+            exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
+                    shrinkVertically(animationSpec = tween(500, easing = FastOutSlowInEasing))
+        ) {
+            Column {
+                RowTimeButton(
+                    text1 = stringResource(R.string.two_days_text),
+                    text2 = stringResource(R.string.five_days_text),
+                    text3 = stringResource(R.string.fourteen_days)
                 )
-                CustomTimeSelect()
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    IconWithText(
+                        painter = painterResource(R.drawable.build_24px),
+                        text = stringResource(R.string.custom_text)
+                    )
+                    CustomTimeSelect()
+                }
             }
         }
         TextButton(

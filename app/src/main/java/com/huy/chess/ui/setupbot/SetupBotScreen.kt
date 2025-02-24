@@ -20,13 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
+import com.huy.chess.ui.changetime.composables.TimeButton
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.RowItem
 import com.huy.chess.ui.component.RowItemWithSwitch
 import com.huy.chess.ui.component.RowTimeButton
-import com.huy.chess.ui.changetime.composables.TimeButton
-import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.setupbot.composables.IconWithText
 import com.huy.chess.ui.setupbot.composables.LevelSelect
 import com.huy.chess.ui.setupbot.composables.PieceSelect

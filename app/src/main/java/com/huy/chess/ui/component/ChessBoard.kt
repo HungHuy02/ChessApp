@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -113,7 +112,7 @@ fun ChessBoard(
     modifier: Modifier = Modifier
 ) {
     val size = LocalConfiguration.current.screenWidthDp
-    var selectedPiece : Piece? by remember { mutableStateOf(null) }
+    var selectedPiece: Piece? by remember { mutableStateOf(null) }
     val board = Utils.initBoard()
     Box(
         contentAlignment = Alignment.Center,
@@ -146,9 +145,10 @@ fun ChessBoard(
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .weight(1f)
-                                    .background(if(it == selectedPiece) Color.DarkGray else Color.Transparent)
+                                    .background(if (it == selectedPiece) Color.DarkGray else Color.Transparent)
                                     .clickable {
-                                        if (selectedPiece == null || selectedPiece != it) selectedPiece = it
+                                        if (selectedPiece == null || selectedPiece != it) selectedPiece =
+                                            it
                                     }
                             )
                         } else {
@@ -165,7 +165,7 @@ fun ChessBoard(
     }
 }
 
-private fun getPieceDrawableId(piece: Char) : Int {
+private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
         'p' -> R.drawable.bpawn
         'r' -> R.drawable.brook

@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.play.composables.NotationPane
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
