@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
-import com.huy.chess.ui.changetime.composables.TimeButton
+import com.huy.chess.ui.component.TimeButton
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.RowItem
@@ -35,6 +35,8 @@ fun SetupBotScreen() {
     var showTimeControl by remember {
         mutableStateOf(false)
     }
+    var selectedText by remember { mutableStateOf("") }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -62,25 +64,43 @@ fun SetupBotScreen() {
             }
         )
         AnimatedVisibility(showTimeControl) {
-            Column {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 RowTimeButton(
-                    text1 = stringResource(R.string.thirty_minute),
-                    text2 = stringResource(R.string.fifteen_minute_plus_ten),
-                    text3 = stringResource(R.string.ten_minute_text)
+                    times = listOf(
+                        stringResource(R.string.thirty_minute),
+                        stringResource(R.string.fifteen_minute_plus_ten),
+                        stringResource(R.string.ten_minute_text)
+                    ),
+                    selectedTime = selectedText,
+                    onClick = { selectedText = it }
+
                 )
                 RowTimeButton(
-                    text1 = stringResource(R.string.five_minute_plus_five_text),
-                    text2 = stringResource(R.string.three_minute_plus_two_text),
-                    text3 = stringResource(R.string.two_minute_plus_one_text)
+                    times = listOf(
+                        stringResource(R.string.five_minute_plus_five_text),
+                        stringResource(R.string.three_minute_plus_two_text),
+                        stringResource(R.string.two_minute_plus_one_text)
+                    ),
+                    selectedTime = selectedText,
+                    onClick = { selectedText = it }
+
                 )
                 RowTimeButton(
-                    text1 = stringResource(R.string.five_minute_text),
-                    text2 = stringResource(R.string.three_minute_text),
-                    text3 = stringResource(R.string.one_minute_text)
+                    times = listOf(
+                        stringResource(R.string.five_minute_text),
+                        stringResource(R.string.three_minute_text),
+                        stringResource(R.string.one_minute_text)
+                    ),
+                    selectedTime = selectedText,
+                    onClick = { selectedText = it }
                 )
                 TimeButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.no_time_text)
+                    text = stringResource(R.string.no_time_text),
+                    isSelected = selectedText == stringResource(R.string.no_time_text),
+                    onClick = { selectedText = it }
                 )
 
             }

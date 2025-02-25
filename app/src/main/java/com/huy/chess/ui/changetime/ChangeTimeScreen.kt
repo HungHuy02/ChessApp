@@ -40,6 +40,7 @@ fun ChangeTimeScreen() {
     var showMore by remember {
         mutableStateOf(false)
     }
+    var selectedText by remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -53,18 +54,26 @@ fun ChangeTimeScreen() {
             text = stringResource(R.string.super_flash_text)
         )
         RowTimeButton(
-            text1 = stringResource(R.string.one_minute_text),
-            text2 = stringResource(R.string.one_minute_plus_one_text),
-            text3 = stringResource(R.string.two_minute_plus_one_text)
+            times = listOf(
+                stringResource(R.string.one_minute_text),
+                stringResource(R.string.one_minute_plus_one_text),
+                stringResource(R.string.two_minute_plus_one_text)
+            ),
+            selectedTime = selectedText,
+            onClick = { selectedText = it }
         )
         IconWithText(
             painter = painterResource(R.drawable.flash_on_24px),
             text = stringResource(R.string.flash_text)
         )
         RowTimeButton(
-            text1 = stringResource(R.string.three_minute_text),
-            text2 = stringResource(R.string.three_minute_plus_two_text),
-            text3 = stringResource(R.string.five_minute_text)
+            times = listOf(
+                stringResource(R.string.three_minute_text),
+                stringResource(R.string.three_minute_plus_two_text),
+                stringResource(R.string.five_minute_text)
+            ),
+            selectedTime = selectedText,
+            onClick = { selectedText = it }
         )
         AnimatedVisibility(
             visible = showMore,
@@ -75,7 +84,9 @@ fun ChangeTimeScreen() {
         ) {
             RowTimeButton(
                 text1 = stringResource(R.string.five_minute_plus_five_text),
-                text2 = stringResource(R.string.five_min_plus_two)
+                text2 = stringResource(R.string.five_min_plus_two),
+                selectedTime = selectedText,
+                onClick = { selectedText = it }
             )
         }
         IconWithText(
@@ -83,9 +94,13 @@ fun ChangeTimeScreen() {
             text = stringResource(R.string.fast_text)
         )
         RowTimeButton(
-            text1 = stringResource(R.string.ten_minute_text),
-            text2 = stringResource(R.string.fifteen_minute_plus_ten),
-            text3 = stringResource(R.string.thirty_minute)
+            times = listOf(
+                stringResource(R.string.ten_minute_text),
+                stringResource(R.string.fifteen_minute_plus_ten),
+                stringResource(R.string.thirty_minute)
+            ),
+            selectedTime = selectedText,
+            onClick = { selectedText = it }
         )
         AnimatedVisibility(
             visible = showMore,
@@ -95,9 +110,13 @@ fun ChangeTimeScreen() {
                     shrinkVertically(animationSpec = tween(500, easing = FastOutSlowInEasing))
         ) {
             RowTimeButton(
-                text1 = stringResource(R.string.ten_min_plus_5),
-                text2 = stringResource(R.string.twenty_min),
-                text3 = stringResource(R.string.sixty_min)
+                times = listOf(
+                    stringResource(R.string.ten_min_plus_5),
+                    stringResource(R.string.twenty_min),
+                    stringResource(R.string.sixty_min)
+                ),
+                selectedTime = selectedText,
+                onClick = { selectedText = it }
             )
         }
         IconWithText(
@@ -105,9 +124,13 @@ fun ChangeTimeScreen() {
             text = stringResource(R.string.daily_text)
         )
         RowTimeButton(
-            text1 = stringResource(R.string.one_day),
-            text2 = stringResource(R.string.three_days_text),
-            text3 = stringResource(R.string.seven_days_text)
+            times = listOf(
+                stringResource(R.string.one_day),
+                stringResource(R.string.three_days_text),
+                stringResource(R.string.seven_days_text)
+            ),
+            selectedTime = selectedText,
+            onClick = { selectedText = it }
         )
         AnimatedVisibility(
             visible = showMore,
@@ -118,9 +141,13 @@ fun ChangeTimeScreen() {
         ) {
             Column {
                 RowTimeButton(
-                    text1 = stringResource(R.string.two_days_text),
-                    text2 = stringResource(R.string.five_days_text),
-                    text3 = stringResource(R.string.fourteen_days)
+                    times = listOf(
+                        stringResource(R.string.two_days_text),
+                        stringResource(R.string.five_days_text),
+                        stringResource(R.string.fourteen_days)
+                    ),
+                    selectedTime = selectedText,
+                    onClick = { selectedText = it }
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconWithText(
