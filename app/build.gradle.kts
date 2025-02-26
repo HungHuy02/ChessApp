@@ -64,12 +64,17 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation (libs.androidx.constraintlayout.compose)
 
+    // navigation
     implementation (libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
+    // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // datastore
+    implementation(libs.androidx.datastore.preferences)
 }
 
 kapt {
