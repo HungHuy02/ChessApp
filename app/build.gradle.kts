@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -48,6 +50,29 @@ android {
     buildFeatures {
         compose = true
     }
+
+    val apikeyPropertiesFile = rootProject.file("apikey.properties")
+    val apikeyProperties = Properties()
+
+    if (apikeyPropertiesFile.exists()) {
+        apikeyPropertiesFile.inputStream().use { inputStream ->
+            apikeyProperties.load(inputStream)
+        }
+    }
+
+    flavorDimensions += listOf("environment")
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "${apikeyProperties["BASE_URL_DEV"]}")
+        }
+
+        create("live") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "${apikeyProperties["BASE_URL_LIVE"]}")
+        }
+    }
 }
 
 dependencies {
@@ -88,6 +113,7 @@ dependencies {
     implementation (libs.retrofit)
     implementation (libs.converter.moshi)
     implementation(libs.moshi.kotlin)
+    implementation(libs.logging.interceptor)
     ksp(libs.moshi.kotlin.codegen)
 
     // coil
