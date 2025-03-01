@@ -12,11 +12,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object DatabaseModule {
 
     @Singleton
     @Provides
     fun provideDataStoreRepository(
-        @ApplicationContext app: Context
-    ): DataStoreRepository = DataStoreRepositoryImpl(app)
+        @ApplicationContext context: Context
+    ): DataStoreRepository = DataStoreRepositoryImpl(context)
 }
