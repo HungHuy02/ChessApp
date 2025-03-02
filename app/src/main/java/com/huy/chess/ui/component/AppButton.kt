@@ -33,7 +33,8 @@ fun AppButton(
     textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     painter: Painter? = null,
-    iconPosition: IconPosition
+    iconPosition: IconPosition,
+    enable: Boolean = true
 ) {
     CompositionLocalProvider (LocalMinimumInteractiveComponentEnforcement provides false) {
         Button(
@@ -43,6 +44,7 @@ fun AppButton(
                 containerColor = backgroundColor,
                 contentColor = textColor
             ),
+            enabled = enable,
             modifier = modifier
                 .background(color = Color.Gray, shape = RoundedCornerShape(10.dp))
                 .padding(top = 0.8.dp)

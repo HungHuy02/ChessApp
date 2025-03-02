@@ -11,29 +11,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import com.huy.chess.R
 
 @Composable
 fun EmailTextField(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit
 ) {
-    var text by remember {
-        mutableStateOf("")
-    }
 
     OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-        },
+        value = value,
+        onValueChange = onValueChange,
         placeholder = {
             Text(
                 text = stringResource(R.string.email_text),
@@ -50,14 +42,14 @@ fun EmailTextField(
             )
         },
         trailingIcon = {
-            if (text.isNotBlank())
+            if (value.isNotBlank())
                 Icon (
                     imageVector = Icons.Default.Clear,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .clickable {
-                            text = ""
+                            onValueChange("")
                         }
                 )
         },
@@ -69,10 +61,4 @@ fun EmailTextField(
         ),
         modifier = modifier
     )
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    EmailTextField()
 }

@@ -30,7 +30,7 @@ fun NavGraphBuilder.authDestination(
             LoginScreen()
         }
     }
-    navigation<Register>(startDestination = Register) {
+    navigation<Register>(startDestination = RegisterWay) {
         composable<RegisterWay> {
             BaseScreen(
                 showBackIcon = true,

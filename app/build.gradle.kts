@@ -49,6 +49,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     val apikeyPropertiesFile = rootProject.file("apikey.properties")
