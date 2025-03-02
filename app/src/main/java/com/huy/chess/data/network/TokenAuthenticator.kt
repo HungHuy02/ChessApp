@@ -27,7 +27,7 @@ class TokenAuthenticator @Inject constructor(
 
         authScope.launch {
             mutex.withLock {
-                newAccessToken = APIManager.refreshToken()
+                newAccessToken = ""
                 newAccessToken?.let { dataStoreService.setAccessToken(it) }
             }
         }
