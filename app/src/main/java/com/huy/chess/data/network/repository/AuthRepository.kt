@@ -1,7 +1,7 @@
 package com.huy.chess.data.network.repository
 
 import com.huy.chess.data.network.api.AuthApi
-import com.huy.chess.model.reponse.BaseResponse
+import com.huy.chess.base.BaseResponse
 import com.huy.chess.model.request.RegisterRequest
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody

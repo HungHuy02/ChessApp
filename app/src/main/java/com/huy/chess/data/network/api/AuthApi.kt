@@ -1,6 +1,6 @@
 package com.huy.chess.data.network.api
 
-import com.huy.chess.model.reponse.BaseResponse
+import com.huy.chess.base.BaseResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

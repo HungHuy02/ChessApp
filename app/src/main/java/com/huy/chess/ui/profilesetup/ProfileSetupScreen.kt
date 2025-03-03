@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,16 +19,39 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
+import com.huy.chess.contract.ProfileSetupEvent
+import com.huy.chess.contract.ProfileSetupIntent
+import com.huy.chess.contract.ProfileSetupState
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.profilesetup.composables.ImagePicker
 import com.huy.chess.ui.profilesetup.composables.UserNameTextField
+import com.huy.chess.viewmodel.ProfileSetupViewModel
 
 @Composable
-fun ProfileSetupScreen() {
+fun ProfileSetupScreen(
+    viewModel: ProfileSetupViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit
+) {
+    val state = viewModel.state.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when(it) {
+                ProfileSetupEvent.NavigateToLogin -> navigateToLogin()
+            }
+        }
+    }
+    Content(state, viewModel::sendIntent)
+}
+
+@Composable
+private fun Content(
+    state: ProfileSetupState,
+    onIntent: (ProfileSetupIntent) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -48,7 +73,12 @@ fun ProfileSetupScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             ImagePicker(modifier = Modifier.padding(end = 8.dp))
-            UserNameTextField(modifier = Modifier.fillMaxWidth())
+            UserNameTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state.displayName
+            ) {
+                onIntent(ProfileSetupIntent.DisplayNameChanged(it))
+            }
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -71,15 +101,9 @@ fun ProfileSetupScreen() {
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = { onIntent(ProfileSetupIntent.ClickedButton) },
             text = stringResource(R.string.create_account_text),
             iconPosition = IconPosition.NONE
         )
     }
-}
-
-@Composable
-@Preview
-fun Preview() {
-    ProfileSetupScreen()
 }

@@ -19,25 +19,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import com.huy.chess.R
 
 @Composable
 fun PasswordTextField(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    value: String,
+    onTextChange: (String) -> Unit
 ) {
-    var text by remember {
-        mutableStateOf("")
-    }
     var showPassword by remember {
         mutableStateOf(false)
     }
 
     OutlinedTextField(
-        value = text,
-        onValueChange = {
-            text = it
-        },
+        value = value,
+        onValueChange = onTextChange,
         placeholder = {
             Text(
                 text = stringResource(R.string.password_placeholder),
@@ -69,10 +65,4 @@ fun PasswordTextField(
         },
         modifier = modifier
     )
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    PasswordTextField()
 }
