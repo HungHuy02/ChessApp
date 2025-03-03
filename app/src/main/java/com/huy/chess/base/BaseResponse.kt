@@ -1,4 +1,4 @@
-package com.huy.chess.model.reponse
+package com.huy.chess.base
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

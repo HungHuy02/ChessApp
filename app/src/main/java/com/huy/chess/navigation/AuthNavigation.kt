@@ -27,7 +27,9 @@ fun NavGraphBuilder.authDestination(
             showBackIcon = true,
             onBackIconClick = { navController.popBackStack() }
         ) {
-            LoginScreen()
+            LoginScreen {
+                navController.navigate(Home)
+            }
         }
     }
     navigation<Register>(startDestination = RegisterWay) {
@@ -66,7 +68,9 @@ fun NavGraphBuilder.authDestination(
                 showBackIcon = true,
                 onBackIconClick = { navController.popBackStack() }
             ) {
-                ProfileSetupScreen()
+                ProfileSetupScreen {
+                    navController.navigate(Login)
+                }
             }
         }
     }

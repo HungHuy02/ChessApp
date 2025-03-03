@@ -9,21 +9,46 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
+import com.huy.chess.contract.LoginEvent
+import com.huy.chess.contract.LoginIntent
+import com.huy.chess.contract.LoginState
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.PasswordTextField
 import com.huy.chess.ui.login.composables.AccountTextField
 import com.huy.chess.ui.login.composables.TextWithFullDivider
+import com.huy.chess.viewmodel.LoginViewModel
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navigateToHome: () -> Unit
+) {
+    val state = viewModel.state.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when (it) {
+                LoginEvent.NavigateToHome -> navigateToHome()
+            }
+        }
+    }
+    Content(state, viewModel::sendIntent)
+}
+
+@Composable
+private fun Content(
+    state: LoginState,
+    onIntent: (LoginIntent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -32,22 +57,32 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AppButton(
-            onClick = {},
+            onClick = { onIntent(LoginIntent.ClickedLoginFacebookButton) },
             text = stringResource(R.string.login_with_facebook_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.facebook),
             iconPosition = IconPosition.START
         )
         AppButton(
-            onClick = {},
+            onClick = { onIntent(LoginIntent.ClickedLoginGoogleButton) },
             text = stringResource(R.string.login_with_google_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.google),
             iconPosition = IconPosition.START
         )
         TextWithFullDivider()
-        AccountTextField(modifier = Modifier.fillMaxWidth())
-        PasswordTextField(modifier = Modifier.fillMaxWidth())
+        AccountTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = state.account
+        ) {
+            onIntent(LoginIntent.AccountChange(it))
+        }
+        PasswordTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = state.password
+        ) {
+            onIntent(LoginIntent.PasswordChange(it))
+        }
         Text(
             text = stringResource(R.string.forgot_password_text),
             color = MaterialTheme.colorScheme.onSurface,
@@ -56,15 +91,9 @@ fun LoginScreen() {
             }
         )
         AppButton(
-            onClick = {},
+            onClick = { onIntent(LoginIntent.ClickedLoginButton) },
             text = stringResource(R.string.login_text),
             iconPosition = IconPosition.NONE
         )
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    LoginScreen()
 }
