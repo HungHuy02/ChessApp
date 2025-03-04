@@ -20,28 +20,35 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
+import com.huy.chess.contract.ChangeTimeIntent
+import com.huy.chess.contract.ChangeTimeState
 import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
 import com.huy.chess.ui.component.RowTimeButton
+import com.huy.chess.viewmodel.ChangeTimeViewModel
 
 @Composable
-fun ChangeTimeScreen() {
-    var showMore by remember {
-        mutableStateOf(false)
-    }
-    var selectedText by remember { mutableStateOf("") }
+fun ChangeTimeScreen(
+    viewModel: ChangeTimeViewModel = hiltViewModel()
+) {
+    val state = viewModel.state.collectAsState().value
 
+    Content(state, viewModel::sendIntent)
+}
+
+@Composable
+private fun Content(
+    state: ChangeTimeState,
+    onIntent: (ChangeTimeIntent) -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         modifier = Modifier
@@ -59,8 +66,8 @@ fun ChangeTimeScreen() {
                 stringResource(R.string.one_minute_plus_one_text),
                 stringResource(R.string.two_minute_plus_one_text)
             ),
-            selectedTime = selectedText,
-            onClick = { selectedText = it }
+            selectedTime = state.selectedTime,
+            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
         )
         IconWithText(
             painter = painterResource(R.drawable.flash_on_24px),
@@ -72,11 +79,11 @@ fun ChangeTimeScreen() {
                 stringResource(R.string.three_minute_plus_two_text),
                 stringResource(R.string.five_minute_text)
             ),
-            selectedTime = selectedText,
-            onClick = { selectedText = it }
+            selectedTime = state.selectedTime,
+            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
         )
         AnimatedVisibility(
-            visible = showMore,
+            visible = state.isMoreSetting,
             enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
                     expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
             exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
@@ -85,8 +92,8 @@ fun ChangeTimeScreen() {
             RowTimeButton(
                 text1 = stringResource(R.string.five_minute_plus_five_text),
                 text2 = stringResource(R.string.five_min_plus_two),
-                selectedTime = selectedText,
-                onClick = { selectedText = it }
+                selectedTime = state.selectedTime,
+                onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -99,11 +106,11 @@ fun ChangeTimeScreen() {
                 stringResource(R.string.fifteen_minute_plus_ten),
                 stringResource(R.string.thirty_minute)
             ),
-            selectedTime = selectedText,
-            onClick = { selectedText = it }
+            selectedTime = state.selectedTime,
+            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
         )
         AnimatedVisibility(
-            visible = showMore,
+            visible = state.isMoreSetting,
             enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
                     expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
             exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
@@ -115,8 +122,8 @@ fun ChangeTimeScreen() {
                     stringResource(R.string.twenty_min),
                     stringResource(R.string.sixty_min)
                 ),
-                selectedTime = selectedText,
-                onClick = { selectedText = it }
+                selectedTime = state.selectedTime,
+                onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -129,11 +136,11 @@ fun ChangeTimeScreen() {
                 stringResource(R.string.three_days_text),
                 stringResource(R.string.seven_days_text)
             ),
-            selectedTime = selectedText,
-            onClick = { selectedText = it }
+            selectedTime = state.selectedTime,
+            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
         )
         AnimatedVisibility(
-            visible = showMore,
+            visible = state.isMoreSetting,
             enter = fadeIn(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
                     expandVertically(animationSpec = tween(500, easing = FastOutSlowInEasing)),
             exit = fadeOut(animationSpec = tween(500, easing = FastOutSlowInEasing)) +
@@ -146,8 +153,8 @@ fun ChangeTimeScreen() {
                         stringResource(R.string.five_days_text),
                         stringResource(R.string.fourteen_days)
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconWithText(
@@ -159,20 +166,18 @@ fun ChangeTimeScreen() {
             }
         }
         TextButton(
-            onClick = {
-                showMore = !showMore
-            },
+            onClick = { onIntent(ChangeTimeIntent.ToggleShowMore) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = stringResource(if (showMore) R.string.fewer_time_controls_text else R.string.more_time_controls_text),
+                    text = stringResource(if (state.isMoreSetting) R.string.fewer_time_controls_text else R.string.more_time_controls_text),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.labelMedium
                 )
                 Icon(
                     painter = painterResource(
-                        if (showMore) R.drawable.keyboard_arrow_up_24px
+                        if (state.isMoreSetting) R.drawable.keyboard_arrow_up_24px
                         else R.drawable.keyboard_arrow_down_24px
                     ),
                     contentDescription = "icon"
@@ -180,10 +185,4 @@ fun ChangeTimeScreen() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    ChangeTimeScreen()
 }

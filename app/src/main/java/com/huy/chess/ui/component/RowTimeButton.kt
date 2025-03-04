@@ -82,7 +82,7 @@ fun RowTimeButton(
         TimeButton(
             text = text2,
             modifier = Modifier.weight(1f),
-            isSelected = selectedTime == text1,
+            isSelected = selectedTime == text2,
             onClick = { onClick(it) }
         )
         Spacer(modifier = Modifier.size(8.dp))
