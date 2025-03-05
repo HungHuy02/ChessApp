@@ -1,26 +1,30 @@
 package com.huy.chess.viewmodel
 
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.contract.LoginEvent
-import com.huy.chess.contract.LoginIntent
-import com.huy.chess.contract.LoginState
+import com.huy.chess.ui.login.LoginEffect
+import com.huy.chess.ui.login.LoginAction
+import com.huy.chess.ui.login.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor() :
-    BaseViewModel<LoginState, LoginIntent, LoginEvent>(
+    BaseViewModel<LoginState, LoginAction, LoginEffect>(
         LoginState()
     ) {
 
-    override fun processIntent(intent: LoginIntent) {
-        when (intent) {
-            LoginIntent.ClickedLoginButton -> sendEvent(LoginEvent.NavigateToHome)
-            LoginIntent.ClickedLoginFacebookButton -> TODO()
-            LoginIntent.ClickedLoginGoogleButton -> TODO()
-            is LoginIntent.AccountChange -> updateState { updateAccount(it, intent.text) }
-            is LoginIntent.PasswordChange -> updateState { updatePassword(it, intent.text) }
+    override fun processAction(action: LoginAction) {
+        when (action) {
+            LoginAction.ClickedLoginButton -> sendEffect(LoginEffect.NavigateToHome)
+            LoginAction.ClickedLoginFacebookButton -> TODO()
+            LoginAction.ClickedLoginGoogleButton -> TODO()
+            is LoginAction.AccountChange -> updateState { updateAccount(it, action.text) }
+            is LoginAction.PasswordChange -> updateState { updatePassword(it, action.text) }
         }
+    }
+
+    private fun loginGoogle() {
+
     }
 
     private fun updateAccount(state: LoginState, text: String): LoginState {

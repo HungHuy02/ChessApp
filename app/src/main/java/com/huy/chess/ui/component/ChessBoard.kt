@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -55,7 +56,7 @@ fun ChessBoard(
         ) {
             rows.forEach { string ->
                 if (string == "8") {
-                    Box(
+                    Spacer(
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
@@ -70,21 +71,7 @@ fun ChessBoard(
                             if (!it.isDigit()) {
                                 Image(
                                     painter = painterResource(
-                                        when (it) {
-                                            'p' -> R.drawable.bpawn
-                                            'r' -> R.drawable.brook
-                                            'b' -> R.drawable.bbishop
-                                            'n' -> R.drawable.bknight
-                                            'q' -> R.drawable.bqueen
-                                            'k' -> R.drawable.bknight
-                                            'P' -> R.drawable.wpawn
-                                            'R' -> R.drawable.wrook
-                                            'B' -> R.drawable.wbishop
-                                            'N' -> R.drawable.wknight
-                                            'Q' -> R.drawable.wqueen
-                                            else -> R.drawable.wking
-                                        }
-
+                                        getPieceDrawableId(it)
                                     ),
                                     contentDescription = null,
                                     contentScale = ContentScale.Inside,
@@ -93,7 +80,7 @@ fun ChessBoard(
                                         .weight(1f)
                                 )
                             } else {
-                                Box(
+                                Spacer(
                                     modifier = Modifier
                                         .fillMaxHeight()
                                         .weight((it - '0').toFloat())

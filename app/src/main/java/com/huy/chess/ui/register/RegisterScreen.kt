@@ -7,25 +7,39 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.register.composables.TextWithDivider
-import com.huy.chess.ui.theme.ChessTheme
+import com.huy.chess.viewmodel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
+    viewModel: RegisterViewModel = hiltViewModel(),
     navigateToEmailInput: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when (it) {
+                RegisterEffect.NavigateToEmailInput -> navigateToEmailInput()
+            }
+        }
+    }
+
+    Content(viewModel::sendAction)
+}
+
+@Composable
+private fun Content(onAction: (RegisterAction) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,7 +57,7 @@ fun RegisterScreen(
         )
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = navigateToEmailInput,
+            onClick = { onAction(RegisterAction.RegisterWithEmail) },
             text = stringResource(R.string.register_with_email_text),
             iconPosition = IconPosition.NONE
         )
@@ -52,7 +66,7 @@ fun RegisterScreen(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = { onAction(RegisterAction.RegisterWithGoogle) },
             text = stringResource(R.string.continue_with_google_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.google),
@@ -61,24 +75,11 @@ fun RegisterScreen(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            onClick = { onAction(RegisterAction.RegisterWithFacebook) },
             text = stringResource(R.string.continue_with_facebook_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.facebook),
             iconPosition = IconPosition.START
         )
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    ChessTheme(dynamicColor = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
-        ) {
-            RegisterScreen({})
-        }
-    }
-
 }

@@ -12,9 +12,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<S, I, E>(initialState: S) : ViewModel() {
+sealed class NoEffect
 
-    private val intentChannel: Channel<I> = Channel()
+abstract class BaseViewModel<S, A, E>(initialState: S) : ViewModel() {
+
+    private val actionChannel: Channel<A> = Channel()
 
     private var _state: MutableStateFlow<S> = MutableStateFlow(initialState)
     val state: StateFlow<S> = _state.asStateFlow()
@@ -23,28 +25,28 @@ abstract class BaseViewModel<S, I, E>(initialState: S) : ViewModel() {
     val event: SharedFlow<E> = _event.asSharedFlow()
 
     init {
-        observeIntents()
+        observeAction()
     }
 
-    private fun observeIntents() {
+    private fun observeAction() {
         viewModelScope.launch {
-            intentChannel.consumeAsFlow().collect {
-                processIntent(it)
+            actionChannel.consumeAsFlow().collect {
+                processAction(it)
             }
         }
     }
 
-    fun sendIntent(intent: I) {
-        viewModelScope.launch { intentChannel.send(intent) }
+    fun sendAction(action: A) {
+        viewModelScope.launch { actionChannel.send(action) }
     }
 
-    protected fun sendEvent(event: E) {
-        viewModelScope.launch { _event.emit(event) }
+    protected fun sendEffect(effect : E) {
+        viewModelScope.launch { _event.emit(effect) }
     }
 
     protected fun updateState(handler: (oldState: S) -> S) {
         _state.value = handler(_state.value)
     }
 
-    abstract fun processIntent(intent: I)
+    abstract fun processAction(action: A)
 }

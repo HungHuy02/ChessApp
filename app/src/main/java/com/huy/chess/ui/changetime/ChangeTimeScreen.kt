@@ -28,8 +28,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
-import com.huy.chess.contract.ChangeTimeIntent
-import com.huy.chess.contract.ChangeTimeState
 import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
 import com.huy.chess.ui.component.RowTimeButton
@@ -41,13 +39,13 @@ fun ChangeTimeScreen(
 ) {
     val state = viewModel.state.collectAsState().value
 
-    Content(state, viewModel::sendIntent)
+    Content(state, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
     state: ChangeTimeState,
-    onIntent: (ChangeTimeIntent) -> Unit
+    onIntent: (ChangeTimeAction) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -67,7 +65,7 @@ private fun Content(
                 stringResource(R.string.two_minute_plus_one_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
         )
         IconWithText(
             painter = painterResource(R.drawable.flash_on_24px),
@@ -80,7 +78,7 @@ private fun Content(
                 stringResource(R.string.five_minute_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -93,7 +91,7 @@ private fun Content(
                 text1 = stringResource(R.string.five_minute_plus_five_text),
                 text2 = stringResource(R.string.five_min_plus_two),
                 selectedTime = state.selectedTime,
-                onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+                onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -107,7 +105,7 @@ private fun Content(
                 stringResource(R.string.thirty_minute)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -123,7 +121,7 @@ private fun Content(
                     stringResource(R.string.sixty_min)
                 ),
                 selectedTime = state.selectedTime,
-                onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+                onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -137,7 +135,7 @@ private fun Content(
                 stringResource(R.string.seven_days_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -154,7 +152,7 @@ private fun Content(
                         stringResource(R.string.fourteen_days)
                     ),
                     selectedTime = state.selectedTime,
-                    onClick = { onIntent(ChangeTimeIntent.ClickedButton(it)) }
+                    onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconWithText(
@@ -166,7 +164,7 @@ private fun Content(
             }
         }
         TextButton(
-            onClick = { onIntent(ChangeTimeIntent.ToggleShowMore) },
+            onClick = { onIntent(ChangeTimeAction.ToggleShowMore) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {

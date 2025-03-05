@@ -9,6 +9,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
@@ -29,13 +30,13 @@ fun ChessBottomAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val navBackStackEntry by rememberUpdatedState(newValue = navController.currentBackStackEntry)
         val currentDestination = navBackStackEntry?.destination
 
         BottomNavScreens.items.forEach { navigationItem ->
             Log.e("tag", "test")
 
-            val screen = when (navigationItem) {
+            val screen: Any = when (navigationItem) {
                 BottomNavScreens.Home -> Home
                 BottomNavScreens.MoreOptions -> MoreOptions
                 BottomNavScreens.Puzzles -> Puzzles

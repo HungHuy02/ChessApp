@@ -18,9 +18,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
-import com.huy.chess.contract.LoginEvent
-import com.huy.chess.contract.LoginIntent
-import com.huy.chess.contract.LoginState
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.PasswordTextField
@@ -37,17 +34,17 @@ fun LoginScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                LoginEvent.NavigateToHome -> navigateToHome()
+                LoginEffect.NavigateToHome -> navigateToHome()
             }
         }
     }
-    Content(state, viewModel::sendIntent)
+    Content(state, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
     state: LoginState,
-    onIntent: (LoginIntent) -> Unit
+    onIntent: (LoginAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -57,14 +54,14 @@ private fun Content(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AppButton(
-            onClick = { onIntent(LoginIntent.ClickedLoginFacebookButton) },
+            onClick = { onIntent(LoginAction.ClickedLoginFacebookButton) },
             text = stringResource(R.string.login_with_facebook_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.facebook),
             iconPosition = IconPosition.START
         )
         AppButton(
-            onClick = { onIntent(LoginIntent.ClickedLoginGoogleButton) },
+            onClick = { onIntent(LoginAction.ClickedLoginGoogleButton) },
             text = stringResource(R.string.login_with_google_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.google),
@@ -75,13 +72,13 @@ private fun Content(
             modifier = Modifier.fillMaxWidth(),
             value = state.account
         ) {
-            onIntent(LoginIntent.AccountChange(it))
+            onIntent(LoginAction.AccountChange(it))
         }
         PasswordTextField(
             modifier = Modifier.fillMaxWidth(),
             value = state.password
         ) {
-            onIntent(LoginIntent.PasswordChange(it))
+            onIntent(LoginAction.PasswordChange(it))
         }
         Text(
             text = stringResource(R.string.forgot_password_text),
@@ -91,7 +88,7 @@ private fun Content(
             }
         )
         AppButton(
-            onClick = { onIntent(LoginIntent.ClickedLoginButton) },
+            onClick = { onIntent(LoginAction.ClickedLoginButton) },
             text = stringResource(R.string.login_text),
             iconPosition = IconPosition.NONE
         )
