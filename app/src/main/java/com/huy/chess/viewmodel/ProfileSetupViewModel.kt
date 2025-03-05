@@ -1,23 +1,23 @@
 package com.huy.chess.viewmodel
 
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.contract.ProfileSetupEvent
-import com.huy.chess.contract.ProfileSetupIntent
-import com.huy.chess.contract.ProfileSetupState
+import com.huy.chess.ui.profilesetup.ProfileSetupEffect
+import com.huy.chess.ui.profilesetup.ProfileSetupAction
+import com.huy.chess.ui.profilesetup.ProfileSetupState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileSetupViewModel @Inject constructor() :
-    BaseViewModel<ProfileSetupState, ProfileSetupIntent, ProfileSetupEvent>(
+    BaseViewModel<ProfileSetupState, ProfileSetupAction, ProfileSetupEffect>(
         ProfileSetupState()
     ) {
 
-    override fun processIntent(intent: ProfileSetupIntent) {
-        when(intent) {
-            ProfileSetupIntent.ClickedButton -> sendEvent(ProfileSetupEvent.NavigateToLogin)
-            is ProfileSetupIntent.AvatarPathChanged -> TODO()
-            is ProfileSetupIntent.DisplayNameChanged -> updateState { updateDisplayName(it, intent.text) }
+    override fun processAction(action: ProfileSetupAction) {
+        when(action) {
+            ProfileSetupAction.ClickedButton -> sendEffect(ProfileSetupEffect.NavigateToLogin)
+            is ProfileSetupAction.AvatarPathChanged -> TODO()
+            is ProfileSetupAction.DisplayNameChanged -> updateState { updateDisplayName(it, action.text) }
         }
     }
 

@@ -17,9 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
-import com.huy.chess.contract.EmailInputEvent
-import com.huy.chess.contract.EmailInputIntent
-import com.huy.chess.contract.EmailInputState
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.emailinput.composables.EmailTextField
@@ -34,17 +31,17 @@ fun EmailInputScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                EmailInputEvent.NavigateToPasswordInput -> navigateToPasswordInput()
+                EmailInputEffect.NavigateToPasswordInput -> navigateToPasswordInput()
             }
         }
     }
-    Content(state, viewModel::sendIntent)
+    Content(state, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
     state: EmailInputState,
-    onIntent: (EmailInputIntent) -> Unit
+    onIntent: (EmailInputAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -62,11 +59,11 @@ private fun Content(
             modifier = Modifier.fillMaxWidth(),
             value = state.inputText
         ) {
-            onIntent(EmailInputIntent.InputChanged(it))
+            onIntent(EmailInputAction.InputChanged(it))
         }
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            onClick = { onIntent(EmailInputIntent.ClickedButton) },
+            onClick = { onIntent(EmailInputAction.ClickedButton) },
             text = stringResource(R.string.continue_text),
             iconPosition = IconPosition.NONE,
             enable = state.isButtonEnable,

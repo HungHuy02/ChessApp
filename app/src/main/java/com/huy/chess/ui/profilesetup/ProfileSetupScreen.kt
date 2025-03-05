@@ -22,9 +22,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
-import com.huy.chess.contract.ProfileSetupEvent
-import com.huy.chess.contract.ProfileSetupIntent
-import com.huy.chess.contract.ProfileSetupState
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.profilesetup.composables.ImagePicker
@@ -40,17 +37,17 @@ fun ProfileSetupScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
-                ProfileSetupEvent.NavigateToLogin -> navigateToLogin()
+                ProfileSetupEffect.NavigateToLogin -> navigateToLogin()
             }
         }
     }
-    Content(state, viewModel::sendIntent)
+    Content(state, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
     state: ProfileSetupState,
-    onIntent: (ProfileSetupIntent) -> Unit
+    onIntent: (ProfileSetupAction) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -77,7 +74,7 @@ private fun Content(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.displayName
             ) {
-                onIntent(ProfileSetupIntent.DisplayNameChanged(it))
+                onIntent(ProfileSetupAction.DisplayNameChanged(it))
             }
         }
 
@@ -101,7 +98,7 @@ private fun Content(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onIntent(ProfileSetupIntent.ClickedButton) },
+            onClick = { onIntent(ProfileSetupAction.ClickedButton) },
             text = stringResource(R.string.create_account_text),
             iconPosition = IconPosition.NONE
         )
