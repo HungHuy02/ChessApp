@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.huy.chess.ui.component.BaseScreen
 import com.huy.chess.ui.emailinput.EmailInputScreen
 import com.huy.chess.ui.login.LoginScreen
 import com.huy.chess.ui.passwordinput.PasswordInputScreen
@@ -23,54 +22,29 @@ fun NavGraphBuilder.authDestination(
     navController: NavController
 ) {
     composable<Login> {
-        BaseScreen(
-            showBackIcon = true,
-            onBackIconClick = { navController.popBackStack() }
-        ) {
-            LoginScreen {
-                navController.navigate(Home)
-            }
+        LoginScreen {
+            navController.navigate(TopLevelDestination.Home)
         }
     }
     navigation<Register>(startDestination = RegisterWay) {
         composable<RegisterWay> {
-            BaseScreen(
-                showBackIcon = true,
-                onBackIconClick = { navController.popBackStack() }
-            ) {
-                RegisterScreen {
-                    navController.navigate(EmailInput)
-                }
+            RegisterScreen {
+                navController.navigate(EmailInput)
             }
         }
         composable<EmailInput> {
-            BaseScreen(
-                showBackIcon = true,
-                onBackIconClick = { navController.popBackStack() }
-            ) {
-                EmailInputScreen {
-                    navController.navigate(PasswordInput)
-                }
+            EmailInputScreen {
+                navController.navigate(PasswordInput)
             }
         }
         composable<PasswordInput> {
-            BaseScreen(
-                showBackIcon = true,
-                onBackIconClick = { navController.popBackStack() }
-            ) {
-                PasswordInputScreen {
-                    navController.navigate(ProfileSetup)
-                }
+            PasswordInputScreen {
+                navController.navigate(ProfileSetup)
             }
         }
         composable<ProfileSetup> {
-            BaseScreen(
-                showBackIcon = true,
-                onBackIconClick = { navController.popBackStack() }
-            ) {
-                ProfileSetupScreen {
-                    navController.navigate(Login)
-                }
+            ProfileSetupScreen {
+                navController.navigate(Login)
             }
         }
     }
