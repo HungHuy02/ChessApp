@@ -11,7 +11,7 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val authApi: AuthApi
 ){
-    suspend fun register(request: RegisterRequest) : Result<BaseResponse> {
+    suspend fun register(request: RegisterRequest) : Result<BaseResponse<Any>> {
         return try {
             val namePart = request.name.toRequestBody()
             val emailPart = request.email.toRequestBody()

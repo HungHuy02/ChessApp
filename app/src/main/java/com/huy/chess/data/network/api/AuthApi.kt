@@ -17,5 +17,5 @@ interface AuthApi {
         @Part("email") email: RequestBody,
         @Part("password") password: RequestBody,
         @Part avatar: MultipartBody.Part
-    ) : Response<BaseResponse>
+    ) : Response<BaseResponse<Any>>
 }
