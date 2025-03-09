@@ -1,6 +1,6 @@
 package com.huy.chess.utils
 
-import com.huy.chess.enums.TimeType
+import com.huy.chess.utils.enums.TimeType
 import java.util.concurrent.TimeUnit
 
 object Formatters {
