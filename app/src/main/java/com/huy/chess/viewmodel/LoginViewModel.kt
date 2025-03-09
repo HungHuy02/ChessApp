@@ -16,15 +16,11 @@ class LoginViewModel @Inject constructor() :
     override fun processAction(action: LoginAction) {
         when (action) {
             LoginAction.ClickedLoginButton -> sendEffect(LoginEffect.NavigateToHome)
-            LoginAction.ClickedLoginFacebookButton -> TODO()
-            LoginAction.ClickedLoginGoogleButton -> TODO()
+            LoginAction.ClickedLoginFacebookButton -> sendEffect(LoginEffect.SignInFacebook)
+            LoginAction.ClickedLoginGoogleButton -> sendEffect(LoginEffect.SignInGoogle)
             is LoginAction.AccountChange -> updateState { updateAccount(it, action.text) }
             is LoginAction.PasswordChange -> updateState { updatePassword(it, action.text) }
         }
-    }
-
-    private fun loginGoogle() {
-
     }
 
     private fun updateAccount(state: LoginState, text: String): LoginState {

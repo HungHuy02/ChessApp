@@ -125,4 +125,12 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.googleid)
+
+    // credentials
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+
+    // facebook sdk
+    implementation(libs.facebook.android.sdk)
 }

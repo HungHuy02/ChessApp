@@ -1,4 +1,4 @@
-package com.huy.chess.enums
+package com.huy.chess.utils.enums
 
 enum class TimeType {
     ONE_MINUTE,
