@@ -16,14 +16,21 @@ class ProfileSetupViewModel @Inject constructor() :
     override fun processAction(action: ProfileSetupAction) {
         when(action) {
             ProfileSetupAction.ClickedButton -> sendEffect(ProfileSetupEffect.NavigateToLogin)
-            is ProfileSetupAction.AvatarPathChanged -> TODO()
+            is ProfileSetupAction.AvatarPathChanged -> updateState { updateAvatarPath(it, action.text) }
             is ProfileSetupAction.DisplayNameChanged -> updateState { updateDisplayName(it, action.text) }
+            ProfileSetupAction.ClickedChangeAvatar -> sendEffect(ProfileSetupEffect.OpenImagePicker)
         }
     }
 
     private fun updateDisplayName(state: ProfileSetupState, text: String) : ProfileSetupState {
         return state.copy(
             displayName = text
+        )
+    }
+
+    private fun updateAvatarPath(state: ProfileSetupState, path: String) : ProfileSetupState {
+        return state.copy(
+            avatarPath = path
         )
     }
 }

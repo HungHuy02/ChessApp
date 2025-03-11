@@ -13,8 +13,8 @@ class RegisterViewModel @Inject constructor() : BaseViewModel<RegisterState, Reg
     override fun processAction(action: RegisterAction) {
         when(action) {
             RegisterAction.RegisterWithEmail -> sendEffect(RegisterEffect.NavigateToEmailInput)
-            RegisterAction.RegisterWithFacebook -> TODO()
-            RegisterAction.RegisterWithGoogle -> TODO()
+            RegisterAction.RegisterWithFacebook -> sendEffect(RegisterEffect.SignInFacebook)
+            RegisterAction.RegisterWithGoogle -> sendEffect(RegisterEffect.SignInGoogle)
         }
 
     }
