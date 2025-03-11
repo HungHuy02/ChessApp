@@ -1,5 +1,8 @@
 package com.huy.chess.ui.profilesetup
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,10 +37,17 @@ fun ProfileSetupScreen(
     navigateToLogin: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        viewModel.sendAction(ProfileSetupAction.AvatarPathChanged(it.toString()))
+    }
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
                 ProfileSetupEffect.NavigateToLogin -> navigateToLogin()
+                ProfileSetupEffect.OpenImagePicker ->
+                    launcher.launch(
+                        PickVisualMediaRequest(mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly)
+                    )
             }
         }
     }
@@ -47,7 +57,7 @@ fun ProfileSetupScreen(
 @Composable
 private fun Content(
     state: ProfileSetupState,
-    onIntent: (ProfileSetupAction) -> Unit
+    onAction: (ProfileSetupAction) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -69,12 +79,14 @@ private fun Content(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ImagePicker(modifier = Modifier.padding(end = 8.dp))
+            ImagePicker(modifier = Modifier.padding(end = 8.dp)) {
+                onAction(ProfileSetupAction.ClickedChangeAvatar)
+            }
             UserNameTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.displayName
             ) {
-                onIntent(ProfileSetupAction.DisplayNameChanged(it))
+                onAction(ProfileSetupAction.DisplayNameChanged(it))
             }
         }
 
@@ -98,7 +110,7 @@ private fun Content(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onIntent(ProfileSetupAction.ClickedButton) },
+            onClick = { onAction(ProfileSetupAction.ClickedButton) },
             text = stringResource(R.string.create_account_text),
             iconPosition = IconPosition.NONE
         )
