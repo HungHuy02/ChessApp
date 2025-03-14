@@ -11,6 +11,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.huy.chess.R
@@ -21,6 +22,7 @@ fun UserNameTextField(
     value: String,
     onValueChange: (String) -> Unit
 ) {
+    val focusManger = LocalFocusManager.current
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -45,7 +47,7 @@ fun UserNameTextField(
                 )
         },
         keyboardActions = KeyboardActions(
-            onDone = {}
+            onDone = { focusManger.clearFocus() }
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Done

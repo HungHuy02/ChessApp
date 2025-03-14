@@ -45,7 +45,8 @@ fun LoginScreen(
     val callbackManager = CallbackManager.Factory.create()
     val loginManager = LoginManager.getInstance()
     val launcher = rememberLauncherForActivityResult(
-        loginManager.createLogInActivityResultContract(callbackManager, null)) {}
+        loginManager.createLogInActivityResultContract(callbackManager, null)
+    ) {}
 
     LaunchedEffect(Unit) {
         viewModel.event.collect {
@@ -68,11 +69,11 @@ private fun Content(
     onIntent: (LoginAction) -> Unit
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(top = 32.dp, start = 16.dp, end = 16.dp)
     ) {
         AppButton(
             onClick = { onIntent(LoginAction.ClickedLoginFacebookButton) },
