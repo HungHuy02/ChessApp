@@ -64,7 +64,8 @@ private fun Content(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)) {
+            .padding(8.dp)
+    ) {
         Text(
             text = stringResource(R.string.select_name_text),
             style = MaterialTheme.typography.titleLarge,

@@ -44,10 +44,10 @@ private fun Content(
     onIntent: (PasswordInputAction) -> Unit
 ) {
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .padding(16.dp)
     ) {
         Text(
             text = stringResource(R.string.create_password_text),
