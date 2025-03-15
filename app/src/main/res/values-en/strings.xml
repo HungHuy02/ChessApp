@@ -94,4 +94,20 @@
     <string name="message_text">Messages</string>
     <string name="back_text">Back</string>
     <string name="forward_text">Forward</string>
+    <string name="not_today_text">Not Today</string>
+    <string name="register_dialog_title_1">Sign up to use this feature.</string>
+    <string name="register_dialog_sub_title_1">Play, Learn and Connect</string>
+    <string name="register_dialog_description_1">Join millions of chess players</string>
+    <string name="register_dialog_title_2">Sign up to analyze your games!</string>
+    <string name="register_dialog_sub_title_2">Unlimited Game Review</string>
+    <string name="register_dialog_description_2">Learn from every game!</string>
+    <string name="register_dialog_title_3">Sign up to track your progress!</string>
+    <string name="register_dialog_sub_title_3">Get a Rating</string>
+    <string name="register_dialog_description_3">Save your games!</string>
+    <string name="register_dialog_title_4">Sign up to keep solving Puzzles!</string>
+    <string name="register_dialog_sub_title_4">500k+ Puzzles</string>
+    <string name="register_dialog_description_4">Play every day to improve!</string>
+    <string name="register_dialog_title_5">Sign up to unlock Lessons.</string>
+    <string name="register_dialog_sub_title_5">1500+ Lessons</string>
+    <string name="register_dialog_description_5">Learn from chess masters!</string>
 </resources>

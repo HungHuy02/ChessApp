@@ -9,9 +9,11 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import com.huy.chess.navigation.Login
 import com.huy.chess.navigation.Register
+import com.huy.chess.navigation.RegisterDialog
 import com.huy.chess.navigation.TopLevelDestination
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.bottomDestination
@@ -19,6 +21,7 @@ import com.huy.chess.navigation.playDestination
 import com.huy.chess.ui.component.ChessBottomAppBar
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.FocusClearIme
+import com.huy.chess.ui.dialog.register.RegisterDialog
 
 @Composable
 fun MainScreen() {
@@ -55,6 +58,13 @@ fun MainScreen() {
                 bottomDestination(navController)
                 authDestination(navController)
                 playDestination(navController)
+                dialog<RegisterDialog> {
+                    RegisterDialog(
+                        navigateRegister = { navController.navigate(Register) }
+                    ) {
+                        navController.popBackStack()
+                    }
+                }
             }
         }
     }
