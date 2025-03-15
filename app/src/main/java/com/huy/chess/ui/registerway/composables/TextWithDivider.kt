@@ -1,4 +1,4 @@
-package com.huy.chess.ui.register.composables
+package com.huy.chess.ui.registerway.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

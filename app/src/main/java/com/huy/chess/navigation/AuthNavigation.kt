@@ -1,5 +1,7 @@
 package com.huy.chess.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -8,7 +10,8 @@ import com.huy.chess.ui.emailinput.EmailInputScreen
 import com.huy.chess.ui.login.LoginScreen
 import com.huy.chess.ui.passwordinput.PasswordInputScreen
 import com.huy.chess.ui.profilesetup.ProfileSetupScreen
-import com.huy.chess.ui.register.RegisterScreen
+import com.huy.chess.ui.registerway.RegisterWayScreen
+import com.huy.chess.viewmodel.RegisterViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable object Login
@@ -28,22 +31,46 @@ fun NavGraphBuilder.authDestination(
     }
     navigation<Register>(startDestination = RegisterWay) {
         composable<RegisterWay> {
-            RegisterScreen {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Register)
+            }
+            val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
+            RegisterWayScreen(
+                registerViewModel = registerViewModel
+            ) {
                 navController.navigate(EmailInput)
             }
         }
         composable<EmailInput> {
-            EmailInputScreen {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Register)
+            }
+            val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
+            EmailInputScreen(
+                registerViewModel = registerViewModel
+            ) {
                 navController.navigate(PasswordInput)
             }
         }
         composable<PasswordInput> {
-            PasswordInputScreen {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Register)
+            }
+            val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
+            PasswordInputScreen(
+                registerViewModel = registerViewModel
+            ) {
                 navController.navigate(ProfileSetup)
             }
         }
         composable<ProfileSetup> {
-            ProfileSetupScreen {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry(Register)
+            }
+            val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
+            ProfileSetupScreen(
+                registerViewModel = registerViewModel
+            ) {
                 navController.navigate(Login)
             }
         }

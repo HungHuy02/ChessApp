@@ -1,4 +1,4 @@
-package com.huy.chess.ui.register
+package com.huy.chess.ui.registerway
 
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,12 +26,14 @@ import com.huy.chess.R
 import com.huy.chess.data.auth.AccountManager
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
-import com.huy.chess.ui.register.composables.TextWithDivider
+import com.huy.chess.ui.registerway.composables.TextWithDivider
 import com.huy.chess.viewmodel.RegisterViewModel
+import com.huy.chess.viewmodel.RegisterWayViewModel
 
 @Composable
-fun RegisterScreen(
-    viewModel: RegisterViewModel = hiltViewModel(),
+fun RegisterWayScreen(
+    registerViewModel: RegisterViewModel,
+    viewModel: RegisterWayViewModel = hiltViewModel(),
     navigateToEmailInput: () -> Unit
 ) {
     val context = LocalContext.current
@@ -46,9 +48,9 @@ fun RegisterScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
-                RegisterEffect.NavigateToEmailInput -> navigateToEmailInput()
-                RegisterEffect.SignInGoogle -> accountManager.signInGoogle()
-                RegisterEffect.SignInFacebook -> {
+                RegisterWayEffect.NavigateToEmailInput -> navigateToEmailInput()
+                RegisterWayEffect.SignInGoogle -> accountManager.signInGoogle()
+                RegisterWayEffect.SignInFacebook -> {
                     launcher.launch(listOf("email", "public_profile"))
                     accountManager.signInFacebook(callbackManager, loginManager)
                 }
@@ -60,7 +62,7 @@ fun RegisterScreen(
 }
 
 @Composable
-private fun Content(onAction: (RegisterAction) -> Unit) {
+private fun Content(onAction: (RegisterWayAction) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -78,7 +80,7 @@ private fun Content(onAction: (RegisterAction) -> Unit) {
         )
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onAction(RegisterAction.RegisterWithEmail) },
+            onClick = { onAction(RegisterWayAction.RegisterWayWithEmail) },
             text = stringResource(R.string.register_with_email_text),
             iconPosition = IconPosition.NONE
         )
@@ -87,7 +89,7 @@ private fun Content(onAction: (RegisterAction) -> Unit) {
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onAction(RegisterAction.RegisterWithGoogle) },
+            onClick = { onAction(RegisterWayAction.RegisterWayWithGoogle) },
             text = stringResource(R.string.continue_with_google_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.google),
@@ -96,7 +98,7 @@ private fun Content(onAction: (RegisterAction) -> Unit) {
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onAction(RegisterAction.RegisterWithFacebook) },
+            onClick = { onAction(RegisterWayAction.RegisterWayWithFacebook) },
             text = stringResource(R.string.continue_with_facebook_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.facebook),

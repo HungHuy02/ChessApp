@@ -21,27 +21,34 @@ import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.PasswordTextField
 import com.huy.chess.viewmodel.PasswordInputViewModel
+import com.huy.chess.viewmodel.RegisterAction
+import com.huy.chess.viewmodel.RegisterState
+import com.huy.chess.viewmodel.RegisterViewModel
 
 @Composable
 fun PasswordInputScreen(
+    registerViewModel: RegisterViewModel,
     viewModel: PasswordInputViewModel = hiltViewModel(),
     navigateToProfileSetup: () -> Unit
 ) {
+    val registerState = registerViewModel.state.collectAsState().value
     val state = viewModel.state.collectAsState().value
-    LaunchedEffect (Unit) {
+    LaunchedEffect(Unit) {
         viewModel.event.collect {
             when (it) {
                 PasswordInputEffect.NavigateToProfileSetup -> navigateToProfileSetup()
             }
         }
     }
-    Content(state, viewModel::sendAction)
+    Content(registerState, state, registerViewModel::sendAction, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
+    registerState: RegisterState,
     state: PasswordInputState,
-    onIntent: (PasswordInputAction) -> Unit
+    onRegisterAction: (RegisterAction) -> Unit,
+    onAction: (PasswordInputAction) -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -55,14 +62,19 @@ private fun Content(
             color = MaterialTheme.colorScheme.onPrimary
         )
         Spacer(modifier = Modifier.size(16.dp))
-        PasswordTextField(modifier = Modifier.fillMaxWidth(), value = state.inputText) {
-            onIntent(PasswordInputAction.InputChanged(it))
+        PasswordTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = registerState.password
+        ) {
+            onRegisterAction(RegisterAction.PasswordChange(it))
+            onAction(PasswordInputAction.InputChanged(it))
         }
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            onClick = { onIntent(PasswordInputAction.ClickedButton) },
+            onClick = { onAction(PasswordInputAction.ClickedButton) },
             text = stringResource(R.string.continue_text),
             iconPosition = IconPosition.NONE,
+            enable = state.isButtonEnable,
             modifier = Modifier.fillMaxWidth()
         )
     }

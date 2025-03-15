@@ -30,19 +30,25 @@ import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.profilesetup.composables.ImagePicker
 import com.huy.chess.ui.profilesetup.composables.UserNameTextField
 import com.huy.chess.viewmodel.ProfileSetupViewModel
+import com.huy.chess.viewmodel.RegisterAction
+import com.huy.chess.viewmodel.RegisterState
+import com.huy.chess.viewmodel.RegisterViewModel
 
 @Composable
 fun ProfileSetupScreen(
+    registerViewModel: RegisterViewModel,
     viewModel: ProfileSetupViewModel = hiltViewModel(),
     navigateToLogin: () -> Unit
 ) {
+    val registerState = registerViewModel.state.collectAsState().value
     val state = viewModel.state.collectAsState().value
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+        registerViewModel.sendAction(RegisterAction.AvatarPathChange(it.toString()))
         viewModel.sendAction(ProfileSetupAction.AvatarPathChanged(it.toString()))
     }
     LaunchedEffect(Unit) {
         viewModel.event.collect {
-            when(it) {
+            when (it) {
                 ProfileSetupEffect.NavigateToLogin -> navigateToLogin()
                 ProfileSetupEffect.OpenImagePicker ->
                     launcher.launch(
@@ -51,12 +57,14 @@ fun ProfileSetupScreen(
             }
         }
     }
-    Content(state, viewModel::sendAction)
+    Content(registerState, state, registerViewModel::sendAction, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
+    registerState: RegisterState,
     state: ProfileSetupState,
+    onRegisterAction: (RegisterAction) -> Unit,
     onAction: (ProfileSetupAction) -> Unit
 ) {
     Column(
@@ -80,13 +88,17 @@ private fun Content(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ImagePicker(modifier = Modifier.padding(end = 8.dp)) {
+            ImagePicker(
+                uri = registerState.avatarPath,
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
                 onAction(ProfileSetupAction.ClickedChangeAvatar)
             }
             UserNameTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = state.displayName
+                value = registerState.name
             ) {
+                onRegisterAction(RegisterAction.NameChange(it))
                 onAction(ProfileSetupAction.DisplayNameChanged(it))
             }
         }
@@ -113,7 +125,8 @@ private fun Content(
             modifier = Modifier.fillMaxWidth(),
             onClick = { onAction(ProfileSetupAction.ClickedButton) },
             text = stringResource(R.string.create_account_text),
-            iconPosition = IconPosition.NONE
+            iconPosition = IconPosition.NONE,
+            enable = state.isButtonEnable
         )
     }
 }
