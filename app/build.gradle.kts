@@ -116,11 +116,11 @@ dependencies {
     implementation (libs.converter.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
     ksp(libs.moshi.kotlin.codegen)
 
     // coil
-    implementation(libs.coil)
-    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.compose)
 
     // firebase
     implementation(platform(libs.firebase.bom))

@@ -24,13 +24,13 @@ class ProfileSetupViewModel @Inject constructor() :
 
     private fun updateDisplayName(state: ProfileSetupState, text: String) : ProfileSetupState {
         return state.copy(
-            displayName = text
+            isButtonEnable = true
         )
     }
 
     private fun updateAvatarPath(state: ProfileSetupState, path: String) : ProfileSetupState {
         return state.copy(
-            avatarPath = path
+            isButtonEnable = true
         )
     }
 }

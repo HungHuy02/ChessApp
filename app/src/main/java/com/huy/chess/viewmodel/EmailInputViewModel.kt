@@ -23,7 +23,6 @@ class EmailInputViewModel @Inject constructor() :
 
     private fun handleInputTextChange(state: EmailInputState, text: String): EmailInputState {
         return state.copy(
-            inputText = text,
             isButtonEnable = text.isValidEmail()
         )
     }
