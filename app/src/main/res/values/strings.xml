@@ -114,6 +114,22 @@
     <string name="message_text">Tin nhắn</string>
     <string name="back_text">Quay lại</string>
     <string name="forward_text">Tiếp</string>
+    <string name="not_today_text">Không phải Hôm nay</string>
+    <string name="register_dialog_title_1">Đăng ký tài khoản để dùng tính năng này.</string>
+    <string name="register_dialog_sub_title_1">Chơi, học và kết nối</string>
+    <string name="register_dialog_description_1">Tham gia với hàng triệu người chơi cờ vua</string>
+    <string name="register_dialog_title_2">Đăng ký tài khoản để phân tích ván đấu của bạn!</string>
+    <string name="register_dialog_sub_title_2">Xem lại ván đấu không giới hạn</string>
+    <string name="register_dialog_description_2">Học từ mọi ván đấu!</string>
+    <string name="register_dialog_title_3">Đăng ký tài khoản để theo dõi quá trình của bạn!</string>
+    <string name="register_dialog_sub_title_3">Nhận đánh giá</string>
+    <string name="register_dialog_description_3">Lưu ván đấu lại!</string>
+    <string name="register_dialog_title_4">Đăng ký tài khoản để tiếp tục Giải Đố!</string>
+    <string name="register_dialog_sub_title_4">500k+ Thế cờ đố</string>
+    <string name="register_dialog_description_4">Chơi mỗi ngày để cải thiện!</string>
+    <string name="register_dialog_title_5">Đăng ký tài khoản để mở khóa bài học.</string>
+    <string name="register_dialog_sub_title_5">Hơn 1500 bài học</string>
+    <string name="register_dialog_description_5">Học từ các kiện tướng!</string>
 
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>

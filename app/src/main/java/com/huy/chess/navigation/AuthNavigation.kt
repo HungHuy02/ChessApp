@@ -12,14 +12,6 @@ import com.huy.chess.ui.passwordinput.PasswordInputScreen
 import com.huy.chess.ui.profilesetup.ProfileSetupScreen
 import com.huy.chess.ui.registerway.RegisterWayScreen
 import com.huy.chess.viewmodel.RegisterViewModel
-import kotlinx.serialization.Serializable
-
-@Serializable object Login
-@Serializable object Register
-@Serializable object RegisterWay
-@Serializable object EmailInput
-@Serializable object PasswordInput
-@Serializable object ProfileSetup
 
 fun NavGraphBuilder.authDestination(
     navController: NavController

@@ -7,18 +7,6 @@ import com.huy.chess.R
 import com.huy.chess.ui.home.HomeScreen
 import com.huy.chess.ui.moreoptions.MoreOptionsScreen
 import com.huy.chess.ui.puzzle.PuzzleScreen
-import kotlinx.serialization.Serializable
-
-sealed class TopLevelDestination {
-    @Serializable
-    data object Home: TopLevelDestination()
-    @Serializable
-    data object Puzzles: TopLevelDestination()
-    @Serializable
-    data object Study: TopLevelDestination()
-    @Serializable
-    data object MoreOptions: TopLevelDestination()
-}
 
 sealed class BottomNavScreens(
      val icon: Int,
