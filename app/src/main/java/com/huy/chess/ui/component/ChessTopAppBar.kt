@@ -10,7 +10,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -23,15 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import com.huy.chess.R
-import com.huy.chess.navigation.NewGame
-import com.huy.chess.navigation.SetupTwoPeople
 import com.huy.chess.navigation.TopLevelDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChessTopAppBar(
     currentDestination: NavDestination?,
-    onBackIconClick: () -> Unit = {},
     onRegisterButtonClick: () -> Unit = {},
     onLoginButtonClick: () -> Unit = {}
 ) {
@@ -50,12 +46,6 @@ fun ChessTopAppBar(
         }
         TopLevelDestination.MoreOptions::class.qualifiedName -> {
             title = stringResource(R.string.more_options_text)
-        }
-        NewGame::class.qualifiedName -> {
-            title = stringResource(R.string.new_game_text)
-        }
-        SetupTwoPeople::class.qualifiedName -> {
-            title = stringResource(R.string.play_with_friend_offline)
         }
         else -> {
 
@@ -79,31 +69,13 @@ fun ChessTopAppBar(
             }
         },
         navigationIcon = {
-            when (currentDestination?.route) {
-                TopLevelDestination.Home::class.qualifiedName -> {
-                    TextButton(onClick = onLoginButtonClick) {
-                        Text(
-                            text = stringResource(R.string.login_text),
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.labelLarge
-                        )
-                    }
-                }
-
-                TopLevelDestination.Study::class.qualifiedName,
-                TopLevelDestination.Puzzles::class.qualifiedName,
-                TopLevelDestination.MoreOptions::class.qualifiedName -> {}
-
-                else -> {
-                    IconButton(
-                        onClick = onBackIconClick,
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.arrow_back_24px),
-                            contentDescription = "back icon",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
+            if (currentDestination?.route.equals(TopLevelDestination.Home::class.qualifiedName)) {
+                TextButton(onClick = onLoginButtonClick) {
+                    Text(
+                        text = stringResource(R.string.login_text),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge
+                    )
                 }
             }
         },

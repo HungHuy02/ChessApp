@@ -26,6 +26,8 @@ object SetupBot
 object SetupTwoPeople
 @Serializable
 object RegisterDialog
+@Serializable
+object Main
 
 
 sealed class TopLevelDestination {

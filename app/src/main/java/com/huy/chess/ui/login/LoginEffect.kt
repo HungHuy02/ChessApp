@@ -4,4 +4,5 @@ sealed class LoginEffect {
     data object NavigateToHome : LoginEffect()
     data object SignInGoogle: LoginEffect()
     data object SignInFacebook: LoginEffect()
+    data object PopBackStack: LoginEffect()
 }

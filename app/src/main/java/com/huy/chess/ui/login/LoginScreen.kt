@@ -5,9 +5,12 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +38,8 @@ import com.huy.chess.viewmodel.LoginViewModel
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
@@ -57,6 +61,7 @@ fun LoginScreen(
                     launcher.launch(listOf("email", "public_profile"))
                     accountManager.signInFacebook(callbackManager, loginManager)
                 }
+                LoginEffect.PopBackStack -> popBackStack()
             }
         }
     }
@@ -66,53 +71,70 @@ fun LoginScreen(
 @Composable
 private fun Content(
     state: LoginState,
-    onIntent: (LoginAction) -> Unit
+    onAction: (LoginAction) -> Unit
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 32.dp, start = 16.dp, end = 16.dp)
+            .padding(16.dp)
     ) {
+        Icon(
+            painter = painterResource(R.drawable.arrow_back_24px),
+            contentDescription = "icon back",
+            modifier = Modifier
+                .clickable {
+                    onAction(LoginAction.ClickedBackButton)
+                }
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.login_text),
+            color = MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Spacer(Modifier.height(16.dp))
+        AccountTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = state.account
+        ) {
+            onAction(LoginAction.AccountChange(it))
+        }
+        PasswordTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = state.password
+        ) {
+            onAction(LoginAction.PasswordChange(it))
+        }
+        TextWithFullDivider()
         AppButton(
-            onClick = { onIntent(LoginAction.ClickedLoginFacebookButton) },
+            onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
             text = stringResource(R.string.login_with_facebook_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.facebook),
             iconPosition = IconPosition.START
         )
         AppButton(
-            onClick = { onIntent(LoginAction.ClickedLoginGoogleButton) },
+            onClick = { onAction(LoginAction.ClickedLoginGoogleButton) },
             text = stringResource(R.string.login_with_google_text),
             textStyle = MaterialTheme.typography.titleMedium,
             painter = painterResource(R.drawable.google),
             iconPosition = IconPosition.START
         )
-        TextWithFullDivider()
-        AccountTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = state.account
-        ) {
-            onIntent(LoginAction.AccountChange(it))
-        }
-        PasswordTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = state.password
-        ) {
-            onIntent(LoginAction.PasswordChange(it))
-        }
         Text(
             text = stringResource(R.string.forgot_password_text),
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.clickable {
 
-            }
+            }.align(Alignment.CenterHorizontally)
         )
+        Spacer(Modifier.weight(1f))
         AppButton(
-            onClick = { onIntent(LoginAction.ClickedLoginButton) },
+            onClick = { onAction(LoginAction.ClickedLoginButton) },
             text = stringResource(R.string.login_text),
-            iconPosition = IconPosition.NONE
+            iconPosition = IconPosition.NONE,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
