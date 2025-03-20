@@ -3,11 +3,16 @@ package com.huy.chess.ui.registerway
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +39,9 @@ import com.huy.chess.viewmodel.RegisterWayViewModel
 fun RegisterWayScreen(
     registerViewModel: RegisterViewModel,
     viewModel: RegisterWayViewModel = hiltViewModel(),
-    navigateToEmailInput: () -> Unit
+    navigateToEmailInput: () -> Unit,
+    navigateLogIn: () -> Unit,
+    popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
     val accountManager = remember {
@@ -54,6 +61,8 @@ fun RegisterWayScreen(
                     launcher.launch(listOf("email", "public_profile"))
                     accountManager.signInFacebook(callbackManager, loginManager)
                 }
+                RegisterWayEffect.NavigateLogin -> navigateLogIn()
+                RegisterWayEffect.PopBackStack -> popBackStack()
             }
         }
     }
@@ -70,6 +79,28 @@ private fun Content(onAction: (RegisterWayAction) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.arrow_back_24px),
+                contentDescription = "icon back",
+                modifier = Modifier.clickable {
+                    onAction(RegisterWayAction.ClickedBack)
+                }
+            )
+            Text(
+                text = stringResource(R.string.login_text),
+                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.titleSmall,
+                modifier = Modifier.clickable {
+                    onAction(RegisterWayAction.ClickedLogIn)
+                }
+            )
+        }
+        Spacer(Modifier.height(32.dp))
         Text(
             text = stringResource(R.string.create_your_account_text),
             style = MaterialTheme.typography.titleLarge

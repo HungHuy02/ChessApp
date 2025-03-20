@@ -2,9 +2,10 @@ package com.huy.chess.data.network.repository
 
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
-import com.huy.chess.model.User
 import com.huy.chess.model.request.LoginRequest
 import com.huy.chess.model.request.RegisterRequest
+import com.huy.chess.model.response.LoginResponse
+import com.huy.chess.model.response.RefreshResponse
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
 import java.io.File
@@ -31,7 +32,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun socialLogin(idToken: String): Result<BaseResponse<User>> {
+    suspend fun socialLogin(idToken: String): Result<LoginResponse> {
         return try {
             val response = authApi.socialLogin(idToken)
             if (response.isSuccessful) {
@@ -45,7 +46,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun login(loginRequest: LoginRequest): Result<BaseResponse<User>> {
+    suspend fun login(loginRequest: LoginRequest): Result<LoginResponse> {
         return try {
             val response = authApi.login(loginRequest)
             if (response.isSuccessful) {
@@ -59,7 +60,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun refresh(): Result<BaseResponse<String>> {
+    suspend fun refresh(): Result<RefreshResponse> {
         return try {
             val response = authApi.refresh()
             if (response.isSuccessful) {

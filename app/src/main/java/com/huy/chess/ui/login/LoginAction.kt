@@ -6,4 +6,5 @@ sealed class LoginAction {
     data object ClickedLoginButton : LoginAction()
     data object ClickedLoginGoogleButton : LoginAction()
     data object ClickedLoginFacebookButton : LoginAction()
+    data object ClickedBackButton : LoginAction()
 }

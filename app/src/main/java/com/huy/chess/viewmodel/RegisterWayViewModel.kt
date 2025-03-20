@@ -15,6 +15,8 @@ class RegisterWayViewModel @Inject constructor() : BaseViewModel<RegisterWayStat
             RegisterWayAction.RegisterWayWithEmail -> sendEffect(RegisterWayEffect.NavigateToEmailInput)
             RegisterWayAction.RegisterWayWithFacebook -> sendEffect(RegisterWayEffect.SignInFacebook)
             RegisterWayAction.RegisterWayWithGoogle -> sendEffect(RegisterWayEffect.SignInGoogle)
+            RegisterWayAction.ClickedBack -> sendEffect(RegisterWayEffect.PopBackStack)
+            RegisterWayAction.ClickedLogIn -> sendEffect(RegisterWayEffect.NavigateLogin)
         }
 
     }

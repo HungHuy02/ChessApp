@@ -17,9 +17,10 @@ fun NavGraphBuilder.authDestination(
     navController: NavController
 ) {
     composable<Login> {
-        LoginScreen {
-            navController.navigate(TopLevelDestination.Home)
-        }
+        LoginScreen(
+            navigateToHome = { navController.navigate(Main) },
+            popBackStack = { navController.popBackStack() }
+        )
     }
     navigation<Register>(startDestination = RegisterWay) {
         composable<RegisterWay> {
@@ -28,10 +29,11 @@ fun NavGraphBuilder.authDestination(
             }
             val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
             RegisterWayScreen(
-                registerViewModel = registerViewModel
-            ) {
-                navController.navigate(EmailInput)
-            }
+                registerViewModel = registerViewModel,
+                navigateToEmailInput = { navController.navigate(EmailInput) },
+                navigateLogIn = { navController.navigate(Login) },
+                popBackStack = { navController.popBackStack() }
+            )
         }
         composable<EmailInput> {
             val parentEntry = remember(it) {

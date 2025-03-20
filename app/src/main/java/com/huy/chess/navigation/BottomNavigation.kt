@@ -43,10 +43,10 @@ sealed class BottomNavScreens(
 }
 
 fun NavGraphBuilder.bottomDestination(
-    navController: NavController
+    navigatePlay: () -> Unit
 ) {
     composable<TopLevelDestination.Home> {
-        HomeScreen { navController.navigate(Play) }
+        HomeScreen { navigatePlay() }
     }
 
     composable<TopLevelDestination.Puzzles> {

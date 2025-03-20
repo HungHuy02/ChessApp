@@ -1,8 +1,9 @@
 package com.huy.chess.data.network.api
 
 import com.huy.chess.base.BaseResponse
-import com.huy.chess.model.User
 import com.huy.chess.model.request.LoginRequest
+import com.huy.chess.model.response.LoginResponse
+import com.huy.chess.model.response.RefreshResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -23,11 +24,11 @@ interface AuthApi {
     ) : Response<BaseResponse<Any>>
 
     @POST("/auth/social")
-    suspend fun socialLogin(@Body idToken: String) : Response<BaseResponse<User>>
+    suspend fun socialLogin(@Body idToken: String) : Response<LoginResponse>
 
     @POST("/auth/login")
-    suspend fun login(@Body loginRequest: LoginRequest) : Response<BaseResponse<User>>
+    suspend fun login(@Body loginRequest: LoginRequest) : Response<LoginResponse>
 
     @POST("/auth/refresh")
-    suspend fun refresh() : Response<BaseResponse<String>>
+    suspend fun refresh() : Response<RefreshResponse>
 }
