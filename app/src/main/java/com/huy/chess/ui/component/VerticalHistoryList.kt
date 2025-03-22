@@ -1,4 +1,4 @@
-package com.huy.chess.ui.profile.composable
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +56,7 @@ fun VerticalHistoryItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
-            .padding(8.dp)
+            .padding(16.dp)
             .clickable {  }
     ) {
         Icon(

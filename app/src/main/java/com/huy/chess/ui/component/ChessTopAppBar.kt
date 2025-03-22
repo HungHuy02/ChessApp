@@ -2,6 +2,8 @@ package com.huy.chess.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -132,6 +135,34 @@ fun ChessTopAppBar(
                 }
         )
         Spacer(Modifier.weight(1f))
+        action()
+    }
+}
+
+@Composable
+fun ChessTopAppBar(
+    modifier: Modifier = Modifier,
+    onClickBack: () -> Unit,
+    title: String,
+    action: @Composable BoxScope.() -> Unit = {}
+) {
+    Box (
+        modifier = modifier.fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.arrow_back_24px),
+            contentDescription = "back icon",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable {
+                    onClickBack()
+                }
+        )
+        Text(
+            text = title,
+            modifier = Modifier.align(Alignment.Center)
+        )
         action()
     }
 }
