@@ -28,6 +28,8 @@ object SetupTwoPeople
 object RegisterDialog
 @Serializable
 object Main
+@Serializable
+object Profile
 
 
 sealed class TopLevelDestination {

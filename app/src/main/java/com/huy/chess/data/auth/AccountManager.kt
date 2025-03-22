@@ -1,7 +1,6 @@
 package com.huy.chess.data.auth
 
 import android.app.Activity
-import android.util.Log
 import androidx.credentials.CreatePasswordRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
