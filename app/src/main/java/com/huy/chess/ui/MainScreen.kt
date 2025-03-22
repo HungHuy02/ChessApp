@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import com.huy.chess.navigation.GameArchive
 import com.huy.chess.navigation.Login
 import com.huy.chess.navigation.Main
 import com.huy.chess.navigation.Play
@@ -15,6 +16,7 @@ import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
 import com.huy.chess.ui.component.FocusClearIme
 import com.huy.chess.ui.dialog.register.RegisterDialog
+import com.huy.chess.ui.gamearchive.GameArchiveScreen
 import com.huy.chess.ui.profile.ProfileScreen
 
 @Composable
@@ -45,7 +47,12 @@ fun MainScreen() {
                 ProfileScreen(
                     navigateFriends = {},
                     navigateEditProfile = {},
-                    navigateGameArchive = {},
+                    navigateGameArchive = { navController.navigate(GameArchive) },
+                    popBackStack = { navController.popBackStack() }
+                )
+            }
+            composable<GameArchive> {
+                GameArchiveScreen(
                     popBackStack = { navController.popBackStack() }
                 )
             }

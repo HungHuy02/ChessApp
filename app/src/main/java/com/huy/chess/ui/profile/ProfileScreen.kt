@@ -17,7 +17,7 @@ import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.profile.composable.HorizontalFriendList
 import com.huy.chess.ui.profile.composable.ProfileRowButton
-import com.huy.chess.ui.profile.composable.VerticalHistoryList
+import com.huy.chess.ui.component.VerticalHistoryList
 import com.huy.chess.viewmodel.ProfileViewModel
 
 @Composable

@@ -30,6 +30,8 @@ object RegisterDialog
 object Main
 @Serializable
 object Profile
+@Serializable
+object GameArchive
 
 
 sealed class TopLevelDestination {
