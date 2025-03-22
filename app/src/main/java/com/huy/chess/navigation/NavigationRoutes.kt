@@ -32,6 +32,8 @@ object Main
 object Profile
 @Serializable
 object GameArchive
+@Serializable
+object Friends
 
 
 sealed class TopLevelDestination {
