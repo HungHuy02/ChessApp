@@ -130,6 +130,7 @@
     <string name="register_dialog_title_5">Đăng ký tài khoản để mở khóa bài học.</string>
     <string name="register_dialog_sub_title_5">Hơn 1500 bài học</string>
     <string name="register_dialog_description_5">Học từ các kiện tướng!</string>
+    <string name="name_with_elo_text" translatable="false">%s (%d)</string>
 
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
