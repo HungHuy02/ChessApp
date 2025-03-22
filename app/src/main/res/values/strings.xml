@@ -132,6 +132,14 @@
     <string name="register_dialog_description_5">Học từ các kiện tướng!</string>
     <string name="name_with_elo_text" translatable="false">%s (%d)</string>
     <string name="game_archive_text" translatable="false">Game Archive</string>
+    <string name="friends_text" translatable="false">Friends</string>
+
+    <string name="search_contacts_text" translatable="false">Tìm kiếm Liên hệ</string>
+    <string name="facebook_friends_text" translatable="false">Bạn bè Facebook</string>
+    <string name="invite_friends_text" translatable="false">Mời Bạn bè</string>
+    <string name="send_challenge_link_text" translatable="false">Gửi Liên kết Thử thách</string>
+    <string name="friends_search_hint_text" translatable="false">Tìm kiếm theo tên hoặc tên người dùng</string>
+    <string name="leaderboard_text" translatable="false">Leaderboard</string>
 
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
