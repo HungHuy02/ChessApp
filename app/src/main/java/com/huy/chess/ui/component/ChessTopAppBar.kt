@@ -166,3 +166,40 @@ fun ChessTopAppBar(
         action()
     }
 }
+
+@Composable
+fun ChessTopAppBar(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    title: String,
+    isVerify: Boolean,
+    onClickDone: () -> Unit
+) {
+    Box (
+        modifier = modifier.fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Icon(
+            painter = painterResource(if (!isVerify) R.drawable.arrow_back_24px else R.drawable.close_24px),
+            contentDescription = "back icon",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable {
+                    onClick()
+                }
+        )
+        Text(
+            text = title,
+            modifier = Modifier.align(Alignment.Center)
+        )
+        if(isVerify) {
+            Icon(
+                painter = painterResource(R.drawable.check_24px),
+                contentDescription = "check icon",
+                modifier = Modifier.clickable {
+                    onClickDone()
+                }
+            )
+        }
+    }
+}

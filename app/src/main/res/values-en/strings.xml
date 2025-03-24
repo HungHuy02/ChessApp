@@ -110,4 +110,17 @@
     <string name="register_dialog_title_5">Sign up to unlock Lessons.</string>
     <string name="register_dialog_sub_title_5">1500+ Lessons</string>
     <string name="register_dialog_description_5">Learn from chess masters!</string>
+    <string name="edit_profile_text">Edit Profile</string>
+    <string name="profile_picture_text">Profile Picture</string>
+    <string name="flair_text">Flair</string>
+    <string name="status_text">Status</string>
+    <string name="username_text">Username</string>
+    <string name="first_name_text">First Name</string>
+    <string name="last_name_text">Last Name</string>
+    <string name="country_text">Country</string>
+    <string name="location_text">Location</string>
+    <string name="language_text">Language</string>
+    <string name="display_content_in_english_text">Display content in English when not available in my language</string>
+    <string name="force_english_text">Force English</string>
+    <string name="select_language_text">Select language</string>
 </resources>
