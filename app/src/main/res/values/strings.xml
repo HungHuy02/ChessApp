@@ -141,6 +141,20 @@
     <string name="friends_search_hint_text" translatable="false">Tìm kiếm theo tên hoặc tên người dùng</string>
     <string name="leaderboard_text" translatable="false">Leaderboard</string>
 
+    <string name="edit_profile_text">Chỉnh sửa Hồ sơ</string>
+    <string name="profile_picture_text">Ảnh đại diện</string>
+    <string name="flair_text">Nét đặc trưng</string>
+    <string name="status_text">Trạng thái</string>
+    <string name="username_text">Tên người dùng</string>
+    <string name="first_name_text">Tên</string>
+    <string name="last_name_text">Họ</string>
+    <string name="country_text">Quốc gia</string>
+    <string name="location_text">Vị trí</string>
+    <string name="language_text">Ngôn ngữ</string>
+    <string name="display_content_in_english_text">Hiển thị nội dung bằng tiếng Anh khi không có sẵn bằng ngôn ngữ của tôi</string>
+    <string name="force_english_text">Bắt buộc tiếng Anh</string>
+    <string name="select_language_text">Chọn ngôn ngữ</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>
