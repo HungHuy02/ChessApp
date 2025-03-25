@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.huy.chess.ui.component.ChessBoard
+import com.huy.chess.ui.component.getChessPiecePainters
 import com.huy.chess.ui.play.composables.NotationPane
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.Timer
@@ -21,6 +22,7 @@ import com.huy.chess.ui.play.composables.Timer
 fun PlayScreen() {
     val size = LocalConfiguration.current.screenWidthDp
     var list by remember { mutableStateOf(listOf("")) }
+    val listPainter = getChessPiecePainters()
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -36,6 +38,7 @@ fun PlayScreen() {
         )
 
         ChessBoard(
+            list = listPainter,
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
