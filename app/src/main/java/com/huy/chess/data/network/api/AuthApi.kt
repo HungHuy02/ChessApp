@@ -15,20 +15,20 @@ import retrofit2.http.Part
 interface AuthApi {
 
     @Multipart
-    @POST("/auth/register")
+    @POST("v1/auth/register")
     suspend fun register(
         @Part("name") name: RequestBody,
         @Part("email") email: RequestBody,
         @Part("password") password: RequestBody,
-        @Part avatar: MultipartBody.Part
+        @Part avatar: MultipartBody.Part?
     ) : Response<BaseResponse<Any>>
 
-    @POST("/auth/social")
+    @POST("v1/auth/social")
     suspend fun socialLogin(@Body idToken: String) : Response<LoginResponse>
 
-    @POST("/auth/login")
+    @POST("v1/auth/login")
     suspend fun login(@Body loginRequest: LoginRequest) : Response<LoginResponse>
 
-    @POST("/auth/refresh")
+    @POST("v1/auth/refresh")
     suspend fun refresh() : Response<RefreshResponse>
 }

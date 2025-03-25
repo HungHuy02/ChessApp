@@ -47,7 +47,6 @@ class LoginViewModel @Inject constructor(
 
                 }
         }
-        sendEffect(LoginEffect.NavigateToHome)
     }
 
     private fun updateAccount(state: LoginState, text: String): LoginState {

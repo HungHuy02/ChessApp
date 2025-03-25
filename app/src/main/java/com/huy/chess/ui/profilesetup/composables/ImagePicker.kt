@@ -18,7 +18,7 @@ import com.huy.chess.R
 @Composable
 fun ImagePicker(
     modifier: Modifier = Modifier,
-    uri: String,
+    uri: String?,
     onClick: () -> Unit
 ) {
     Box(
@@ -29,7 +29,7 @@ fun ImagePicker(
             .clickable { onClick() }
     ) {
         AsyncImage(
-            model = uri.ifEmpty { R.drawable.add_a_photo_24px },
+            model = uri ?: { R.drawable.add_a_photo_24px },
             contentDescription = "add a photo icon",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.size(48.dp)

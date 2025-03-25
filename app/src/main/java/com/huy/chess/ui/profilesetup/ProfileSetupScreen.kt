@@ -123,7 +123,11 @@ private fun Content(
 
         AppButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { onAction(ProfileSetupAction.ClickedButton) },
+            onClick = {
+                with(registerState) {
+                    onAction(ProfileSetupAction.ClickedButton(email, password, name, avatarPath))
+                }
+            },
             text = stringResource(R.string.create_account_text),
             iconPosition = IconPosition.NONE,
             enable = state.isButtonEnable
