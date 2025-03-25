@@ -8,7 +8,7 @@ data class RegisterState(
     val email: String = "",
     val password: String = "",
     val name: String = "",
-    val avatarPath: String = ""
+    val avatarPath: String? = null
 )
 
 sealed class RegisterAction {

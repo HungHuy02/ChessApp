@@ -1,5 +1,6 @@
 package com.huy.chess.data.network.repository
 
+import com.huy.chess.base.BaseRepository
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
 import com.huy.chess.model.request.LoginRequest
@@ -13,64 +14,24 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     private val authApi: AuthApi
-) {
+) : BaseRepository() {
     suspend fun register(request: RegisterRequest): Result<BaseResponse<Any>> {
-        return try {
-            val namePart = request.name.toRequestBody()
-            val emailPart = request.email.toRequestBody()
-            val passwordPart = request.password.toRequestBody()
-            val avatar = File(request.avatar).toMultipart("avatar")
-            val response = authApi.register(namePart, emailPart, passwordPart, avatar)
-            if (response.isSuccessful) {
-                response.body()?.let { Result.success(it) }
-                    ?: Result.failure(Exception("Empty body"))
-            } else {
-                Result.failure(Exception("Error: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        val namePart = request.name.toRequestBody()
+        val emailPart = request.email.toRequestBody()
+        val passwordPart = request.password.toRequestBody()
+        val avatar = request.avatar?.let { File(it).toMultipart("avatar") }
+        return safeApiCall {authApi.register(namePart, emailPart, passwordPart, avatar) }
     }
 
     suspend fun socialLogin(idToken: String): Result<LoginResponse> {
-        return try {
-            val response = authApi.socialLogin(idToken)
-            if (response.isSuccessful) {
-                response.body()?.let { Result.success(it) }
-                    ?: Result.failure(Exception("Empty body"))
-            } else {
-                Result.failure(Exception("Error: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return safeApiCall { authApi.socialLogin(idToken) }
     }
 
     suspend fun login(loginRequest: LoginRequest): Result<LoginResponse> {
-        return try {
-            val response = authApi.login(loginRequest)
-            if (response.isSuccessful) {
-                response.body()?.let { Result.success(it) }
-                    ?: Result.failure(Exception("Empty body"))
-            } else {
-                Result.failure(Exception("Error: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return safeApiCall { authApi.login(loginRequest) }
     }
 
     suspend fun refresh(): Result<RefreshResponse> {
-        return try {
-            val response = authApi.refresh()
-            if (response.isSuccessful) {
-                response.body()?.let { Result.success(it) }
-                    ?: Result.failure(Exception("Empty body"))
-            } else {
-                Result.failure(Exception("Error: ${response.code()}"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return safeApiCall { authApi.refresh() }
     }
 }

@@ -1,4 +1,4 @@
-import java.util.Properties
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -22,6 +22,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val baseUrl = gradleLocalProperties(rootDir, providers).getProperty("baseUrl") ?: ""
+        buildConfigField("String", "BASE_URL", "\"${baseUrl}\"")
     }
 
     buildTypes {
@@ -51,29 +54,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    val apikeyPropertiesFile = rootProject.file("apikey.properties")
-    val apikeyProperties = Properties()
-
-    if (apikeyPropertiesFile.exists()) {
-        apikeyPropertiesFile.inputStream().use { inputStream ->
-            apikeyProperties.load(inputStream)
-        }
-    }
-
-    flavorDimensions += listOf("environment")
-
-    productFlavors {
-        create("dev") {
-            dimension = "environment"
-            buildConfigField("String", "BASE_URL", "${apikeyProperties["BASE_URL_DEV"]}")
-        }
-
-        create("live") {
-            dimension = "environment"
-            buildConfigField("String", "BASE_URL", "${apikeyProperties["BASE_URL_LIVE"]}")
-        }
     }
 }
 

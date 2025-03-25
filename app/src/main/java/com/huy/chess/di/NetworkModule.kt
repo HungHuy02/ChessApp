@@ -2,7 +2,6 @@ package com.huy.chess.di
 
 import com.huy.chess.data.network.TokenAuthenticator
 import com.huy.chess.data.network.api.AuthApi
-import com.huy.chess.utils.Constants
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -14,6 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
+import com.huy.chess.BuildConfig
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,7 +31,7 @@ object NetworkModule {
         moshiConverterFactory: MoshiConverterFactory
     ) : Retrofit {
         return Retrofit.Builder().addConverterFactory(moshiConverterFactory)
-            .baseUrl(Constants.API_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .build()
     }
