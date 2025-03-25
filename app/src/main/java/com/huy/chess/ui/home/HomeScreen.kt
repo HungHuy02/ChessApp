@@ -9,11 +9,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
+import com.huy.chess.ui.component.getChessPiecePainters
 import com.huy.chess.ui.home.composables.HomeItems
 import com.huy.chess.utils.Constants
 
@@ -21,6 +24,7 @@ import com.huy.chess.utils.Constants
 fun HomeScreen(
     navigateToPlayScreen: () -> Unit
 ) {
+    val list = getChessPiecePainters()
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -33,6 +37,7 @@ fun HomeScreen(
             item {
                 HomeItems(
                     fen = Constants.START_FEN,
+                    list = list,
                     title = stringResource(R.string.play_online_text),
                     description = stringResource(R.string.play_online_dec_text),
                     icon = R.drawable.playwhite_cea685ba
@@ -42,6 +47,7 @@ fun HomeScreen(
             item {
                 HomeItems(
                     fen = Constants.START_FEN,
+                    list = list,
                     title = stringResource(R.string.solve_puzzles_text),
                     description = stringResource(R.string.solve_puzzles_dec_text),
                     icon = R.drawable.puzzles
@@ -51,6 +57,7 @@ fun HomeScreen(
             item {
                 HomeItems(
                     fen = Constants.START_FEN,
+                    list = list,
                     title = stringResource(R.string.daily_puzzle_text),
                     description = stringResource(R.string.daily_puzzles_dec_text),
                     icon = R.drawable.dailypuzzle
@@ -60,6 +67,7 @@ fun HomeScreen(
             item {
                 HomeItems(
                     fen = Constants.START_FEN,
+                    list = list,
                     title = stringResource(R.string.play_with_bot_text),
                     description = stringResource(R.string.play_with_bot_dec_text),
                     icon = R.drawable.stockfish
@@ -69,6 +77,7 @@ fun HomeScreen(
             item {
                 HomeItems(
                     fen = Constants.START_FEN,
+                    list = list,
                     title = stringResource(R.string.study_text),
                     description = stringResource(R.string.study_dec_text),
                     icon = R.drawable.lessons
@@ -85,3 +94,4 @@ fun HomeScreen(
         )
     }
 }
+

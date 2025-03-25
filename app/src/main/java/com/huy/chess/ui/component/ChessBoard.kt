@@ -23,10 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -37,6 +37,7 @@ import com.huy.chess.utils.Utils
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
+    list: List<Painter>,
     fen: String,
     size: Dp
 ) {
@@ -74,9 +75,7 @@ fun ChessBoard(
                         string.forEach {
                             if (!it.isDigit()) {
                                 Image(
-                                    painter = painterResource(
-                                        getPieceDrawableId(it)
-                                    ),
+                                    painter = list[getPieceDrawableId(it)],
                                     contentDescription = null,
                                     contentScale = ContentScale.Inside,
                                     modifier = Modifier
@@ -100,7 +99,8 @@ fun ChessBoard(
 
 @Composable
 fun ChessBoard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    list: List<Painter>
 ) {
     val size = LocalConfiguration.current.screenWidthDp
     var selectedPiece: Piece? by remember { mutableStateOf(null) }
@@ -131,9 +131,7 @@ fun ChessBoard(
                         val animateOffset by animateOffsetAsState(targetValue = Offset(offset.x.value, offset.y.value), label = "offset")
                         if (it.piece != ' ') {
                             Image(
-                                painter = painterResource(
-                                    getPieceDrawableId(it.piece)
-                                ),
+                                painter = list[getPieceDrawableId(it.piece)],
                                 contentDescription = null,
                                 contentScale = ContentScale.Inside,
                                 modifier = Modifier
@@ -163,34 +161,37 @@ fun ChessBoard(
 
 private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
-        'p' -> R.drawable.bpawn
-        'r' -> R.drawable.brook
-        'b' -> R.drawable.bbishop
-        'n' -> R.drawable.bknight
-        'q' -> R.drawable.bqueen
-        'k' -> R.drawable.bknight
-        'P' -> R.drawable.wpawn
-        'R' -> R.drawable.wrook
-        'B' -> R.drawable.wbishop
-        'N' -> R.drawable.wknight
-        'Q' -> R.drawable.wqueen
-        else -> R.drawable.wking
+        'p' -> 0
+        'r' -> 1
+        'b' -> 2
+        'n' -> 3
+        'q' -> 4
+        'k' -> 5
+        'P' -> 6
+        'R' -> 7
+        'B' -> 8
+        'N' -> 9
+        'Q' -> 10
+        else -> 11
     }
 }
 
-@Preview
 @Composable
-private fun Preview() {
-    ChessBoard(
-        fen = "rnbqkbnr/pppppppp/8/8/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 1",
-        size = 240.dp
+fun getChessPiecePainters(): List<Painter> {
+    return listOf(
+        painterResource(R.drawable.bpawn),
+        painterResource(R.drawable.brook),
+        painterResource(R.drawable.bbishop),
+        painterResource(R.drawable.bknight),
+        painterResource(R.drawable.bqueen),
+        painterResource(R.drawable.bknight),
+        painterResource(R.drawable.wpawn),
+        painterResource(R.drawable.wrook),
+        painterResource(R.drawable.wbishop),
+        painterResource(R.drawable.wknight),
+        painterResource(R.drawable.wqueen),
+        painterResource(R.drawable.wking)
     )
-}
-
-@Preview
-@Composable
-private fun PreviewMainChess() {
-    ChessBoard()
 }
 
 
