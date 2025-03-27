@@ -1,5 +1,7 @@
 package com.huy.chess.data.network.repository
 
+import android.content.Context
+import android.net.Uri
 import com.huy.chess.base.BaseRepository
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
@@ -9,17 +11,20 @@ import com.huy.chess.model.response.LoginResponse
 import com.huy.chess.model.response.RefreshResponse
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
+import com.huy.chess.utils.uriToFile
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val authApi: AuthApi
 ) : BaseRepository() {
     suspend fun register(request: RegisterRequest): Result<BaseResponse<Any>> {
         val namePart = request.name.toRequestBody()
         val emailPart = request.email.toRequestBody()
         val passwordPart = request.password.toRequestBody()
-        val avatar = request.avatar?.let { File(it).toMultipart("avatar") }
+        val avatar = request.avatar?.let { context.uriToFile(Uri.parse(it))?.toMultipart("avatar") }
         return safeApiCall {authApi.register(namePart, emailPart, passwordPart, avatar) }
     }
 
