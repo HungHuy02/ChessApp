@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -22,7 +23,8 @@ import com.huy.chess.ui.play.composables.Timer
 fun PlayScreen() {
     val size = LocalConfiguration.current.screenWidthDp
     var list by remember { mutableStateOf(listOf("")) }
-    val listPainter = getChessPiecePainters()
+    val context = LocalContext.current
+    val listPainter = remember { getChessPiecePainters(context) }
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
