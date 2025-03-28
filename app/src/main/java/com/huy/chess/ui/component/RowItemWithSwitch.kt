@@ -1,6 +1,7 @@
 package com.huy.chess.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -12,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 
 @Composable
 fun RowItemWithSwitch(
@@ -36,6 +38,54 @@ fun RowItemWithSwitch(
             onCheckedChange = {
                 checked = !checked
             }
+        )
+    }
+}
+
+@Composable
+fun RowItemWithSwitch(
+    modifier: Modifier = Modifier,
+    label: String,
+    checked: Boolean,
+    onCheckedChange: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Switch(
+            checked = checked,
+            onCheckedChange = {
+                onCheckedChange()
+            }
+        )
+    }
+}
+
+@Composable
+fun RowItemWithSwitchEx(
+    modifier: Modifier = Modifier,
+    label: String,
+    description: AnnotatedString,
+    checked: Boolean,
+    onCheckedChange: () -> Unit
+) {
+    Column(
+        modifier = modifier
+    ) {
+        RowItemWithSwitch(
+            label = label,
+            checked = checked,
+            onCheckedChange = onCheckedChange
+        )
+        Text(
+            text = description
         )
     }
 }

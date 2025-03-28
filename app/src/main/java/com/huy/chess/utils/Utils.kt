@@ -1,5 +1,10 @@
 package com.huy.chess.utils
 
+import android.content.Context
+import android.graphics.BitmapFactory
+import androidx.annotation.DrawableRes
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import com.huy.chess.model.Piece
 
 object Utils {
@@ -39,5 +44,10 @@ object Utils {
                 Piece(7, 4, 'K'), Piece(7, 5, 'B'), Piece(7, 6, 'N'), Piece(7, 7, 'R')
             )
         )
+    }
+
+    fun loadImageBimap(context: Context, @DrawableRes resId: Int): ImageBitmap {
+        val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+        return bitmap.asImageBitmap()
     }
 }

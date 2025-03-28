@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.huy.chess.ui.component.ChessBoard
@@ -20,7 +20,7 @@ import com.huy.chess.ui.component.ChessBoard
 @Composable
 fun HomeItems(
     fen: String,
-    list: List<Painter>,
+    list: List<ImageBitmap>,
     title: String,
     description: String,
     @DrawableRes icon: Int

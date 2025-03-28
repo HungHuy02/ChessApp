@@ -155,6 +155,48 @@
     <string name="force_english_text">Bắt buộc tiếng Anh</string>
     <string name="select_language_text">Chọn ngôn ngữ</string>
 
+    <string name="account_text" translatable="false">Account</string>
+    <string name="notifications_text" translatable="false">Notifications</string>
+    <string name="board_text" translatable="false">Board</string>
+    <string name="privacy_settings_text" translatable="false">Privacy Settings</string>
+    <string name="log_out_text" translatable="false">Log Out</string>
+
+    <string name="show_featured_events_text" translatable="false">Show Featured Events</string>
+    <string name="show_recommended_games_text" translatable="false">Show Recommended Games</string>
+    <string name="show_play_online_text" translatable="false">Show Play Online</string>
+    <string name="show_play_bots_text" translatable="false">Show Play Bots</string>
+    <string name="show_play_coach_text" translatable="false">Show Play Coach</string>
+    <string name="show_lessons_text" translatable="false">Show Lessons</string>
+    <string name="show_puzzles_text" translatable="false">Show Puzzles</string>
+    <string name="show_daily_puzzle_text" translatable="false">Show Daily Puzzle</string>
+
+    <string name="sounds_text" translatable="false">Sounds</string>
+    <string name="haptic_feedback_text" translatable="false">Haptic Feedback</string>
+    <string name="show_coordinates_text" translatable="false">Show Coordinates</string>
+    <string name="highlight_last_move_text" translatable="false">Highlight Last Move</string>
+    <string name="show_legal_moves_text" translatable="false">Show Legal Moves</string>
+    <string name="magnify_pieces_text" translatable="false">Magnify Pieces</string>
+    <string name="game_result_board_animations_text" translatable="false">Game Result Board Animations</string>
+    <string name="game_win_celebration_text" translatable="false">Game Win Celebration</string>
+    <string name="confetti_text" translatable="false">Confetti</string>
+    <string name="piece_notation_text" translatable="false">Piece Notation</string>
+    <string name="figurine_text" translatable="false">Figurine</string>
+    <string name="castling_method_text" translatable="false">Castling Method</string>
+    <string name="normal_text" translatable="false">Normal</string>
+
+    <string name="collect_puzzle_points_text" translatable="false">Collect Puzzle Points</string>
+    <string name="level_up_with_points_text" translatable="false">Level up with points for each puzzle you solve! (Turn this OFF to use Classic Mode and focus on rating.)</string>
+    <string name="always_show_rating_text" translatable="false">Always Show Rating</string>
+    <string name="keep_your_rating_in_view_text" translatable="false">Keep your rating in view as you earn puzzle points.</string>
+    <string name="show_timer_text" translatable="false">Show Timer</string>
+
+    <string name="quick_analysis_text" translatable="false">Quick Analysis</string>
+    <string name="show_evaluation_bar_text" translatable="false">Show Evaluation Bar</string>
+    <string name="show_suggestion_arrows_text" translatable="false">Show Suggestion Arrows</string>
+    <string name="show_threat_arrows_text" translatable="false">Show Threat Arrows</string>
+    <string name="show_engine_lines_text" translatable="false">Show Engine Lines</string>
+    <string name="show_move_feedback_text" translatable="false">Show Move Feedback</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

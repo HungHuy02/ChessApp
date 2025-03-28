@@ -1,5 +1,6 @@
 package com.huy.chess.ui.component
 
+import android.content.Context
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -37,7 +38,7 @@ import com.huy.chess.utils.Utils
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
-    list: List<Painter>,
+    list: List<ImageBitmap>,
     fen: String,
     size: Dp
 ) {
@@ -75,7 +76,7 @@ fun ChessBoard(
                         string.forEach {
                             if (!it.isDigit()) {
                                 Image(
-                                    painter = list[getPieceDrawableId(it)],
+                                    bitmap = list[getPieceDrawableId(it)],
                                     contentDescription = null,
                                     contentScale = ContentScale.Inside,
                                     modifier = Modifier
@@ -100,7 +101,7 @@ fun ChessBoard(
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
-    list: List<Painter>
+    list: List<ImageBitmap>
 ) {
     val size = LocalConfiguration.current.screenWidthDp
     var selectedPiece: Piece? by remember { mutableStateOf(null) }
@@ -131,7 +132,7 @@ fun ChessBoard(
                         val animateOffset by animateOffsetAsState(targetValue = Offset(offset.x.value, offset.y.value), label = "offset")
                         if (it.piece != ' ') {
                             Image(
-                                painter = list[getPieceDrawableId(it.piece)],
+                                bitmap = list[getPieceDrawableId(it.piece)],
                                 contentDescription = null,
                                 contentScale = ContentScale.Inside,
                                 modifier = Modifier
@@ -176,21 +177,20 @@ private fun getPieceDrawableId(piece: Char): Int {
     }
 }
 
-@Composable
-fun getChessPiecePainters(): List<Painter> {
+fun getChessPiecePainters(context: Context): List<ImageBitmap> {
     return listOf(
-        painterResource(R.drawable.bpawn),
-        painterResource(R.drawable.brook),
-        painterResource(R.drawable.bbishop),
-        painterResource(R.drawable.bknight),
-        painterResource(R.drawable.bqueen),
-        painterResource(R.drawable.bknight),
-        painterResource(R.drawable.wpawn),
-        painterResource(R.drawable.wrook),
-        painterResource(R.drawable.wbishop),
-        painterResource(R.drawable.wknight),
-        painterResource(R.drawable.wqueen),
-        painterResource(R.drawable.wking)
+        Utils.loadImageBimap(context, R.drawable.bpawn),
+        Utils.loadImageBimap(context, R.drawable.brook),
+        Utils.loadImageBimap(context, R.drawable.bbishop),
+        Utils.loadImageBimap(context, R.drawable.bknight),
+        Utils.loadImageBimap(context, R.drawable.bqueen),
+        Utils.loadImageBimap(context, R.drawable.bknight),
+        Utils.loadImageBimap(context, R.drawable.wpawn),
+        Utils.loadImageBimap(context, R.drawable.wrook),
+        Utils.loadImageBimap(context, R.drawable.wbishop),
+        Utils.loadImageBimap(context, R.drawable.wknight),
+        Utils.loadImageBimap(context, R.drawable.wqueen),
+        Utils.loadImageBimap(context, R.drawable.wking)
     )
 }
 
