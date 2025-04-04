@@ -27,7 +27,7 @@ fun HomeScreen(
     navigateToPlayScreen: () -> Unit
 ) {
     val context = LocalContext.current
-    val list = remember { getChessPiecePainters(context) }
+    val list = remember { getChessPiecePainters(context, 100 / 8) }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
