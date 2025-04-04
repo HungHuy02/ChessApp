@@ -26,7 +26,7 @@ fun HomeItems(
     @DrawableRes icon: Int
 ) {
     Row(modifier = Modifier.fillMaxWidth()) {
-        ChessBoard(list = list, fen = fen, size = 100.dp)
+        ChessBoard(list = list, fen = fen)
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
                 text = title,

@@ -118,4 +118,7 @@ dependencies {
 
     // facebook sdk
     implementation(libs.facebook.android.sdk)
+
+    // socket.io client java
+    implementation(libs.socket.io.client)
 }

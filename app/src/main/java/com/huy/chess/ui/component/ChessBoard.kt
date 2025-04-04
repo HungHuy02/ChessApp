@@ -1,17 +1,15 @@
 package com.huy.chess.ui.component
 
 import android.content.Context
-import androidx.compose.animation.core.animateOffsetAsState
-import androidx.compose.foundation.Image
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -24,158 +22,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import com.huy.chess.R
 import com.huy.chess.model.Piece
 import com.huy.chess.utils.Utils
-
-@Composable
-fun ChessBoard(
-    modifier: Modifier = Modifier,
-    list: List<ImageBitmap>,
-    fen: String,
-    size: Dp
-) {
-    val rows = fen.split(" ")[0].split("/")
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .size(size + 8.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .background(MaterialTheme.colorScheme.tertiary)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.chess_board),
-            contentDescription = null,
-            modifier = Modifier
-                .size(size)
-                .clip(MaterialTheme.shapes.small)
-        )
-        Column(
-            modifier = Modifier.size(size)
-        ) {
-            rows.forEach { string ->
-                if (string == "8") {
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                    )
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                    ) {
-                        string.forEach {
-                            if (!it.isDigit()) {
-                                Image(
-                                    bitmap = list[getPieceDrawableId(it)],
-                                    contentDescription = null,
-                                    contentScale = ContentScale.Inside,
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .weight(1f)
-                                )
-                            } else {
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .weight((it - '0').toFloat())
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ChessBoard(
-    modifier: Modifier = Modifier,
-    list: List<ImageBitmap>
-) {
-    val size = LocalConfiguration.current.screenWidthDp
-    var selectedPiece: Piece? by remember { mutableStateOf(null) }
-    var desSpot: Piece? by remember { mutableStateOf(null) }
-    val board = remember { Utils.initBoard() }
-    val spotSize = (size / 8).dp
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .size(size.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.chess_board),
-            contentDescription = null,
-            modifier = Modifier
-                .size(size.dp)
-        )
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            board.forEach { row ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    row.forEach {
-                        var offset by remember{ mutableStateOf(DpOffset.Zero) }
-                        val animateOffset by animateOffsetAsState(targetValue = Offset(offset.x.value, offset.y.value), label = "offset")
-                        if (it.piece != ' ') {
-                            LaunchedEffect (selectedPiece == it && desSpot != null) {
-                                if(desSpot!= null) {
-                                    val x = (desSpot!!.x - selectedPiece!!.x) * spotSize
-                                    val y = (desSpot!!.y - selectedPiece!!.y) * spotSize
-                                    offset = DpOffset(x = offset.x + y, y = offset.y + x)
-                                    board[desSpot!!.x][desSpot!!.y] = Piece(desSpot!!.x, desSpot!!.y, ' ')
-                                    selectedPiece = null
-                                    desSpot = null
-                                }
-                            }
-                            Image(
-                                bitmap = list[getPieceDrawableId(it.piece)],
-                                contentDescription = null,
-                                contentScale = ContentScale.Inside,
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                                    .offset(animateOffset.x.dp, animateOffset.y.dp)
-                                    .background(if (it == selectedPiece) Color.DarkGray else Color.Transparent)
-                                    .clickable {
-                                        if (selectedPiece == null || (selectedPiece?.piece?.isUpperCase() == it.piece.isUpperCase()))
-                                            selectedPiece = it
-                                        else {
-                                            desSpot = it
-                                        }
-                                    }
-                            )
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 
 private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
@@ -194,30 +52,150 @@ private fun getPieceDrawableId(piece: Char): Int {
     }
 }
 
-fun getChessPiecePainters(context: Context): List<ImageBitmap> {
-    return listOf(
-        Utils.loadImageBimap(context, R.drawable.bpawn),
-        Utils.loadImageBimap(context, R.drawable.brook),
-        Utils.loadImageBimap(context, R.drawable.bbishop),
-        Utils.loadImageBimap(context, R.drawable.bknight),
-        Utils.loadImageBimap(context, R.drawable.bqueen),
-        Utils.loadImageBimap(context, R.drawable.bking),
-        Utils.loadImageBimap(context, R.drawable.wpawn),
-        Utils.loadImageBimap(context, R.drawable.wrook),
-        Utils.loadImageBimap(context, R.drawable.wbishop),
-        Utils.loadImageBimap(context, R.drawable.wknight),
-        Utils.loadImageBimap(context, R.drawable.wqueen),
-        Utils.loadImageBimap(context, R.drawable.wking)
+fun getChessPiecePainters(context: Context, size: Int): List<ImageBitmap> {
+    val pieceResIds = listOf(
+        R.drawable.bpawn, R.drawable.brook, R.drawable.bbishop, R.drawable.bknight,
+        R.drawable.bqueen, R.drawable.bking, R.drawable.wpawn, R.drawable.wrook,
+        R.drawable.wbishop, R.drawable.wknight, R.drawable.wqueen, R.drawable.wking,
     )
+
+    return pieceResIds.map { resId ->
+        Utils.loadImageBimap(context, resId, size)
+    }
 }
 
-@Preview
 @Composable
-private fun Preview() {
+fun ChessBoard(
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
-    ChessBoard(
-        list = getChessPiecePainters(context)
-    )
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current.density
+    val boardSize = (configuration.screenWidthDp * density).toInt()
+    val cellSize = boardSize / 8
+    val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
+    val list = remember { getChessPiecePainters(context, cellSize) }
+    val board = remember { Utils.initBoard() }
+
+    var selectedPiece: Piece? by remember { mutableStateOf(null) }
+    var desSpot: Piece? by remember { mutableStateOf(null) }
+
+    val pieceOffset = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+
+    LaunchedEffect(desSpot) {
+        if (selectedPiece != null && desSpot != null) {
+            val startX = selectedPiece!!.y * cellSize.toFloat()
+            val startY = selectedPiece!!.x * cellSize.toFloat()
+            val endX = desSpot!!.y * cellSize.toFloat()
+            val endY = desSpot!!.x * cellSize.toFloat()
+
+            pieceOffset.snapTo(Offset(startX, startY))
+            pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
+
+            board[desSpot!!.x][desSpot!!.y] = Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
+            board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
+
+            selectedPiece = null
+            desSpot = null
+        }
+    }
+
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(configuration.screenWidthDp.dp)
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    val row = (offset.y / cellSize).toInt()
+                    val col = (offset.x / cellSize).toInt()
+                    if (row in 0..7 && col in 0..7) {
+                        if (selectedPiece == null || (selectedPiece?.piece?.isUpperCase() == board[row][col].piece.isUpperCase())) {
+                            selectedPiece = board[row][col]
+                        } else {
+                            desSpot = board[row][col]
+                        }
+                    }
+                }
+            }
+    ) {
+        val cellSize = size.width / 8
+        drawImage(
+            image = boardBitmap,
+            topLeft = Offset(0f, 0f),
+        )
+        selectedPiece?.let {
+            drawRect(
+                color = Color.Yellow.copy(alpha = 0.5f),
+                topLeft = Offset(it.y * cellSize, it.x * cellSize),
+                size = Size(cellSize, cellSize)
+            )
+        }
+
+        for (row in 0 until 8) {
+            for (col in 0 until 8) {
+                val piece = board[row][col]
+                if (piece.piece != ' ') {
+                    val isMovingPiece = selectedPiece == piece && desSpot != null
+                    val offset = if (isMovingPiece) pieceOffset.value else Offset(col * cellSize, row * cellSize)
+
+                    drawImage(
+                        image = list[getPieceDrawableId(piece.piece)],
+                        topLeft = offset
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ChessBoard(
+    modifier: Modifier = Modifier,
+    list: List<ImageBitmap>,
+    fen: String
+) {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current.density
+    val boardSizeDp = configuration.screenWidthDp / 3
+    val boardSize = (boardSizeDp * density).toInt()
+    val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
+    val rows = fen.split(" ")[0].split("/")
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(boardSizeDp.dp + 8.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.tertiary)
+    ) {
+        Canvas(
+            modifier = Modifier
+                .size(boardSizeDp.dp)
+        ) {
+            val cellSize = size.width / 8
+            drawImage(
+                image = boardBitmap,
+                topLeft = Offset(0f, 0f),
+            )
+
+            var rowIndex = 0
+            rows.forEach { rowString ->
+                var colIndex = 0
+                rowString.forEach { char ->
+                    if (char.isDigit()) {
+                        colIndex += (char - '0')
+                    } else {
+                        drawImage(
+                            image = list[getPieceDrawableId(char)],
+                            topLeft = Offset(colIndex * cellSize, rowIndex * cellSize),
+                        )
+                        colIndex++
+                    }
+                }
+                rowIndex++
+            }
+        }
+    }
 }
 
 

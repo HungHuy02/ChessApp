@@ -1,11 +1,14 @@
 package com.huy.chess.utils
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.imageResource
+import androidx.core.graphics.scale
 import com.huy.chess.model.Piece
 
 object Utils {
@@ -45,4 +48,12 @@ object Utils {
         val bitmap = BitmapFactory.decodeResource(context.resources, resId)
         return bitmap.asImageBitmap()
     }
+
+    fun loadImageBimap(context: Context, @DrawableRes resId: Int, size: Int): ImageBitmap {
+        val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+        val scaledBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true)
+        return scaledBitmap.asImageBitmap()
+    }
+
+
 }
