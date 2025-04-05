@@ -50,9 +50,19 @@ object Utils {
     }
 
     fun loadImageBimap(context: Context, @DrawableRes resId: Int, size: Int): ImageBitmap {
-        val bitmap = BitmapFactory.decodeResource(context.resources, resId)
+        val option = BitmapFactory.Options().apply {
+            inSampleSize = 2
+        }
+        val bitmap = BitmapFactory.decodeResource(context.resources, resId, option)
         val scaledBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true)
         return scaledBitmap.asImageBitmap()
+    }
+
+    fun loadBitmap(context: Context, @DrawableRes resId: Int): Bitmap {
+        val option = BitmapFactory.Options().apply {
+            inSampleSize = 4
+        }
+        return BitmapFactory.decodeResource(context.resources, resId, option)
     }
 
 

@@ -38,6 +38,8 @@ object Friends
 object Language
 @Serializable
 object EditProfile
+@Serializable
+object PlayOptions
 
 
 sealed class TopLevelDestination {
