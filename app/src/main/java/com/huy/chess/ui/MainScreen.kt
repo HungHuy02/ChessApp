@@ -8,16 +8,18 @@ import androidx.navigation.compose.rememberNavController
 import com.huy.chess.navigation.EditProfile
 import com.huy.chess.navigation.Friends
 import com.huy.chess.navigation.GameArchive
+import com.huy.chess.navigation.Language
 import com.huy.chess.navigation.Login
 import com.huy.chess.navigation.Main
 import com.huy.chess.navigation.Play
+import com.huy.chess.navigation.PlayOptions
 import com.huy.chess.navigation.Profile
 import com.huy.chess.navigation.Register
 import com.huy.chess.navigation.RegisterDialog
-import com.huy.chess.navigation.Language
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
 import com.huy.chess.ui.component.FocusClearIme
+import com.huy.chess.ui.dialog.playoptions.PlayOptionsDialog
 import com.huy.chess.ui.dialog.register.RegisterDialog
 import com.huy.chess.ui.editprofile.EditProfileScreen
 import com.huy.chess.ui.friends.FriendsScreen
@@ -75,6 +77,11 @@ fun MainScreen() {
             composable<EditProfile> {
                 EditProfileScreen(
                     navigateLanguage = { navController.navigate(Language) },
+                    popBackStack = { navController.popBackStack() }
+                )
+            }
+            dialog<PlayOptions>{
+                PlayOptionsDialog(
                     popBackStack = { navController.popBackStack() }
                 )
             }

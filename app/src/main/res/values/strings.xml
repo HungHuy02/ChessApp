@@ -197,6 +197,12 @@
     <string name="show_engine_lines_text" translatable="false">Show Engine Lines</string>
     <string name="show_move_feedback_text" translatable="false">Show Move Feedback</string>
 
+    <string name="options_text" translatable="false">Options</string>
+    <string name="flip_board_text" translatable="false">Flip Board</string>
+    <string name="explorer_text" translatable="false">Explorer</string>
+    <string name="share_game_text" translatable="false">Share Game</string>
+    <string name="save_game_text" translatable="false">Save Game</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

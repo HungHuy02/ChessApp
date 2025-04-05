@@ -1,6 +1,7 @@
 package com.huy.chess.ui.component
 
 import android.content.Context
+import android.graphics.Bitmap
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
@@ -25,11 +26,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.model.Piece
@@ -61,6 +63,18 @@ fun getChessPiecePainters(context: Context, size: Int): List<ImageBitmap> {
 
     return pieceResIds.map { resId ->
         Utils.loadImageBimap(context, resId, size)
+    }
+}
+
+fun getChessPieceBitmap(context: Context): List<Bitmap> {
+    val pieceResIds = listOf(
+        R.drawable.bpawn, R.drawable.brook, R.drawable.bbishop, R.drawable.bknight,
+        R.drawable.bqueen, R.drawable.bking, R.drawable.wpawn, R.drawable.wrook,
+        R.drawable.wbishop, R.drawable.wknight, R.drawable.wqueen, R.drawable.wking,
+    )
+
+    return pieceResIds.map { resId ->
+        Utils.loadBitmap(context, resId)
     }
 }
 
@@ -121,7 +135,7 @@ fun ChessBoard(
         val cellSize = size.width / 8
         drawImage(
             image = boardBitmap,
-            topLeft = Offset(0f, 0f),
+            topLeft = Offset(0f, 0f)
         )
         selectedPiece?.let {
             drawRect(
@@ -151,7 +165,7 @@ fun ChessBoard(
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
-    list: List<ImageBitmap>,
+    list: List<Bitmap>,
     fen: String
 ) {
     val context = LocalContext.current
@@ -159,7 +173,7 @@ fun ChessBoard(
     val density = LocalDensity.current.density
     val boardSizeDp = configuration.screenWidthDp / 3
     val boardSize = (boardSizeDp * density).toInt()
-    val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
+    val boardBitmap = remember { Utils.loadBitmap(context, R.drawable.chess_board) }
     val rows = fen.split(" ")[0].split("/")
     Box(
         contentAlignment = Alignment.Center,
@@ -173,10 +187,14 @@ fun ChessBoard(
                 .size(boardSizeDp.dp)
         ) {
             val cellSize = size.width / 8
-            drawImage(
-                image = boardBitmap,
-                topLeft = Offset(0f, 0f),
-            )
+            drawIntoCanvas { canvas ->
+                canvas.nativeCanvas.drawBitmap(
+                    boardBitmap,
+                    null,
+                    android.graphics.RectF(0f, 0f, size.width, size.width),
+                    null
+                )
+            }
 
             var rowIndex = 0
             rows.forEach { rowString ->
@@ -185,10 +203,22 @@ fun ChessBoard(
                     if (char.isDigit()) {
                         colIndex += (char - '0')
                     } else {
-                        drawImage(
-                            image = list[getPieceDrawableId(char)],
-                            topLeft = Offset(colIndex * cellSize, rowIndex * cellSize),
-                        )
+                        val bitmap = list[getPieceDrawableId(char)]
+                        val left = colIndex * cellSize
+                        val top = rowIndex * cellSize
+                        drawIntoCanvas { canvas ->
+                            canvas.nativeCanvas.drawBitmap(
+                                bitmap,
+                                null,
+                                android.graphics.RectF(
+                                    left,
+                                    top,
+                                    left + cellSize,
+                                    top + cellSize
+                                ),
+                                null
+                            )
+                        }
                         colIndex++
                     }
                 }

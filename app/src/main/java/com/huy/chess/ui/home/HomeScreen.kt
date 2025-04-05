@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
+import com.huy.chess.ui.component.getChessPieceBitmap
 import com.huy.chess.ui.component.getChessPiecePainters
 import com.huy.chess.ui.home.composables.HomeItems
 import com.huy.chess.utils.Constants
@@ -27,7 +28,7 @@ fun HomeScreen(
     navigateToPlayScreen: () -> Unit
 ) {
     val context = LocalContext.current
-    val list = remember { getChessPiecePainters(context, 100 / 8) }
+    val list = remember { getChessPieceBitmap(context) }
     Column(
         modifier = Modifier
             .padding(horizontal = 16.dp)
