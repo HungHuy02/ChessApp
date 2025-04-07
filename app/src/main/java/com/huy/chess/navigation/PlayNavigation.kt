@@ -26,7 +26,9 @@ fun NavGraphBuilder.playDestination(
             )
         }
         composable<ChangeTime> {
-            ChangeTimeScreen()
+            ChangeTimeScreen(
+                popBackStack = { navController.popBackStack() }
+            )
         }
         composable<SetupBot> {
             SetupBotScreen()

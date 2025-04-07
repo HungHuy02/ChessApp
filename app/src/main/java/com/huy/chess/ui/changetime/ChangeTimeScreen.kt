@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,22 +31,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
+import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.RowTimeButton
 import com.huy.chess.viewmodel.ChangeTimeViewModel
 
 @Composable
 fun ChangeTimeScreen(
-    viewModel: ChangeTimeViewModel = hiltViewModel()
+    viewModel: ChangeTimeViewModel = hiltViewModel(),
+    popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
-
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when(it) {
+                ChangeTimeEffect.PopBackStack -> popBackStack()
+            }
+        }
+    }
     Content(state, viewModel::sendAction)
 }
 
 @Composable
 private fun Content(
     state: ChangeTimeState,
-    onIntent: (ChangeTimeAction) -> Unit
+    onAction: (ChangeTimeAction) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -54,6 +63,10 @@ private fun Content(
             .padding(16.dp)
             .verticalScroll(rememberScrollState())
     ) {
+        ChessTopAppBar(
+            title = stringResource(R.string.time_text),
+            onClickBack = { onAction(ChangeTimeAction.ClickedBack) }
+        )
         IconWithText(
             painter = painterResource(R.drawable.bullet),
             text = stringResource(R.string.super_flash_text)
@@ -65,7 +78,7 @@ private fun Content(
                 stringResource(R.string.two_minute_plus_one_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+            onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
         )
         IconWithText(
             painter = painterResource(R.drawable.flash_on_24px),
@@ -78,7 +91,7 @@ private fun Content(
                 stringResource(R.string.five_minute_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+            onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -91,7 +104,7 @@ private fun Content(
                 text1 = stringResource(R.string.five_minute_plus_five_text),
                 text2 = stringResource(R.string.five_min_plus_two),
                 selectedTime = state.selectedTime,
-                onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+                onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -105,7 +118,7 @@ private fun Content(
                 stringResource(R.string.thirty_minute)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+            onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -121,7 +134,7 @@ private fun Content(
                     stringResource(R.string.sixty_min)
                 ),
                 selectedTime = state.selectedTime,
-                onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+                onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
             )
         }
         IconWithText(
@@ -135,7 +148,7 @@ private fun Content(
                 stringResource(R.string.seven_days_text)
             ),
             selectedTime = state.selectedTime,
-            onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+            onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
         )
         AnimatedVisibility(
             visible = state.isMoreSetting,
@@ -152,7 +165,7 @@ private fun Content(
                         stringResource(R.string.fourteen_days)
                     ),
                     selectedTime = state.selectedTime,
-                    onClick = { onIntent(ChangeTimeAction.ClickedButton(it)) }
+                    onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconWithText(
@@ -164,7 +177,7 @@ private fun Content(
             }
         }
         TextButton(
-            onClick = { onIntent(ChangeTimeAction.ToggleShowMore) },
+            onClick = { onAction(ChangeTimeAction.ToggleShowMore) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
