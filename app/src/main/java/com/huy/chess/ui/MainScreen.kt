@@ -11,7 +11,7 @@ import com.huy.chess.navigation.GameArchive
 import com.huy.chess.navigation.Language
 import com.huy.chess.navigation.Login
 import com.huy.chess.navigation.Main
-import com.huy.chess.navigation.Play
+import com.huy.chess.navigation.Game
 import com.huy.chess.navigation.PlayOptions
 import com.huy.chess.navigation.Profile
 import com.huy.chess.navigation.Register
@@ -37,7 +37,7 @@ fun MainScreen() {
         ) {
             composable<Main> {
                 BottomNavigationScreen(
-                    navigatePlay = { navController.navigate(Play) },
+                    navigatePlay = { navController.navigate(Game) },
                     navigateLogin = { navController.navigate(Login) },
                     navigateRegister = { navController.navigate(Register) }
                 )
@@ -77,11 +77,6 @@ fun MainScreen() {
             composable<EditProfile> {
                 EditProfileScreen(
                     navigateLanguage = { navController.navigate(Language) },
-                    popBackStack = { navController.popBackStack() }
-                )
-            }
-            dialog<PlayOptions>{
-                PlayOptionsDialog(
                     popBackStack = { navController.popBackStack() }
                 )
             }
