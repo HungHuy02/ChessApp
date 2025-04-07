@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -95,6 +96,8 @@ dependencies {
 
     // datastore
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
 
     // retrofit2 + moshi
     implementation (libs.retrofit)
@@ -121,4 +124,19 @@ dependencies {
 
     // socket.io client java
     implementation(libs.socket.io.client)
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.8.0"
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                create("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }
