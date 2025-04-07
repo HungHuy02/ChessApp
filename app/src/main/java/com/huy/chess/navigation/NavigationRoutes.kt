@@ -15,7 +15,7 @@ object PasswordInput
 @Serializable
 object ProfileSetup
 @Serializable
-object Play
+object Game
 @Serializable
 object NewGame
 @Serializable
@@ -40,6 +40,8 @@ object Language
 object EditProfile
 @Serializable
 object PlayOptions
+@Serializable
+object Play
 
 
 sealed class TopLevelDestination {
