@@ -19,6 +19,7 @@ enum class TimeType {
     TWO_DAYS,
     THREE_DAYS,
     FIVE_DAYS,
+    SEVEN_DAYS,
     FOURTEEN_DAYS,
     UNLIMITED
 }

@@ -1,6 +1,5 @@
 package com.huy.chess.ui.component
 
-import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -10,20 +9,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.huy.chess.utils.enums.TimeType
+import com.huy.chess.utils.toName
 
 @Composable
 fun TimeButton(
     modifier: Modifier = Modifier,
-    text: String,
+    timeType: TimeType,
     isSelected: Boolean,
-    onClick: (String) -> Unit
+    onClick: (TimeType) -> Unit
 ) {
-    Log.e("TimeButton", text)
     CompositionLocalProvider(LocalMinimumInteractiveComponentSize provides Dp.Unspecified) {
         Button(
-            onClick = { onClick(text) },
+            onClick = { onClick(timeType) },
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.surface
@@ -35,7 +36,7 @@ fun TimeButton(
             ) else modifier
         ) {
             Text(
-                text = text,
+                text = stringResource(timeType.toName()),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurface
             )

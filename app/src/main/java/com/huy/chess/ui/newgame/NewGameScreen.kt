@@ -66,7 +66,10 @@ fun Content(
             title = stringResource(R.string.new_game_text),
             onClickBack = { onAction(NewGameAction.ClickedBack) }
         )
-        TimeButton(modifier = Modifier.fillMaxWidth()) {
+        TimeButton(
+            timeType = state.selectedTime,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             onAction(NewGameAction.ClickedChangeTime)
         }
         AppButton(

@@ -26,7 +26,8 @@ fun IconWithText(
         Icon(
             painter = painter,
             contentDescription = "icon",
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
+            modifier = Modifier.size(24.dp)
         )
         Spacer(modifier = Modifier.size(8.dp))
         Text(

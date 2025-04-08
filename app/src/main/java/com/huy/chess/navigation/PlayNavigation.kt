@@ -31,10 +31,14 @@ fun NavGraphBuilder.playDestination(
             )
         }
         composable<SetupBot> {
-            SetupBotScreen()
+            SetupBotScreen(
+                popBackStack = { navController.popBackStack() }
+            )
         }
         composable<SetupTwoPeople> {
-            SetupTwoPeopleScreen()
+            SetupTwoPeopleScreen(
+                popBackStack = { navController.popBackStack() }
+            )
         }
         composable<Play> {
             PlayScreen()

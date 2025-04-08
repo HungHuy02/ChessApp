@@ -6,51 +6,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
-//@Composable
-//fun RowTimeButton(
-//    modifier: Modifier = Modifier,
-//    text1: String,
-//    text2: String,
-//    text3: String,
-//    selectedTime: String,
-//    onClick: (String) -> Unit
-//) {
-//    Row(modifier = modifier) {
-//        TimeButton(
-//            text = text1,
-//            modifier = Modifier.weight(1f),
-//            isSelected = selectedTime == text1,
-//            onClick = { onClick(it) }
-//        )
-//        Spacer(modifier = Modifier.size(8.dp))
-//        TimeButton(
-//            text = text2,
-//            modifier = Modifier.weight(1f),
-//            isSelected = selectedTime == text2,
-//            onClick = { onClick(it) }
-//        )
-//        Spacer(modifier = Modifier.size(8.dp))
-//        TimeButton(
-//            text = text3,
-//            modifier = Modifier.weight(1f),
-//            isSelected = selectedTime == text3,
-//            onClick = { onClick(it) }
-//        )
-//    }
-//}
+import com.huy.chess.utils.enums.TimeType
 
 @Composable
 fun RowTimeButton(
     modifier: Modifier = Modifier,
-    times: List<String>,
-    selectedTime: String,
-    onClick: (String) -> Unit
+    times: List<TimeType>,
+    selectedTime: TimeType,
+    onClick: (TimeType) -> Unit
 ) {
     Row(modifier = modifier) {
         times.forEachIndexed { index, time ->
             TimeButton(
-                text = time,
+                timeType = time,
                 modifier = Modifier.weight(1f),
                 isSelected = selectedTime == time,
                 onClick = { onClick(it) }
@@ -66,23 +34,23 @@ fun RowTimeButton(
 @Composable
 fun RowTimeButton(
     modifier: Modifier = Modifier,
-    text1: String,
-    text2: String,
-    selectedTime: String,
-    onClick: (String) -> Unit
+    timeType1: TimeType,
+    timeType2: TimeType,
+    selectedTime: TimeType,
+    onClick: (TimeType) -> Unit
 ) {
     Row(modifier = modifier) {
         TimeButton(
-            text = text1,
+            timeType = timeType1,
             modifier = Modifier.weight(1f),
-            isSelected = selectedTime == text1,
+            isSelected = selectedTime == timeType1,
             onClick = { onClick(it) }
         )
         Spacer(modifier = Modifier.size(8.dp))
         TimeButton(
-            text = text2,
+            timeType = timeType2,
             modifier = Modifier.weight(1f),
-            isSelected = selectedTime == text2,
+            isSelected = selectedTime == timeType2,
             onClick = { onClick(it) }
         )
         Spacer(modifier = Modifier.size(8.dp))
