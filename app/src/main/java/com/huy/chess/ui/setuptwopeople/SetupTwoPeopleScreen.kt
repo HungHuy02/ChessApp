@@ -10,32 +10,47 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
+import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.RowItem
 import com.huy.chess.ui.component.RowItemWithSwitch
 import com.huy.chess.ui.component.RowTimeButton
 import com.huy.chess.ui.component.TimeButton
 import com.huy.chess.ui.setuptwopeople.composables.NameArea
+import com.huy.chess.utils.enums.TimeType
+import com.huy.chess.utils.toName
+import com.huy.chess.viewmodel.SetupTwoPeopleViewModel
 
 @Composable
-fun SetupTwoPeopleScreen() {
-    var showTimeControl by remember {
-        mutableStateOf(false)
+fun SetupTwoPeopleScreen(
+    viewModel: SetupTwoPeopleViewModel = hiltViewModel(),
+    popBackStack: () -> Unit
+) {
+    val state = viewModel.state.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when(it) {
+                SetupTwoPeopleEffect.PopBackStack -> popBackStack()
+            }
+        }
     }
+    Content(state, viewModel::sendAction)
+}
 
-    var selectedText by remember { mutableStateOf("") }
-
+@Composable
+private fun Content(
+    state: SetupTwoPeopleState,
+    onAction: (SetupTwoPeopleAction) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -43,6 +58,10 @@ fun SetupTwoPeopleScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        ChessTopAppBar(
+            title = stringResource(R.string.pass_and_play_text),
+            onClickBack = { onAction(SetupTwoPeopleAction.ClickedBack) }
+        )
         Text(
             text = stringResource(R.string.play_with_friend_offline),
             style = MaterialTheme.typography.labelMedium,
@@ -52,47 +71,47 @@ fun SetupTwoPeopleScreen() {
         RowItem(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.time_control_text),
-            text = stringResource(R.string.no_time_text),
+            text = stringResource(state.selectedTime.toName()),
             onClick = {
-                showTimeControl = !showTimeControl
+                onAction(SetupTwoPeopleAction.ClickShowMore)
             }
         )
-        AnimatedVisibility(showTimeControl) {
+        AnimatedVisibility(state.showTimeControl) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.thirty_minute),
-                        stringResource(R.string.fifteen_minute_plus_ten),
-                        stringResource(R.string.ten_minute_text)
+                        TimeType.THIRTY_MINUTES,
+                        TimeType.FIFTEEN_MINUTES_PLUS_TEN,
+                        TimeType.TEN_MINUTES
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupTwoPeopleAction.ClickedButton(it)) }
                 )
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.five_minute_plus_five_text),
-                        stringResource(R.string.three_minute_plus_two_text),
-                        stringResource(R.string.two_minute_plus_one_text)
+                        TimeType.FIVE_MINUTES_PLUS_FIVE,
+                        TimeType.THREE_MINUTES_PLUS_TWO,
+                        TimeType.TWO_MINUTES_PLUS_ONE
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupTwoPeopleAction.ClickedButton(it)) }
                 )
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.five_minute_text),
-                        stringResource(R.string.three_minute_text),
-                        stringResource(R.string.one_minute_text)
+                        TimeType.FIVE_MINUTES,
+                        TimeType.THREE_MINUTES,
+                        TimeType.ONE_MINUTE
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupTwoPeopleAction.ClickedButton(it)) }
                 )
                 TimeButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.no_time_text),
-                    isSelected = selectedText == stringResource(R.string.no_time_text),
-                    onClick = { selectedText = it }
+                    timeType = TimeType.UNLIMITED,
+                    isSelected = state.selectedTime == TimeType.UNLIMITED,
+                    onClick = { onAction(SetupTwoPeopleAction.ClickedButton(it)) }
                 )
 
             }
@@ -109,10 +128,4 @@ fun SetupTwoPeopleScreen() {
             iconPosition = IconPosition.NONE
         )
     }
-}
-
-@Composable
-@Preview
-private fun Preview() {
-    SetupTwoPeopleScreen()
 }

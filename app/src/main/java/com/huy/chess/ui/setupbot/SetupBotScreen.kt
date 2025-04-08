@@ -10,38 +10,59 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
-import com.huy.chess.ui.component.TimeButton
 import com.huy.chess.ui.component.AppButton
+import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.RowItem
 import com.huy.chess.ui.component.RowItemWithSwitch
 import com.huy.chess.ui.component.RowTimeButton
+import com.huy.chess.ui.component.TimeButton
 import com.huy.chess.ui.setupbot.composables.IconWithText
 import com.huy.chess.ui.setupbot.composables.LevelSelect
 import com.huy.chess.ui.setupbot.composables.PieceSelect
+import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleAction
+import com.huy.chess.utils.enums.TimeType
+import com.huy.chess.utils.toName
+import com.huy.chess.viewmodel.SetupBotViewModel
 
 @Composable
-fun SetupBotScreen() {
-    var showTimeControl by remember {
-        mutableStateOf(false)
+fun SetupBotScreen(
+    viewModel: SetupBotViewModel = hiltViewModel(),
+    popBackStack: () -> Unit
+) {
+    val state = viewModel.state.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when(it) {
+                SetupBotEffect.PopBackStack -> popBackStack()
+            }
+        }
     }
-    var selectedText by remember { mutableStateOf("") }
+    Content(state, viewModel::sendAction)
+}
 
+@Composable
+private fun Content(
+    state: SetupBotState,
+    onAction: (SetupBotAction) -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
+        ChessTopAppBar(
+            title = stringResource(R.string.play_with_bot_text),
+            onClickBack = { onAction(SetupBotAction.ClickedBack) }
+        )
         IconWithText()
         Text(
             text = stringResource(R.string.play_with_color_text),
@@ -58,49 +79,49 @@ fun SetupBotScreen() {
         RowItem(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.time_control_text),
-            text = stringResource(R.string.no_time_text),
+            text = stringResource(state.selectedTime.toName()),
             onClick = {
-                showTimeControl = !showTimeControl
+                onAction(SetupBotAction.ClickShowMore)
             }
         )
-        AnimatedVisibility(showTimeControl) {
+        AnimatedVisibility(state.showTimeControl) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.thirty_minute),
-                        stringResource(R.string.fifteen_minute_plus_ten),
-                        stringResource(R.string.ten_minute_text)
+                        TimeType.THIRTY_MINUTES,
+                        TimeType.FIFTEEN_MINUTES_PLUS_TEN,
+                        TimeType.TEN_MINUTES
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupBotAction.ClickedButton(it)) }
 
                 )
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.five_minute_plus_five_text),
-                        stringResource(R.string.three_minute_plus_two_text),
-                        stringResource(R.string.two_minute_plus_one_text)
+                        TimeType.FIVE_MINUTES_PLUS_FIVE,
+                        TimeType.THREE_MINUTES_PLUS_TWO,
+                        TimeType.TWO_MINUTES_PLUS_ONE
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupBotAction.ClickedButton(it)) }
 
                 )
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.five_minute_text),
-                        stringResource(R.string.three_minute_text),
-                        stringResource(R.string.one_minute_text)
+                        TimeType.FIVE_MINUTES,
+                        TimeType.THREE_MINUTES,
+                        TimeType.ONE_MINUTE
                     ),
-                    selectedTime = selectedText,
-                    onClick = { selectedText = it }
+                    selectedTime = state.selectedTime,
+                    onClick = { onAction(SetupBotAction.ClickedButton(it)) }
                 )
                 TimeButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.no_time_text),
-                    isSelected = selectedText == stringResource(R.string.no_time_text),
-                    onClick = { selectedText = it }
+                    timeType = TimeType.UNLIMITED,
+                    isSelected = state.selectedTime == TimeType.UNLIMITED,
+                    onClick = { onAction(SetupBotAction.ClickedButton(it)) }
                 )
 
             }
@@ -121,10 +142,4 @@ fun SetupBotScreen() {
             modifier = Modifier.fillMaxWidth()
         )
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    SetupBotScreen()
 }

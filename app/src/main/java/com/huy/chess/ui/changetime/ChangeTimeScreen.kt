@@ -33,6 +33,7 @@ import com.huy.chess.ui.changetime.composables.CustomTimeSelect
 import com.huy.chess.ui.changetime.composables.IconWithText
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.RowTimeButton
+import com.huy.chess.utils.enums.TimeType
 import com.huy.chess.viewmodel.ChangeTimeViewModel
 
 @Composable
@@ -42,6 +43,7 @@ fun ChangeTimeScreen(
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
+
         viewModel.event.collect {
             when(it) {
                 ChangeTimeEffect.PopBackStack -> popBackStack()
@@ -73,9 +75,9 @@ private fun Content(
         )
         RowTimeButton(
             times = listOf(
-                stringResource(R.string.one_minute_text),
-                stringResource(R.string.one_minute_plus_one_text),
-                stringResource(R.string.two_minute_plus_one_text)
+                TimeType.ONE_MINUTE,
+                TimeType.ONE_MINUTE_PLUS_ONE,
+                TimeType.TWO_MINUTES_PLUS_ONE
             ),
             selectedTime = state.selectedTime,
             onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
@@ -86,9 +88,9 @@ private fun Content(
         )
         RowTimeButton(
             times = listOf(
-                stringResource(R.string.three_minute_text),
-                stringResource(R.string.three_minute_plus_two_text),
-                stringResource(R.string.five_minute_text)
+                TimeType.THREE_MINUTES,
+                TimeType.THREE_MINUTES_PLUS_TWO,
+                TimeType.FIVE_MINUTES
             ),
             selectedTime = state.selectedTime,
             onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
@@ -101,8 +103,8 @@ private fun Content(
                     shrinkVertically(animationSpec = tween(500, easing = FastOutSlowInEasing))
         ) {
             RowTimeButton(
-                text1 = stringResource(R.string.five_minute_plus_five_text),
-                text2 = stringResource(R.string.five_min_plus_two),
+                timeType1 = TimeType.TEN_MINUTES_PLUS_FIVE,
+                timeType2 = TimeType.FIVE_MINUTES_PLUS_TWO,
                 selectedTime = state.selectedTime,
                 onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
             )
@@ -113,9 +115,9 @@ private fun Content(
         )
         RowTimeButton(
             times = listOf(
-                stringResource(R.string.ten_minute_text),
-                stringResource(R.string.fifteen_minute_plus_ten),
-                stringResource(R.string.thirty_minute)
+                TimeType.TEN_MINUTES,
+                TimeType.FIFTEEN_MINUTES_PLUS_TEN,
+                TimeType.THIRTY_MINUTES
             ),
             selectedTime = state.selectedTime,
             onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
@@ -129,9 +131,9 @@ private fun Content(
         ) {
             RowTimeButton(
                 times = listOf(
-                    stringResource(R.string.ten_min_plus_5),
-                    stringResource(R.string.twenty_min),
-                    stringResource(R.string.sixty_min)
+                    TimeType.TEN_MINUTES_PLUS_FIVE,
+                    TimeType.TWENTY_MINUTES,
+                    TimeType.SIXTY_MINUTES
                 ),
                 selectedTime = state.selectedTime,
                 onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
@@ -143,9 +145,9 @@ private fun Content(
         )
         RowTimeButton(
             times = listOf(
-                stringResource(R.string.one_day),
-                stringResource(R.string.three_days_text),
-                stringResource(R.string.seven_days_text)
+                TimeType.ONE_DAY,
+                TimeType.THREE_DAYS,
+                TimeType.SEVEN_DAYS
             ),
             selectedTime = state.selectedTime,
             onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
@@ -160,9 +162,9 @@ private fun Content(
             Column {
                 RowTimeButton(
                     times = listOf(
-                        stringResource(R.string.two_days_text),
-                        stringResource(R.string.five_days_text),
-                        stringResource(R.string.fourteen_days)
+                        TimeType.TWO_DAYS,
+                        TimeType.FIVE_DAYS,
+                        TimeType.FOURTEEN_DAYS
                     ),
                     selectedTime = state.selectedTime,
                     onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }

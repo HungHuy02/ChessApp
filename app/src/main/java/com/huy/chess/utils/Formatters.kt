@@ -20,8 +20,10 @@ object Formatters {
             TimeType.TWO_DAYS -> 2 * 86400
             TimeType.THREE_DAYS -> 3 * 86400
             TimeType.FIVE_DAYS -> 5 * 86400
+            TimeType.SEVEN_DAYS -> 7 * 86400
             TimeType.FOURTEEN_DAYS -> 14 * 86400
             TimeType.UNLIMITED -> 0
+
         }
         return secondTime * 1000
     }
