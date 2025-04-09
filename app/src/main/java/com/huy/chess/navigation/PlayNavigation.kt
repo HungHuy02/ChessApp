@@ -41,7 +41,10 @@ fun NavGraphBuilder.playDestination(
             )
         }
         composable<Play> {
-            PlayScreen()
+            PlayScreen(
+                showPlayOptionsDialog = { navController.navigate(PlayOptions) },
+                popBackStack = { navController.popBackStack() }
+            )
         }
         dialog<PlayOptions>{
             PlayOptionsDialog(
