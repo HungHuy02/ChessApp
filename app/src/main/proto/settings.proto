@@ -4,5 +4,7 @@ option java_package = "com.huy.chess.proto";
 option java_multiple_files = true;
 
 message Settings {
-  int32 selectedTime = 8;
+  int32 selectedTime = 1;
+  int32 selectedTimeBot = 2;
+  int32 selectedTimeTwo = 3;
 }
