@@ -42,7 +42,8 @@ object EditProfile
 object PlayOptions
 @Serializable
 object Play
-
+@Serializable
+object SelectDate
 
 sealed class TopLevelDestination {
     @Serializable

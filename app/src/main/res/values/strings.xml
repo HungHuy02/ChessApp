@@ -203,6 +203,10 @@
     <string name="share_game_text" translatable="false">Share Game</string>
     <string name="save_game_text" translatable="false">Save Game</string>
 
+    <string name="select_date_text">Chọn Ngày</string>
+    <string name="puzzles_get_harder_text">Các thế đố sẽ dần khó hơn qua từng ngày trong tuần</string>
+    <string name="solved_puzzle_text">Các thế cờ đã giải</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

@@ -1,9 +1,11 @@
 [versions]
 agp = "8.7.3"
+compose = "2.6.2"
 constraintlayoutCompose = "1.1.1"
 converterMoshi = "2.11.0"
 credentials = "1.5.0-rc01"
 datastore = "1.1.4"
+desugar_jdk_libs = "2.1.5"
 facebookAndroidSdk = "latest.release"
 firebaseBom = "33.10.0"
 googleid = "1.1.1"
@@ -41,7 +43,9 @@ androidx-datastore = { module = "androidx.datastore:datastore", version.ref = "d
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 facebook-android-sdk = { module = "com.facebook.android:facebook-android-sdk", version.ref = "facebookAndroidSdk" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

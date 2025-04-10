@@ -123,4 +123,7 @@
     <string name="display_content_in_english_text">Display content in English when not available in my language</string>
     <string name="force_english_text">Force English</string>
     <string name="select_language_text">Select language</string>
+    <string name="select_date_text">Select Date</string>
+    <string name="puzzles_get_harder_text">Puzzles get harder throughout the week</string>
+    <string name="solved_puzzle_text">Solved Puzzle</string>
 </resources>
