@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.huy.chess.R
@@ -40,19 +42,14 @@ import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
-import com.kizitonwose.calendar.core.atStartOfMonth
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
-import com.kizitonwose.calendar.core.yearMonth
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
-import java.time.temporal.ChronoUnit
 import java.util.Locale
-import kotlin.LazyThreadSafetyMode.NONE
+
 
 object ContinuousSelectionHelper {
     fun getSelection(
@@ -72,56 +69,32 @@ object ContinuousSelectionHelper {
             DateSelection(startDate = clickedDate, endDate = null)
         }
     }
-
-    fun isInDateBetweenSelection(
-        inDate: LocalDate,
-        startDate: LocalDate,
-        endDate: LocalDate,
-    ): Boolean {
-        if (startDate.yearMonth == endDate.yearMonth) return false
-        if (inDate.yearMonth == startDate.yearMonth) return true
-        val firstDateInThisMonth = inDate.yearMonth.nextMonth.atStartOfMonth()
-        return firstDateInThisMonth in startDate..endDate && startDate != firstDateInThisMonth
-    }
-
-    fun isOutDateBetweenSelection(
-        outDate: LocalDate,
-        startDate: LocalDate,
-        endDate: LocalDate,
-    ): Boolean {
-        if (startDate.yearMonth == endDate.yearMonth) return false
-        if (outDate.yearMonth == endDate.yearMonth) return true
-        val lastDateInThisMonth = outDate.yearMonth.previousMonth.atEndOfMonth()
-        return lastDateInThisMonth in startDate..endDate && endDate != lastDateInThisMonth
-    }
 }
 
-data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDate? = null) {
-    val daysBetween by lazy(NONE) {
-        if (startDate == null || endDate == null) {
-            null
-        } else {
-            ChronoUnit.DAYS.between(startDate, endDate)
-        }
-    }
-}
+
+data class DateSelection(val startDate: LocalDate? = null, val endDate: LocalDate? = null)
+
 
 fun YearMonth.displayText(short: Boolean = false): String {
     return "${this.month.displayText(short = short)} ${this.year}"
 }
 
+
 fun Month.displayText(short: Boolean = true): String {
     val style = if (short) TextStyle.SHORT else TextStyle.FULL
-    return getDisplayName(style, Locale.ENGLISH)
+    return getDisplayName(style, Locale.getDefault())
 }
+
 
 fun DayOfWeek.displayText(uppercase: Boolean = false, narrow: Boolean = false): String {
     val style = if (narrow) TextStyle.NARROW else TextStyle.SHORT
-    return getDisplayName(style, Locale.ENGLISH).let { value ->
-        if (uppercase) value.uppercase(Locale.ENGLISH) else value
+    return getDisplayName(style, Locale.getDefault()).let { value ->
+        if (uppercase) value.uppercase(Locale.getDefault()) else value
     }
 }
 
+
+@Preview
 @Composable
 fun CalendarPage() {
     val currentMonth = remember { YearMonth.now() }
@@ -129,7 +102,7 @@ fun CalendarPage() {
     val endMonth = remember { currentMonth }
     val today = remember { LocalDate.now() }
     var selection by remember { mutableStateOf(DateSelection()) }
-    val daysOfWeek = remember { daysOfWeek() }
+    val daysOfWeek = remember { daysOfWeek(firstDayOfWeek = DayOfWeek.MONDAY) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -142,17 +115,13 @@ fun CalendarPage() {
                 firstVisibleMonth = currentMonth,
                 firstDayOfWeek = daysOfWeek.first(),
             )
-            CalendarTop(
-
-            )
+            CalendarTop()
             VerticalCalendar(
                 state = state,
                 contentPadding = PaddingValues(bottom = 100.dp),
                 dayContent = { value ->
                     Day(
                         value,
-                        today = today,
-                        selection = selection,
                     ) { day ->
                         if (day.position == DayPosition.MonthDate &&
                             (day.date == today || day.date.isAfter(today))
@@ -183,28 +152,23 @@ fun CalendarPage() {
 }
 
 
+
+
 @Composable
 private fun Day(
     day: CalendarDay,
-    today: LocalDate,
-    selection: DateSelection,
     onClick: (CalendarDay) -> Unit,
 ) {
     var textColor = Color.Black
     Box(
         modifier = Modifier
-            .aspectRatio(1f) // This is important for square-sizing!
+            .aspectRatio(1f)
             .clickable(
-                enabled = day.position == DayPosition.MonthDate && day.date >= today,
                 onClick = { onClick(day) },
-            ),
-//            .backgroundHighlight(
-//                day = day,
-//                today = today,
-//                selection = selection,
-//                selectionColor = selectionColor,
-//                continuousSelectionColor = continuousSelectionColor,
-//            ) { textColor = it },
+            )
+            .backgroundHighlight(day) {
+                textColor = it
+            },
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -215,6 +179,7 @@ private fun Day(
         )
     }
 }
+
 
 @Composable
 private fun MonthHeader(
@@ -252,6 +217,7 @@ private fun MonthHeader(
     }
 }
 
+
 @Composable
 private fun CalendarTop(
     modifier: Modifier = Modifier
@@ -277,9 +243,11 @@ private fun CalendarTop(
                 textAlign = TextAlign.Center
             )
 
+
         }
     }
 }
+
 
 @Composable
 private fun CalendarBottom(
@@ -297,7 +265,22 @@ private fun CalendarBottom(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = stringResource(R.string.solve_puzzles_text)
+            text = stringResource(R.string.solved_puzzle_text)
         )
     }
 }
+
+
+fun Modifier.backgroundHighlight(
+    day: CalendarDay,
+    textColor: (Color) -> Unit,
+): Modifier = this.composed {
+    if(day.position == DayPosition.InDate ) {
+        textColor(Color.Transparent)
+    }
+    if(day.position == DayPosition.OutDate ) {
+        textColor(Color.Transparent)
+    }
+    this
+}
+
