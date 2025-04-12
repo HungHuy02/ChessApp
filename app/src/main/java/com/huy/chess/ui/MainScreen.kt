@@ -1,7 +1,6 @@
 package com.huy.chess.ui
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
@@ -27,12 +26,9 @@ import com.huy.chess.ui.gamearchive.GameArchiveScreen
 import com.huy.chess.ui.language.LanguageScreen
 import com.huy.chess.ui.profile.ProfileScreen
 import com.huy.chess.ui.selectdate.SelectDateScreen
-import com.huy.chess.viewmodel.MainViewModel
 
 @Composable
-fun MainScreen(
-    viewModel: MainViewModel = hiltViewModel()
-) {
+fun MainScreen() {
     val navController = rememberNavController()
     FocusClearIme {
         NavHost(
@@ -43,7 +39,10 @@ fun MainScreen(
                 BottomNavigationScreen(
                     navigatePlay = { navController.navigate(Game) },
                     navigateLogin = { navController.navigate(Login) },
-                    navigateRegister = { navController.navigate(Register) }
+                    navigateRegister = { navController.navigate(Register) },
+                    navigateFriends = { navController.navigate(Friends) },
+                    navigateProfile = { navController.navigate(Profile) },
+                    navigateNotification = {  }
                 )
             }
             authDestination(navController)
