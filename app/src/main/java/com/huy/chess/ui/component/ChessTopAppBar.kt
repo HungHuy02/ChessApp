@@ -165,6 +165,7 @@ fun ChessTopAppBar(
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.arrow_back_24px),

@@ -1,15 +1,29 @@
 package com.huy.chess.ui.profile
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
@@ -28,6 +42,7 @@ fun ProfileScreen(
     navigateFriends: () -> Unit,
     popBackStack: () -> Unit
 ) {
+    val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
@@ -38,11 +53,14 @@ fun ProfileScreen(
             }
         }
     }
-    Content(viewModel::sendAction)
+    Content(state, viewModel::sendAction)
 }
 
 @Composable
-private fun Content(onAction: (ProfileAction) -> Unit) {
+private fun Content(
+    state: ProfileState,
+    onAction: (ProfileAction) -> Unit
+) {
     Column {
         ChessTopAppBar(
             onClickBack = {
@@ -56,13 +74,47 @@ private fun Content(onAction: (ProfileAction) -> Unit) {
                         onAction(ProfileAction.ClickedQR)
                     }
                 )
-                Icon(
-                    painter = painterResource(R.drawable.more_vert_24px),
-                    contentDescription = "more icon",
-                    modifier = Modifier.clickable {
-                        onAction(ProfileAction.ClickedMore)
+                Spacer(Modifier.width(8.dp))
+                Box {
+                    Icon(
+                        painter = painterResource(R.drawable.more_vert_24px),
+                        contentDescription = "more icon",
+                        modifier = Modifier.clickable {
+                            onAction(ProfileAction.ClickedMore)
+                        }
+                    )
+                    DropdownMenu(
+                        expanded = state.showMore,
+                        containerColor = MaterialTheme.colorScheme.background,
+                        onDismissRequest = {
+                            onAction(ProfileAction.ClickedMore)
+                        }
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.edit_text),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            },
+                            onClick = {
+                                onAction(ProfileAction.ClickedEdit)
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = stringResource(R.string.share_profile_text),
+                                    style = MaterialTheme.typography.titleSmall
+                                )
+                            },
+                            onClick = {
+                                onAction(ProfileAction.ClickedShareProfile)
+                            }
+                        )
                     }
-                )
+                }
+
             }
         )
         ConstraintLayout(
@@ -70,15 +122,19 @@ private fun Content(onAction: (ProfileAction) -> Unit) {
         ) {
             val (image, name, regionIcon, region, date) = createRefs()
             AsyncImage(
-                model = "lll",
+                model = state.user.avatar,
                 contentDescription = "image",
-                modifier = Modifier.constrainAs(image) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .size(60.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .constrainAs(image) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
             )
             Text(
-                text = "",
+                text = state.user.name ?: "",
                 modifier = Modifier.constrainAs(name) {
                     top.linkTo(image.top)
                     start.linkTo(image.end, margin = 16.dp)
@@ -87,10 +143,13 @@ private fun Content(onAction: (ProfileAction) -> Unit) {
             Icon(
                 painter = painterResource(R.drawable.vietnam),
                 contentDescription = "region icon",
-                modifier = Modifier.constrainAs(regionIcon) {
-                    start.linkTo(name.start)
-                    bottom.linkTo(image.bottom)
-                }
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .width(40.dp)
+                    .constrainAs(regionIcon) {
+                        start.linkTo(name.start)
+                        bottom.linkTo(image.bottom)
+                    }
             )
             Text(
                 text = "Vietnam",

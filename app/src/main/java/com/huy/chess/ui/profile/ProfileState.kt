@@ -1,5 +1,8 @@
 package com.huy.chess.ui.profile
 
-sealed class ProfileState {
-    data object Default : ProfileState()
-}
+import com.huy.chess.model.User
+
+data class ProfileState (
+    val user : User = User(),
+    val showMore: Boolean = false
+)

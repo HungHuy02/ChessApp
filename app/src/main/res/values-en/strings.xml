@@ -126,4 +126,6 @@
     <string name="select_date_text">Select Date</string>
     <string name="puzzles_get_harder_text">Puzzles get harder throughout the week</string>
     <string name="solved_puzzle_text">Solved Puzzle</string>
+    <string name="edit_text">Edit</string>
+    <string name="share_profile_text">Share Profile</string>
 </resources>
