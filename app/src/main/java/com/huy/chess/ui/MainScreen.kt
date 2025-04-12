@@ -57,7 +57,7 @@ fun MainScreen() {
             composable<Profile> {
                 ProfileScreen(
                     navigateFriends = {},
-                    navigateEditProfile = {},
+                    navigateEditProfile = { navController.navigate(EditProfile) },
                     navigateGameArchive = { navController.navigate(GameArchive) },
                     popBackStack = { navController.popBackStack() }
                 )
