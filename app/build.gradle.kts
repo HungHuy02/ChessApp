@@ -109,6 +109,7 @@ dependencies {
 
     // coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
     // firebase
     implementation(platform(libs.firebase.bom))
