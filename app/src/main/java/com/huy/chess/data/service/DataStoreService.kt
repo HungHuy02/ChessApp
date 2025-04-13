@@ -13,19 +13,19 @@ class DataStoreService @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) {
-    suspend fun getAccessToken() : String = withContext(dispatcher) {
-        dataStoreRepository.getString(ACCESS_TOKEN) ?: ""
+    suspend fun getAccessToken() : ByteArray = withContext(dispatcher) {
+        dataStoreRepository.getByteArray(ACCESS_TOKEN) ?: byteArrayOf()
     }
 
-    suspend fun setAccessToken(token: String) = withContext(dispatcher) {
-        dataStoreRepository.putString(ACCESS_TOKEN, token)
+    suspend fun setAccessToken(token: ByteArray) = withContext(dispatcher) {
+        dataStoreRepository.putByteArray(ACCESS_TOKEN, token)
     }
 
-    suspend fun getRefreshToken() : String = withContext(dispatcher) {
-        dataStoreRepository.getString(REFRESH_TOKEN) ?: ""
+    suspend fun getRefreshToken() : ByteArray = withContext(dispatcher) {
+        dataStoreRepository.getByteArray(REFRESH_TOKEN) ?: byteArrayOf()
     }
 
-    suspend fun setRefreshToken(token: String) = withContext(dispatcher) {
-        dataStoreRepository.putString(REFRESH_TOKEN, token)
+    suspend fun setRefreshToken(token: ByteArray) = withContext(dispatcher) {
+        dataStoreRepository.putByteArray(REFRESH_TOKEN, token)
     }
 }
