@@ -9,6 +9,8 @@ import com.huy.chess.model.request.LoginRequest
 import com.huy.chess.ui.login.LoginAction
 import com.huy.chess.ui.login.LoginEffect
 import com.huy.chess.ui.login.LoginState
+import com.huy.chess.utils.Constants
+import com.huy.chess.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,8 +41,8 @@ class LoginViewModel @Inject constructor(
             authRepository.login(loginRequest)
                 .onSuccess {
                     userState.updateUser(it.name, it.email, it.avatar)
-                    dataStoreService.setAccessToken(it.accessToken)
-                    dataStoreService.setRefreshToken(it.refreshToken)
+                    dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
+                    dataStoreService.setRefreshToken(Utils.encodeAESCBC(it.refreshToken, Constants.REFRESH_TOKEN_ALIAS))
                     sendEffect(LoginEffect.NavigateToHome)
                 }
                 .onFailure {

@@ -3,13 +3,18 @@ package com.huy.chess.utils
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.imageResource
-import androidx.core.graphics.scale
 import com.huy.chess.model.Piece
+import java.security.KeyStore
+import javax.crypto.Cipher
+import javax.crypto.KeyGenerator
+import javax.crypto.SecretKey
+import javax.crypto.spec.IvParameterSpec
 
 object Utils {
 
@@ -65,5 +70,49 @@ object Utils {
         return BitmapFactory.decodeResource(context.resources, resId, option)
     }
 
+    fun generateKey(alias: String) : SecretKey {
+        val kg: KeyGenerator = KeyGenerator.getInstance(
+            KeyProperties.KEY_ALGORITHM_AES,
+            Constants.KEY_STORE_PROVIDER
+        )
+        val parameterSpec: KeyGenParameterSpec = KeyGenParameterSpec.Builder(
+            alias,
+            KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        ).run {
+            setKeySize(128)
+            setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+            setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+            setRandomizedEncryptionRequired(true)
+            build()
+        }
+        kg.init(parameterSpec)
+        return kg.generateKey()
+    }
 
+    fun getKey(alias: String) : SecretKey {
+        val keyStore = KeyStore.getInstance(Constants.KEY_STORE_PROVIDER).apply { load(null) }
+        val entry = keyStore.getEntry(alias, null)
+        return if(entry is KeyStore.SecretKeyEntry) {
+            entry.secretKey
+        } else {
+            generateKey(alias)
+        }
+    }
+
+    fun encodeAESCBC(plain: String, alias: String) : ByteArray {
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        cipher.init(Cipher.ENCRYPT_MODE, getKey(alias))
+        val iv = cipher.iv
+        val encoded = cipher.doFinal(plain.toByteArray())
+        return iv + encoded
+    }
+
+    fun decodeAESCBC(input: ByteArray, alias: String) : String {
+        val iv: ByteArray = input.copyOfRange(0, 16)
+        val encoded: ByteArray = input.copyOfRange(16, input.size)
+        val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")
+        val ivSpec = IvParameterSpec(iv)
+        cipher.init(Cipher.DECRYPT_MODE, getKey(alias), ivSpec)
+        return cipher.doFinal(encoded).decodeToString()
+    }
 }

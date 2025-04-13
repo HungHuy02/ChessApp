@@ -1,8 +1,10 @@
 package com.huy.chess.data.preferences.abstraction
 
 interface DataStoreRepository {
+    suspend fun putByteArray(key: String, value: ByteArray)
     suspend fun putString(key: String, value: String)
     suspend fun putInt(key: String, value: Int)
+    suspend fun getByteArray(key: String) : ByteArray?
     suspend fun getString(key: String): String?
     suspend fun getInt(key: String): Int?
 }

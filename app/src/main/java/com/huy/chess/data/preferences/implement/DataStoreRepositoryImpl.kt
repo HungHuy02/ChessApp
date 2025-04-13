@@ -3,6 +3,7 @@ package com.huy.chess.data.preferences.implement
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.byteArrayPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -33,11 +34,17 @@ class DataStoreRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun putByteArray(key: String, value: ByteArray) =
+        putValue(byteArrayPreferencesKey(key), value)
+
     override suspend fun putString(key: String, value: String) =
         putValue(stringPreferencesKey(key), value)
 
     override suspend fun putInt(key: String, value: Int) =
         putValue(intPreferencesKey(key), value)
+
+    override suspend fun getByteArray(key: String): ByteArray? =
+        getValue(byteArrayPreferencesKey(key))
 
     override suspend fun getString(key: String): String? =
         getValue(stringPreferencesKey(key))

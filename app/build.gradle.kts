@@ -97,7 +97,7 @@ dependencies {
     // datastore
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.datastore)
-    implementation(libs.protobuf.javalite)
+    implementation(libs.protobuf.kotlin)
 
     // retrofit2 + moshi
     implementation (libs.retrofit)
