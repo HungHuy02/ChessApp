@@ -14,10 +14,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 import com.huy.chess.BuildConfig
+import com.huy.chess.data.network.AuthInterceptor
+import com.huy.chess.data.network.api.UserApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    fun provideUserApi(retrofit: Retrofit) : UserApi {
+        return retrofit.create(UserApi::class.java)
+    }
 
     @Provides
     fun provideAuthApi(retrofit: Retrofit) : AuthApi {
@@ -40,9 +47,11 @@ object NetworkModule {
     @Singleton
     fun provideOKHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
+        authInterceptor: AuthInterceptor,
         tokenAuthenticator: TokenAuthenticator
     ) : OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(httpLoggingInterceptor)
             .authenticator(tokenAuthenticator)
         return builder.build()

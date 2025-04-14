@@ -1,0 +1,18 @@
+package com.huy.chess.data.network.repository
+
+import android.content.Context
+import com.huy.chess.base.BaseRepository
+import com.huy.chess.data.network.api.UserApi
+import com.huy.chess.model.response.GetDetailsResponse
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+
+class UserRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val userApi: UserApi
+) : BaseRepository() {
+
+    suspend fun getDetails(): Result<GetDetailsResponse> {
+        return safeApiCall { userApi.getDetails() }
+    }
+}
