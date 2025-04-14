@@ -16,6 +16,7 @@ import com.huy.chess.navigation.Profile
 import com.huy.chess.navigation.Register
 import com.huy.chess.navigation.RegisterDialog
 import com.huy.chess.navigation.SelectDate
+import com.huy.chess.navigation.Welcome
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
 import com.huy.chess.ui.component.FocusClearIme
@@ -26,6 +27,7 @@ import com.huy.chess.ui.gamearchive.GameArchiveScreen
 import com.huy.chess.ui.language.LanguageScreen
 import com.huy.chess.ui.profile.ProfileScreen
 import com.huy.chess.ui.selectdate.SelectDateScreen
+import com.huy.chess.ui.welcome.WelcomeScreen
 
 @Composable
 fun MainScreen() {
@@ -33,7 +35,7 @@ fun MainScreen() {
     FocusClearIme {
         NavHost(
             navController = navController,
-            startDestination = Main
+            startDestination = Welcome
         ) {
             composable<Main> {
                 BottomNavigationScreen(
@@ -86,6 +88,11 @@ fun MainScreen() {
             composable<SelectDate> {
                 SelectDateScreen(
                     popBackStack = { navController.popBackStack() }
+                )
+            }
+            composable<Welcome> {
+                WelcomeScreen(
+                    navigateHome = { navController.navigate(Main) }
                 )
             }
         }

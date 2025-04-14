@@ -129,6 +129,9 @@ dependencies {
     // calendar
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     implementation(libs.compose)
+
+    // lottie
+    implementation(libs.lottie.compose)
 }
 
 protobuf {

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 sealed class NoEffect
+sealed class NoAction
 
 abstract class BaseViewModel<S, A, E>(initialState: S) : ViewModel() {
 
