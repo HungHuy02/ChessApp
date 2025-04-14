@@ -44,6 +44,8 @@ object PlayOptions
 object Play
 @Serializable
 object SelectDate
+@Serializable
+object Welcome
 
 sealed class TopLevelDestination {
     @Serializable
