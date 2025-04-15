@@ -36,7 +36,7 @@ class AuthRepository @Inject constructor(
         return safeApiCall { authApi.login(loginRequest) }
     }
 
-    suspend fun refresh(): Result<RefreshResponse> {
-        return safeApiCall { authApi.refresh() }
+    suspend fun refresh(token: String): Result<RefreshResponse> {
+        return safeApiCall { authApi.refresh("Bearer $token") }
     }
 }
