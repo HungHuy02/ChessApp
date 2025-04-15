@@ -1,13 +1,14 @@
 package com.huy.chess.data.network
 
+import android.util.Log
+import com.huy.chess.data.network.repository.AuthRepository
 import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.di.IoDispatcher
+import com.huy.chess.utils.Constants
+import com.huy.chess.utils.Utils
+import dagger.Lazy
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -16,26 +17,24 @@ import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
     private val dataStoreService: DataStoreService,
+    private val authRepository: Lazy<AuthRepository>,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : Authenticator {
 
-    private val authScope = CoroutineScope(SupervisorJob() + dispatcher)
-    private val mutex = Mutex()
-
     override fun authenticate(route: Route?, response: Response): Request? {
-        var newAccessToken: String? = null
-
-        authScope.launch {
-            mutex.withLock {
-                newAccessToken = ""
-//                newAccessToken?.let { dataStoreService.setAccessToken(it) }
-            }
+        val newAccessToken: String = runBlocking(dispatcher) {
+            val refreshToken = dataStoreService.getRefreshToken()
+            authRepository.get().refresh(Utils.decodeAESCBC(refreshToken, Constants.REFRESH_TOKEN_ALIAS))
+                .onSuccess {
+                    dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
+                    return@runBlocking it.accessToken
+                }
+                .onFailure { return@runBlocking "" }
+            ""
         }
-
-        return newAccessToken?.let {
-            response.request.newBuilder()
-                .header("Authorization", "Bearer $it")
-                .build()
-        }
+        if(newAccessToken.isEmpty()) return null
+        return response.request.newBuilder()
+            .header("Authorization", "Bearer $newAccessToken")
+            .build()
     }
 }

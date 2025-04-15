@@ -1,17 +1,16 @@
 package com.huy.chess.data.network
 
-import android.content.Context
+import android.util.Log
 import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.di.IoDispatcher
+import com.huy.chess.di.NoAuth
 import com.huy.chess.utils.Constants
 import com.huy.chess.utils.Utils
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import retrofit2.Invocation
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
@@ -20,14 +19,23 @@ class AuthInterceptor @Inject constructor(
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
+        val request = chain.request()
+
+        val hasNoAuth = request.tag(Invocation::class.java)
+            ?.method()
+            ?.getAnnotation(NoAuth::class.java) != null
+
+        if (hasNoAuth) {
+            return chain.proceed(request)
+        }
         val token = runBlocking(dispatcher) {
             val input = dataStoreService.getAccessToken()
             Utils.decodeAESCBC(input, Constants.ACCESS_TOKEN_ALIAS)
         }
-        val request = chain.request().newBuilder()
+        val newRequest = request.newBuilder()
             .addHeader("Authorization", "Bearer $token")
             .build()
-        return chain.proceed(request)
+        return chain.proceed(newRequest)
     }
 
 }
