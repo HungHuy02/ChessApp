@@ -2,9 +2,9 @@ package com.huy.chess.data.network.api
 
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.di.NoAuth
-import com.huy.chess.model.request.LoginRequest
-import com.huy.chess.model.response.LoginResponse
-import com.huy.chess.model.response.RefreshResponse
+import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.response.LoginResponse
+import com.huy.chess.data.model.response.RefreshResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response

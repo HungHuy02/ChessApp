@@ -3,7 +3,7 @@ package com.huy.chess.data.network.repository
 import android.content.Context
 import com.huy.chess.base.BaseRepository
 import com.huy.chess.data.network.api.UserApi
-import com.huy.chess.model.response.GetDetailsResponse
+import com.huy.chess.data.model.response.GetDetailsResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

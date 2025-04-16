@@ -5,10 +5,10 @@ import android.net.Uri
 import com.huy.chess.base.BaseRepository
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
-import com.huy.chess.model.request.LoginRequest
-import com.huy.chess.model.request.RegisterRequest
-import com.huy.chess.model.response.LoginResponse
-import com.huy.chess.model.response.RefreshResponse
+import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.request.RegisterRequest
+import com.huy.chess.data.model.response.LoginResponse
+import com.huy.chess.data.model.response.RefreshResponse
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
 import com.huy.chess.utils.uriToFile

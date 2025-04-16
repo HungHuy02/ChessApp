@@ -1,4 +1,4 @@
-package com.huy.chess.model.request
+package com.huy.chess.data.model.request
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

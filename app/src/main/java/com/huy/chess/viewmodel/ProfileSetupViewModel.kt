@@ -3,7 +3,7 @@ package com.huy.chess.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.network.repository.AuthRepository
-import com.huy.chess.model.request.RegisterRequest
+import com.huy.chess.data.model.request.RegisterRequest
 import com.huy.chess.ui.profilesetup.ProfileSetupEffect
 import com.huy.chess.ui.profilesetup.ProfileSetupAction
 import com.huy.chess.ui.profilesetup.ProfileSetupState

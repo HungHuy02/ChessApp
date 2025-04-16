@@ -34,7 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
-import com.huy.chess.model.Piece
+import com.huy.chess.data.model.Piece
 import com.huy.chess.utils.Utils
 
 private fun getPieceDrawableId(piece: Char): Int {

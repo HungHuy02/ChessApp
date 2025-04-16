@@ -10,6 +10,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import com.huy.chess.R
+import com.squareup.moshi.Moshi
+import org.json.JSONObject
 
 fun String.toRequestBody(): RequestBody =
     this.toRequestBody("text/plain".toMediaTypeOrNull())
@@ -88,4 +90,11 @@ fun TimeType.toPair() : Pair<Int, Int> {
         TimeType.FOURTEEN_DAYS -> R.drawable.daily to R.string.fourteen_days
         TimeType.UNLIMITED -> -1 to -1
     }
+}
+
+inline fun <reified T> T.toJsonObject(): JSONObject {
+    val moshi = Moshi.Builder().build()
+    val adapter = moshi.adapter(T::class.java)
+    val jsonString = adapter.toJson(this)
+    return JSONObject(jsonString)
 }

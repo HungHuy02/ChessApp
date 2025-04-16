@@ -1,6 +1,6 @@
 package com.huy.chess.data.globalstate
 
-import com.huy.chess.model.User
+import com.huy.chess.data.model.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

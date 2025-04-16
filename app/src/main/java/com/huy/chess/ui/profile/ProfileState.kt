@@ -1,6 +1,6 @@
 package com.huy.chess.ui.profile
 
-import com.huy.chess.model.User
+import com.huy.chess.data.model.User
 
 data class ProfileState (
     val user : User = User(),

@@ -1,4 +1,4 @@
-package com.huy.chess.model.request
+package com.huy.chess.data.model.request
 
 data class RegisterRequest(
     val name: String,

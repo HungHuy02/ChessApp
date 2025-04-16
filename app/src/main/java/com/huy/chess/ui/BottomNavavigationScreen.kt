@@ -12,7 +12,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.huy.chess.model.User
+import com.huy.chess.data.model.User
 import com.huy.chess.navigation.TopLevelDestination
 import com.huy.chess.navigation.bottomDestination
 import com.huy.chess.ui.component.ChessBottomAppBar
