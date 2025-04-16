@@ -23,8 +23,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.huy.chess.R
-import com.huy.chess.model.SignInResult
-import com.huy.chess.model.SignUpResult
+import com.huy.chess.data.model.SignInResult
+import com.huy.chess.data.model.SignUpResult
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -134,7 +134,8 @@ class AccountManager(
 
                     Firebase.auth.signInWithCredential(credential)
                         .addOnSuccessListener { authResult ->
-                            val userId = authResult.user?.uid ?: return@addOnSuccessListener it.resume(SignInResult.Failure)
+                            val userId = authResult.user?.uid ?: return@addOnSuccessListener it.resume(
+                                SignInResult.Failure)
                             it.resume(SignInResult.Success(userId))
                         }
                         .addOnFailureListener { exception ->

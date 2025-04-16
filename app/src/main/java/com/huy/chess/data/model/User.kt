@@ -1,4 +1,4 @@
-package com.huy.chess.model
+package com.huy.chess.data.model
 
 data class User(
     val name: String? = null,

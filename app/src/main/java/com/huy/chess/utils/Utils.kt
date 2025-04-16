@@ -9,7 +9,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import com.huy.chess.model.Piece
+import com.huy.chess.data.model.Piece
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator

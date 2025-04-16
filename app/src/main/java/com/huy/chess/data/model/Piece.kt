@@ -1,4 +1,4 @@
-package com.huy.chess.model
+package com.huy.chess.data.model
 
 data class Piece(
     var x: Int,

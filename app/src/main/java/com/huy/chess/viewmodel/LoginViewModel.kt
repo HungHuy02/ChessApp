@@ -5,7 +5,7 @@ import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.globalstate.UserState
 import com.huy.chess.data.network.repository.AuthRepository
 import com.huy.chess.data.service.DataStoreService
-import com.huy.chess.model.request.LoginRequest
+import com.huy.chess.data.model.request.LoginRequest
 import com.huy.chess.ui.login.LoginAction
 import com.huy.chess.ui.login.LoginEffect
 import com.huy.chess.ui.login.LoginState
