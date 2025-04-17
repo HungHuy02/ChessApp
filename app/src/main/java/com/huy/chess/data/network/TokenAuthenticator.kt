@@ -1,6 +1,5 @@
 package com.huy.chess.data.network
 
-import android.util.Log
 import com.huy.chess.data.network.repository.AuthRepository
 import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.di.IoDispatcher
@@ -24,12 +23,13 @@ class TokenAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
         val newAccessToken: String = runBlocking(dispatcher) {
             val refreshToken = dataStoreService.getRefreshToken()
-            authRepository.get().refresh(Utils.decodeAESCBC(refreshToken, Constants.REFRESH_TOKEN_ALIAS))
-                .onSuccess {
-                    dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
-                    return@runBlocking it.accessToken
-                }
-                .onFailure { return@runBlocking "" }
+            if(refreshToken.isNotEmpty())
+                authRepository.get().refresh(Utils.decodeAESCBC(refreshToken, Constants.REFRESH_TOKEN_ALIAS))
+                    .onSuccess {
+                        dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
+                        return@runBlocking it.accessToken
+                    }
+                    .onFailure { return@runBlocking "" }
             ""
         }
         if(newAccessToken.isEmpty()) return null
