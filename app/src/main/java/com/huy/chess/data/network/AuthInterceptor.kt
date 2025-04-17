@@ -1,6 +1,5 @@
 package com.huy.chess.data.network
 
-import android.util.Log
 import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.di.IoDispatcher
 import com.huy.chess.di.NoAuth
@@ -30,7 +29,9 @@ class AuthInterceptor @Inject constructor(
         }
         val token = runBlocking(dispatcher) {
             val input = dataStoreService.getAccessToken()
-            Utils.decodeAESCBC(input, Constants.ACCESS_TOKEN_ALIAS)
+            if(input.isNotEmpty())
+                return@runBlocking Utils.decodeAESCBC(input, Constants.ACCESS_TOKEN_ALIAS)
+            return@runBlocking ""
         }
         val newRequest = request.newBuilder()
             .addHeader("Authorization", "Bearer $token")
