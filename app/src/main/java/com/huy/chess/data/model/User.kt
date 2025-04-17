@@ -1,8 +1,12 @@
 package com.huy.chess.data.model
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class User(
-    val name: String? = null,
-    val email: String? = null,
-    val avatar: String? = null,
-    val elo: Int? = null
+    @Json(name = "name") val name: String? = null,
+    @Json(name = "email") val email: String? = null,
+    @Json(name = "avatar") val avatar: String? = null,
+    @Json(name = "elo") val elo: Int? = null
 )
