@@ -8,3 +8,8 @@ message Settings {
   int32 selectedTimeBot = 2;
   int32 selectedTimeTwo = 3;
 }
+
+message Language {
+  bool displayEnglishWhenNotAvailable = 1;
+  bool forceLanguage = 2;
+}
