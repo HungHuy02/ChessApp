@@ -6,17 +6,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
+import com.huy.chess.ui.editprofile.composable.TextWithRightIcon
 import com.huy.chess.ui.editprofile.composable.TextWithTextField
 import com.huy.chess.viewmodel.EditProfileViewModel
 
@@ -46,24 +52,32 @@ private fun Content(
     Column {
         ChessTopAppBar(
             onClick = { onAction(EditProfileAction.ClickedLeft) },
-            title = stringResource(R.string.language_text),
+            title = stringResource(R.string.edit_profile_text),
             isVerify = state.isVerify,
             onClickDone = { onAction(EditProfileAction.ClickedDone) }
         )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-                .clickable {
-                    onAction(EditProfileAction.ClickedPicture)
-                } .padding(8.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.profile_picture_text)
-            )
-            AsyncImage(
-                model = R.drawable.noavatar,
-                contentDescription = "image"
-            )
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+                    .clickable {
+                        onAction(EditProfileAction.ClickedPicture)
+                    } .padding(8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.profile_picture_text)
+                )
+                AsyncImage(
+                    model = state.user.avatar,
+                    contentDescription = "image",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(80.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                )
+
+            }
+
             TextWithTextField(
                 text = stringResource(R.string.flair_text),
                 value = "",
@@ -106,13 +120,10 @@ private fun Content(
                 onValueChange = {},
                 onClick = { onAction(EditProfileAction.ClickedLocation) }
             )
-            TextWithTextField(
+            TextWithRightIcon (
                 text = stringResource(R.string.language_text),
-                value = "",
-                onValueChange = {},
                 onClick = { onAction(EditProfileAction.ClickedLanguage) }
             )
         }
-
     }
 }
