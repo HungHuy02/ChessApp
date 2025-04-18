@@ -2,7 +2,9 @@ package com.huy.chess.ui.language.composable
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +24,16 @@ fun LanguageRow(
         modifier = Modifier
             .clickable {
                 onClick()
-            }.padding(8.dp)
+            }.padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
-            text = text
+            text = text,
+            modifier = Modifier.weight(1f)
         )
+        Spacer(Modifier.width(16.dp))
         Switch(
             checked = checked,
-            onCheckedChange = { onClick }
+            onCheckedChange = { onClick() }
         )
     }
 }
