@@ -15,11 +15,17 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 import com.huy.chess.BuildConfig
 import com.huy.chess.data.network.AuthInterceptor
+import com.huy.chess.data.network.api.PuzzleApi
 import com.huy.chess.data.network.api.UserApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+
+    @Provides
+    fun providePuzzleApi(retrofit: Retrofit) : PuzzleApi {
+        return retrofit.create(PuzzleApi::class.java)
+    }
 
     @Provides
     fun provideUserApi(retrofit: Retrofit) : UserApi {
