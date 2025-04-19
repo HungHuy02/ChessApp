@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
-import com.huy.chess.data.model.DailyPuzzle
+import com.huy.chess.navigation.DailyPuzzle
 import com.huy.chess.navigation.EditProfile
 import com.huy.chess.navigation.Friends
 import com.huy.chess.navigation.Game
@@ -21,6 +21,7 @@ import com.huy.chess.navigation.Welcome
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
 import com.huy.chess.ui.component.FocusClearIme
+import com.huy.chess.ui.dailypuzzle.DailyPuzzleScreen
 import com.huy.chess.ui.dialog.register.RegisterDialog
 import com.huy.chess.ui.editprofile.EditProfileScreen
 import com.huy.chess.ui.friends.FriendsScreen
@@ -46,7 +47,7 @@ fun MainScreen() {
                     navigateFriends = { navController.navigate(Friends) },
                     navigateProfile = { navController.navigate(Profile) },
                     navigateNotification = { },
-                    navigateDailyPuzzle = {  }
+                    navigateDailyPuzzle = { navController.navigate(DailyPuzzle) }
                 )
             }
             authDestination(navController)
@@ -95,6 +96,12 @@ fun MainScreen() {
             composable<Welcome> {
                 WelcomeScreen(
                     navigateHome = { navController.navigate(Main) }
+                )
+            }
+            composable<DailyPuzzle> {
+                DailyPuzzleScreen(
+                    navigateSelectDate = { navController.navigate(SelectDate) },
+                    popBackStack = { navController.popBackStack() }
                 )
             }
         }
