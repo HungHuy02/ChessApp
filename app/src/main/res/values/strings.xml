@@ -210,6 +210,16 @@
     <string name="edit_text">Chỉnh sửa</string>
     <string name="share_profile_text">Chia sẻ hồ sơ</string>
 
+    <string name="correct_answer_text" translatable="false">%s đúng!</string>
+    <string name="hint_text" translatable="false">Gợi ý</string>
+    <string name="incorrect_answer_text" translatable="false">%s không đúng!</string>
+    <string name="answer_text" translatable="false">Đáp án</string>
+    <string name="try_again_text" translatable="false">Hãy thử lại</string>
+    <string name="solved_text" translatable="false">Đã giải quyết</string>
+    <string name="reset_board_text" translatable="false">Thiết lập lại bàn cờ</string>
+    <string name="white_player_turn_text" translatable="false">Đến lượt phiên quân trắng di chuyển</string>
+    <string name="black_player_turn_text" translatable="false">Đến lượt phiên quân đen di chuyển</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>
