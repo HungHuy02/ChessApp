@@ -23,6 +23,7 @@ import com.huy.chess.viewmodel.BottomNavViewModel
 fun BottomNavigationScreen(
     viewModel: BottomNavViewModel = hiltViewModel(),
     navigatePlay: () -> Unit,
+    navigateDailyPuzzle: () -> Unit,
     navigateLogin: () -> Unit,
     navigateRegister: () -> Unit,
     navigateFriends: () -> Unit,
@@ -69,7 +70,10 @@ fun BottomNavigationScreen(
             startDestination = TopLevelDestination.Home,
             modifier = Modifier.padding(it)
         ) {
-            bottomDestination(navigatePlay)
+            bottomDestination(
+                navigatePlay = navigatePlay,
+                navigateDailyPuzzle = navigateDailyPuzzle
+            )
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import com.huy.chess.data.model.DailyPuzzle
 import com.huy.chess.navigation.EditProfile
 import com.huy.chess.navigation.Friends
 import com.huy.chess.navigation.Game
@@ -44,7 +45,8 @@ fun MainScreen() {
                     navigateRegister = { navController.navigate(Register) },
                     navigateFriends = { navController.navigate(Friends) },
                     navigateProfile = { navController.navigate(Profile) },
-                    navigateNotification = {  }
+                    navigateNotification = { },
+                    navigateDailyPuzzle = {  }
                 )
             }
             authDestination(navController)
