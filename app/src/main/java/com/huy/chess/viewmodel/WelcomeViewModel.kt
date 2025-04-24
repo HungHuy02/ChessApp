@@ -8,6 +8,7 @@ import com.huy.chess.data.network.repository.UserRepository
 import com.huy.chess.ui.welcome.WelcomeEffect
 import com.huy.chess.ui.welcome.WelcomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +25,7 @@ class WelcomeViewModel @Inject constructor(
                     userState.updateUser(it.name, it.email, it.avatar)
                 }
                 .onFailure {  }
+            delay(400)
             sendEffect(WelcomeEffect.NavigateHome)
         }
     }
