@@ -39,6 +39,10 @@ class SetupTwoPeopleViewModel @Inject constructor(
                 }
             }
             SetupTwoPeopleAction.ClickShowMore -> updateState { it.copy(showTimeControl = !it.showTimeControl) }
+            is SetupTwoPeopleAction.ChangeBlackName -> updateState { it.copy(blackName = action.value) }
+            is SetupTwoPeopleAction.ChangeWhiteName -> updateState { it.copy(whiteName = action.value) }
+            SetupTwoPeopleAction.ClickedChange -> updateState { it.copy(blackName = it.whiteName, whiteName = it.blackName) }
+            SetupTwoPeopleAction.ChangeRotateBoard -> updateState { it.copy(enableRotateBoard = !it.enableRotateBoard) }
         }
     }
 }
