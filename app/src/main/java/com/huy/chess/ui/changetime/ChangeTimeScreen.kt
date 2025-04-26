@@ -10,8 +10,10 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -82,6 +84,7 @@ private fun Content(
             selectedTime = state.selectedTime,
             onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
         )
+        Spacer(Modifier.height(16.dp))
         IconWithText(
             painter = painterResource(R.drawable.flash_on_24px),
             text = stringResource(R.string.flash_text)
@@ -109,6 +112,7 @@ private fun Content(
                 onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
             )
         }
+        Spacer(Modifier.height(16.dp))
         IconWithText(
             painter = painterResource(R.drawable.timer_24px),
             text = stringResource(R.string.fast_text)
@@ -139,6 +143,7 @@ private fun Content(
                 onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
             )
         }
+        Spacer(Modifier.height(16.dp))
         IconWithText(
             painter = painterResource(R.drawable.wb_sunny_24px),
             text = stringResource(R.string.daily_text)
@@ -169,6 +174,7 @@ private fun Content(
                     selectedTime = state.selectedTime,
                     onClick = { onAction(ChangeTimeAction.ClickedButton(it)) }
                 )
+                Spacer(Modifier.height(16.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     IconWithText(
                         painter = painterResource(R.drawable.build_24px),

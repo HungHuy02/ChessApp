@@ -1,5 +1,6 @@
 package com.huy.chess.ui.changetime.composables
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -19,20 +20,24 @@ fun CustomTimeSelect(modifier: Modifier = Modifier) {
     Card(
         onClick = {},
         shape = MaterialTheme.shapes.medium,
-        modifier = modifier.wrapContentSize().padding(8.dp)
+        modifier = modifier.wrapContentSize()
     ) {
-        TimeSlider(maxSelect = Constants.MAX_TIME_SELECT, isInitialTime = true)
-        TimeSlider(maxSelect = Constants.MAX_BONUS_TIME_SELECT, isInitialTime = false)
-        Button(
-            onClick = {},
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier.padding(8.dp)
         ) {
-            Text(
-                text = stringResource(R.string.select_text),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.titleLarge
-            )
+            TimeSlider(maxSelect = Constants.MAX_TIME_SELECT, isInitialTime = true)
+            TimeSlider(maxSelect = Constants.MAX_BONUS_TIME_SELECT, isInitialTime = false)
+            Button(
+                onClick = {},
+                shape = MaterialTheme.shapes.small,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = stringResource(R.string.select_text),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
     }
 }
