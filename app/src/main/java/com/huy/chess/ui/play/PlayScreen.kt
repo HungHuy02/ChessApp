@@ -17,6 +17,7 @@ import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.Timer
 import com.huy.chess.viewmodel.PlayViewModel
 import com.huy.chess.R
+import com.huy.chess.ui.play.composables.CapturedPiece
 
 @Composable
 fun PlayScreen(
@@ -44,7 +45,7 @@ private fun Content(
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (topBar, pane, board, timerTop, timerBottom, bar) = createRefs()
+        val (topBar, pane, board, capture, timerTop, timerBottom, bar) = createRefs()
         ChessTopAppBar(
             title = stringResource(R.string.app_name),
             onClickBack = { onAction(PlayAction.ClickedBackButton) },
@@ -70,6 +71,14 @@ private fun Content(
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
                     bottom.linkTo(parent.bottom)
+                }
+        )
+
+        CapturedPiece(
+            modifier = Modifier
+                .constrainAs(capture) {
+                    top.linkTo(board.bottom, margin = 16.dp)
+                    start.linkTo(parent.start, margin = 16.dp)
                 }
         )
 

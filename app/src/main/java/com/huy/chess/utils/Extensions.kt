@@ -98,3 +98,7 @@ inline fun <reified T> T.toJsonObject(): JSONObject {
     val jsonString = adapter.toJson(this)
     return JSONObject(jsonString)
 }
+
+fun <K> MutableMap<K, Int>.increment(key: K) {
+    this[key] = (this[key] ?: 0) + 1
+}
