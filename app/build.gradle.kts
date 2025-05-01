@@ -23,6 +23,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++17"
+                cppFlags += "-g"
+            }
+        }
+        ndk {
+            debugSymbolLevel = "FULL" // hoặc 'SYMBOL_TABLE'
+        }
 
         val baseUrl = gradleLocalProperties(rootDir, providers).getProperty("baseUrl") ?: ""
         buildConfigField("String", "BASE_URL", "\"${baseUrl}\"")
@@ -52,6 +61,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
     }
     buildFeatures {
         compose = true
