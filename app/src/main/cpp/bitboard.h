@@ -1,0 +1,29 @@
+//
+// Created by HungHuy02 on 5/1/2025.
+//
+
+#ifndef BITBOARD_H
+#define BITBOARD_H
+
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <random>
+#include <map>
+#include <unordered_map>
+
+using namespace std;
+
+struct MoveResult {
+    string notation;
+    int diffMove;
+};
+
+MoveResult makeMove(int source, char sourcePiece, int target, char targetPiece, char toPiece);
+vector<int> getLegalMoves(int encodeSquare);
+void parseFen(const char *fen);
+void initAll();
+bool hasOneLegalMove();
+
+#endif
+
