@@ -32,6 +32,11 @@ class PlayViewModel @Inject constructor() :
                     it.copy(capturedPiece = map)
                 }
             }
+            is PlayAction.Move -> updateState {
+                val notation = state.value.notationList.toMutableList()
+                notation.add(action.move)
+                it.copy(notationList = notation)
+            }
         }
     }
 }

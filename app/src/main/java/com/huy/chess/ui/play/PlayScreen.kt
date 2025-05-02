@@ -68,6 +68,7 @@ private fun Content(
 
         ChessBoard(
             onCapture = { onAction(PlayAction.PieceCaptured(it)) },
+            onMove = { onAction(PlayAction.Move(it)) },
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
