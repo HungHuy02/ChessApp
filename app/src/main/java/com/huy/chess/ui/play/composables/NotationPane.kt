@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,7 +28,15 @@ fun NotationPane(
     modifier: Modifier = Modifier,
     notations: List<String>
 ) {
-    LazyRow(modifier = modifier) {
+    var state = rememberLazyListState()
+    LaunchedEffect(notations.size) {
+        if(notations.isNotEmpty())
+            state.animateScrollToItem(notations.size - 1)
+    }
+    LazyRow(
+        modifier = modifier,
+        state = state
+    ) {
         itemsIndexed(notations) { index, item ->
             NotationPaneItem(
                 number = if (index % 2 == 0) index / 2 + 1 else null,
