@@ -15,19 +15,16 @@ import com.huy.chess.utils.increment
 
 @Composable
 fun CapturedPiece(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    map: MutableMap<Char, Int>
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current.density
     val boardSize = (configuration.screenWidthDp * density).toInt()
-    val cellSize = boardSize / 12
+    val cellSize = boardSize / 14
     val pieceSize = cellSize / 3f
-    val map = mutableMapOf<Char, Int>()
-    map.increment('p')
-    map.increment('q')
-    map.increment('P')
-    map.increment('N')
+
     val list = remember { getChessPiecePainters(context, cellSize) }
     Canvas(modifier = modifier) {
         var currentX = 0f
@@ -49,7 +46,7 @@ fun CapturedPiece(
                     count = count,
                     imageBitmap = list[getPieceDrawableId(pieceType)],
                     x = currentX,
-                    y = cellSize * 2f,
+                    y = cellSize * 1.2f,
                     distance = pieceSize
                 )
             }
@@ -64,12 +61,13 @@ fun DrawScope.drawPiece(
     y: Float,
     distance: Float
 ) : Float {
-    var positionX = x + distance
-    for (i in 0 .. count) {
+    var positionX = x + distance * 2
+    for (i in 0 ..< count) {
         drawImage(
             image = imageBitmap,
-            topLeft = Offset(positionX + distance * i, y)
+            topLeft = Offset(positionX, y)
         )
+        positionX += distance
     }
     return positionX
 }
