@@ -61,13 +61,14 @@ fun NotationPaneItem(
                 )
             )
         }
+        Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = text,
             modifier = Modifier
-                .background(if (isClick) Color.Gray else Color.White, RoundedCornerShape(2.dp))
+                .background(if (isClick) Color.Gray else Color.Unspecified, RoundedCornerShape(2.dp))
                 .padding(bottom = 2.dp)
                 .background(
-                    if (isClick) Color.Cyan else Color.White,
+                    if (isClick) Color.Cyan else Color.Unspecified,
                     RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 4.dp)

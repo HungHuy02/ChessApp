@@ -85,6 +85,7 @@ fun getChessPieceBitmap(context: Context): List<Bitmap> {
 fun ChessBoard(
     modifier: Modifier = Modifier,
     onCapture: (Char) -> Unit = {},
+    onMove: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -122,7 +123,8 @@ fun ChessBoard(
                             }
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
-                            makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target)
+                            val result = makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target)
+                            onMove(result.notation)
                             board[x][y] = Piece(x, y, target)
 
 //                        movedSpot = listOf(selectedPiece!!, desSpot!!)
@@ -143,7 +145,8 @@ fun ChessBoard(
                             }
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
-                            makeMove(promotionPair.first, 'p', promotionPair.second,' ', target)
+                            val result = makeMove(promotionPair.first, 'p', promotionPair.second,' ', target)
+                            onMove(result.notation)
                             board[x][y] = Piece(x, y, target)
 
 //                        movedSpot = listOf(selectedPiece!!, desSpot!!)
@@ -188,6 +191,7 @@ fun ChessBoard(
             } else {
                 if(result.diffMove != -1) {
                     isMoving = true
+                    onMove(result.notation)
                     pieceOffset.snapTo(Offset(startX, startY))
                     pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
                     if(result.diffMove != 65) {

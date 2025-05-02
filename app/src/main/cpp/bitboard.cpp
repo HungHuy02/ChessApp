@@ -1276,7 +1276,7 @@ string generateAlgebraicNotation(int move) {
     }
     switch(piece) {
         case P:
-            if(capture) notation = squareToCoordinate[targetSquare][0];
+            if(capture) notation = squareToCoordinate[sourceSquare][0];
             break;
         case N:
             notation = "N";
@@ -1294,7 +1294,7 @@ string generateAlgebraicNotation(int move) {
             notation = "K";
             break;
         case p:
-            if(capture) notation = squareToCoordinate[targetSquare][0];
+            if(capture) notation = squareToCoordinate[sourceSquare][0];
             break;
         case n:
             notation = "N";
