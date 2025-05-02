@@ -5,6 +5,8 @@ import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.play.PlayAction
 import com.huy.chess.ui.play.PlayEffect
 import com.huy.chess.ui.play.PlayState
+import com.huy.chess.utils.Constants
+import com.huy.chess.utils.increment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,8 +15,7 @@ class PlayViewModel @Inject constructor() :
     BaseViewModel<PlayState, PlayAction, PlayEffect>(PlayState()) {
 
     init {
-        System.loadLibrary("chess")
-        parseFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+        parseFen(Constants.START_FEN)
     }
 
     override fun processAction(action: PlayAction) {
@@ -24,6 +25,13 @@ class PlayViewModel @Inject constructor() :
             PlayAction.ClickedForward -> {}
             PlayAction.ClickedMore -> sendEffect(PlayEffect.ShowPlayOptionsDialog)
             PlayAction.ClickedBackButton -> sendEffect(PlayEffect.PopBackStack)
+            is PlayAction.PieceCaptured -> {
+                updateState {
+                    val map = state.value.capturedPiece
+                    map.increment(action.piece)
+                    it.copy(capturedPiece = map)
+                }
+            }
         }
     }
 }

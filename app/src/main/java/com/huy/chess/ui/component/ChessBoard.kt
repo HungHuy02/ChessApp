@@ -83,7 +83,8 @@ fun getChessPieceBitmap(context: Context): List<Bitmap> {
 
 @Composable
 fun ChessBoard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCapture: (Char) -> Unit = {},
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -202,6 +203,8 @@ fun ChessBoard(
                         board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
                     }
                     isMoving = false
+
+                    if(desSpot!!.piece != ' ') onCapture(desSpot!!.piece)
 
                     board[desSpot!!.x][desSpot!!.y] = Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
                     board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')

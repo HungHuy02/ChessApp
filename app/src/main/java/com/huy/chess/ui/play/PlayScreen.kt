@@ -67,6 +67,7 @@ private fun Content(
         )
 
         ChessBoard(
+            onCapture = { onAction(PlayAction.PieceCaptured(it)) },
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
@@ -75,6 +76,7 @@ private fun Content(
         )
 
         CapturedPiece(
+            map = state.capturedPiece,
             modifier = Modifier
                 .constrainAs(capture) {
                     top.linkTo(board.bottom, margin = 16.dp)

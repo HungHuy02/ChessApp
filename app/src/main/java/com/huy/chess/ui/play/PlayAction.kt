@@ -6,4 +6,5 @@ sealed class PlayAction {
     data object ClickedBack: PlayAction()
     data object ClickedForward: PlayAction()
     data object ClickedBackButton: PlayAction()
+    data class PieceCaptured(val piece: Char): PlayAction()
 }
