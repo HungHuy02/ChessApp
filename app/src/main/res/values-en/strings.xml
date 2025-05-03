@@ -133,4 +133,15 @@
     <string name="review_game_text">Xem lại ván đấu</string>
     <string name="rematch_text">Tái đấu</string>
     <string name="time_new_text">%s Mới</string>
+    <string name="resigned_text">do bỏ cuộc</string>
+    <string name="draw_by_repetition_text">do lặp lại nước đi</string>
+    <string name="surrendered_text">do đầu hàng</string>
+    <string name="fifty_move_rule_text">bởi luật 50-nước đi</string>
+    <string name="draw_text">Hòa</string>
+    <string name="white_win_text">Trắng thắng</string>
+    <string name="black_win_text">Đen thắng</string>
+    <string name="time_out_text">do hết thời gian</string>
+    <string name="insufficient_material_text">do không đủ quân</string>
+    <string name="agreement_text">do thỏa thuận</string>
+    <string name="out_of_move">do hết nước đi</string>
 </resources>

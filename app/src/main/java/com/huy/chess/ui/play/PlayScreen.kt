@@ -18,22 +18,22 @@ import com.huy.chess.ui.play.composables.Timer
 import com.huy.chess.viewmodel.PlayViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.play.composables.CapturedPiece
+import com.huy.chess.utils.enums.GameResult
 
 @Composable
 fun PlayScreen(
     viewModel: PlayViewModel = hiltViewModel(),
     showPlayOptionsDialog: () -> Unit,
-    showEndGameDialog: () -> Unit,
+    showEndGameDialog: (GameResult) -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
-        showEndGameDialog()
         viewModel.event.collect {
             when(it) {
                 PlayEffect.PopBackStack -> popBackStack()
                 PlayEffect.ShowPlayOptionsDialog -> showPlayOptionsDialog()
-                PlayEffect.ShowEndGameDialog -> showEndGameDialog()
+                is PlayEffect.ShowEndGameDialog -> showEndGameDialog(it.gameResult)
             }
         }
     }
@@ -72,6 +72,7 @@ private fun Content(
         ChessBoard(
             onCapture = { onAction(PlayAction.PieceCaptured(it)) },
             onMove = { onAction(PlayAction.Move(it)) },
+            onResult = { onAction(PlayAction.Result(it)) },
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
