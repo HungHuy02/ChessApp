@@ -220,6 +220,12 @@
     <string name="white_player_turn_text" translatable="false">Đến lượt phiên quân trắng di chuyển</string>
     <string name="black_player_turn_text" translatable="false">Đến lượt phiên quân đen di chuyển</string>
 
+    <string name="you_won_text">Bạn đã thắng</string>
+    <string name="checkmate_text">do chiếu hết</string>
+    <string name="review_game_text">Xem lại ván đấu</string>
+    <string name="rematch_text">Tái đấu</string>
+    <string name="time_new_text">%s Mới</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

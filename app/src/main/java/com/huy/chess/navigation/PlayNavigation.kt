@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navigation
 import com.huy.chess.ui.changetime.ChangeTimeScreen
+import com.huy.chess.ui.dialog.endgame.EndGameDialog
 import com.huy.chess.ui.dialog.playoptions.PlayOptionsDialog
 import com.huy.chess.ui.newgame.NewGameScreen
 import com.huy.chess.ui.play.PlayScreen
@@ -43,11 +44,17 @@ fun NavGraphBuilder.playDestination(
         composable<Play> {
             PlayScreen(
                 showPlayOptionsDialog = { navController.navigate(PlayOptions) },
+                showEndGameDialog = {navController.navigate(EndGame) },
                 popBackStack = { navController.popBackStack() }
             )
         }
         dialog<PlayOptions>{
             PlayOptionsDialog(
+                popBackStack = { navController.popBackStack() }
+            )
+        }
+        dialog<EndGame> {
+            EndGameDialog(
                 popBackStack = { navController.popBackStack() }
             )
         }

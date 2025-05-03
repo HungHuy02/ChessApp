@@ -128,4 +128,9 @@
     <string name="solved_puzzle_text">Solved Puzzle</string>
     <string name="edit_text">Edit</string>
     <string name="share_profile_text">Share Profile</string>
+    <string name="you_won_text">Bạn đã thắng</string>
+    <string name="checkmate_text">do chiếu hết</string>
+    <string name="review_game_text">Xem lại ván đấu</string>
+    <string name="rematch_text">Tái đấu</string>
+    <string name="time_new_text">%s Mới</string>
 </resources>
