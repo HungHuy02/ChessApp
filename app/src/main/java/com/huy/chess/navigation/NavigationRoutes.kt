@@ -48,6 +48,8 @@ object SelectDate
 object Welcome
 @Serializable
 object DailyPuzzle
+@Serializable
+object EndGame
 
 sealed class TopLevelDestination {
     @Serializable

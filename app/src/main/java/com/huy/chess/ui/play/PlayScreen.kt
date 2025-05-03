@@ -23,14 +23,17 @@ import com.huy.chess.ui.play.composables.CapturedPiece
 fun PlayScreen(
     viewModel: PlayViewModel = hiltViewModel(),
     showPlayOptionsDialog: () -> Unit,
+    showEndGameDialog: () -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
+        showEndGameDialog()
         viewModel.event.collect {
             when(it) {
                 PlayEffect.PopBackStack -> popBackStack()
                 PlayEffect.ShowPlayOptionsDialog -> showPlayOptionsDialog()
+                PlayEffect.ShowEndGameDialog -> showEndGameDialog()
             }
         }
     }
