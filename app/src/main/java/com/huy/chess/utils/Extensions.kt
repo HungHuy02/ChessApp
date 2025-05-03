@@ -10,6 +10,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import com.huy.chess.R
+import com.huy.chess.utils.enums.GameResult
+import com.huy.chess.utils.enums.GameResultInfo
 import com.squareup.moshi.Moshi
 import org.json.JSONObject
 
@@ -89,6 +91,25 @@ fun TimeType.toPair() : Pair<Int, Int> {
         TimeType.SEVEN_DAYS -> R.drawable.daily to R.string.seven_days_text
         TimeType.FOURTEEN_DAYS -> R.drawable.daily to R.string.fourteen_days
         TimeType.UNLIMITED -> -1 to -1
+    }
+}
+
+fun GameResult.toResult(): GameResultInfo {
+    return when(this) {
+        GameResult.WIN_CHECKMATE -> GameResultInfo("1-0", R.string.you_won_text, R.string.checkmate_text)
+        GameResult.WIN_OPPONENT_RESIGNED -> GameResultInfo("1-0", R.string.you_won_text, R.string.surrendered_text)
+        GameResult.WIN_OPPONENT_FORFEIT -> GameResultInfo("1-0", R.string.you_won_text, R.string.resigned_text)
+        GameResult.WIN_TIMEOUT -> GameResultInfo("1-0", R.string.you_won_text, R.string.time_out_text)
+        GameResult.LOSE_CHECKMATE -> GameResultInfo("0-1", R.string.white_win_text, R.string.checkmate_text)
+        GameResult.LOSE_RESIGNED -> GameResultInfo("0-1", R.string.white_win_text, R.string.surrendered_text)
+        GameResult.LOSE_FORFEIT -> GameResultInfo("0-1", R.string.white_win_text, R.string.resigned_text)
+        GameResult.LOSE_TIMEOUT -> GameResultInfo("0-1", R.string.white_win_text, R.string.time_out_text)
+        GameResult.DRAW_STALEMATE -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.out_of_move)
+        GameResult.DRAW_THREEFOLD_REPETITION -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.draw_by_repetition_text)
+        GameResult.DRAW_FIFTY_MOVE_RULE -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.fifty_move_rule_text)
+        GameResult.DRAW_INSUFFICIENT_MATERIAL -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.insufficient_material_text)
+        GameResult.DRAW_AGREEMENT -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.agreement_text)
+        GameResult.DRAW_TIMEOUT_INSUFFICIENT_MATERIAL -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.insufficient_material_text)
     }
 }
 

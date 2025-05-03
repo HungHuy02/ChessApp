@@ -37,7 +37,7 @@ class PlayViewModel @Inject constructor() :
                 notation.add(action.move)
                 it.copy(notationList = notation)
             }
-            PlayAction.Result -> sendEffect(PlayEffect.ShowEndGameDialog)
+            is PlayAction.Result -> sendEffect(PlayEffect.ShowEndGameDialog(action.gameResult))
         }
     }
 }

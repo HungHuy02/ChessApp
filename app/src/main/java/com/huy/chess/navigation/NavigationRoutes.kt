@@ -1,5 +1,6 @@
 package com.huy.chess.navigation
 
+import com.huy.chess.utils.enums.GameResult
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -49,7 +50,7 @@ object Welcome
 @Serializable
 object DailyPuzzle
 @Serializable
-object EndGame
+data class EndGame(val gameResult: GameResult)
 
 sealed class TopLevelDestination {
     @Serializable

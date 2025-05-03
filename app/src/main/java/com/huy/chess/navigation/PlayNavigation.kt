@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.huy.chess.ui.changetime.ChangeTimeScreen
 import com.huy.chess.ui.dialog.endgame.EndGameDialog
 import com.huy.chess.ui.dialog.playoptions.PlayOptionsDialog
@@ -54,7 +55,9 @@ fun NavGraphBuilder.playDestination(
             )
         }
         dialog<EndGame> {
+            val route = it.toRoute<EndGame>()
             EndGameDialog(
+                gameResult = route.gameResult,
                 popBackStack = { navController.popBackStack() }
             )
         }

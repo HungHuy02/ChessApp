@@ -39,6 +39,7 @@ import com.huy.chess.R
 import com.huy.chess.data.model.MoveResult
 import com.huy.chess.data.model.Piece
 import com.huy.chess.utils.Utils
+import com.huy.chess.utils.enums.GameResult
 
 private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
@@ -85,7 +86,8 @@ fun getChessPieceBitmap(context: Context): List<Bitmap> {
 fun ChessBoard(
     modifier: Modifier = Modifier,
     onCapture: (Char) -> Unit = {},
-    onMove: (String) -> Unit = {}
+    onMove: (String) -> Unit = {},
+    onResult: (GameResult) -> Unit = {}
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -215,7 +217,10 @@ fun ChessBoard(
 
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
                     whiteSide = !whiteSide
-                    if(!hasOneLegalMove()) isGameEnd = true
+                    if(!hasOneLegalMove()) {
+                        onResult(GameResult.WIN_CHECKMATE)
+                        isGameEnd = true
+                    }
                 }
             }
             selectedPiece = null
@@ -234,7 +239,7 @@ fun ChessBoard(
                             val row = (offset.y / cellSize).toInt()
                             val col = (offset.x / cellSize).toInt()
                             if (row in 0..7 && col in 0..7) {
-                                if(isPromoting) {
+                                if (isPromoting) {
                                     selectedPiece = Piece(row, col, ' ')
                                 } else if ((selectedPiece == null && board[row][col].piece.isUpperCase() == whiteSide) || (!board[row][col].piece.isWhitespace() && selectedPiece?.piece?.isUpperCase() == board[row][col].piece.isUpperCase())) {
                                     selectedPiece = board[row][col]
