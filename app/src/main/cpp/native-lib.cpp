@@ -45,10 +45,10 @@ Java_com_huy_chess_ui_component_ChessBoardKt_parseFen(JNIEnv *env, jobject thiz,
 }
 
 extern "C"
-JNIEXPORT jboolean JNICALL
+JNIEXPORT jint JNICALL
 Java_com_huy_chess_ui_component_ChessBoardKt_hasOneLegalMove(JNIEnv *env, jobject thiz) {
-    const bool result = hasOneLegalMove();
-    return result ? JNI_TRUE : JNI_FALSE;
+    const int result = hasOneLegalMove();
+    return static_cast<jint>(result);
 }
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {

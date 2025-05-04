@@ -1,7 +1,5 @@
 package com.huy.chess.ui.play
 
-import com.huy.chess.utils.enums.GameResult
-
 sealed class PlayAction {
     data object ClickedMore: PlayAction()
     data object ClickedAdd: PlayAction()
@@ -10,5 +8,5 @@ sealed class PlayAction {
     data object ClickedBackButton: PlayAction()
     data class PieceCaptured(val piece: Char): PlayAction()
     data class Move(val move: String) : PlayAction()
-    data class Result(val gameResult: GameResult): PlayAction()
+    data class Result(val result: Int, val whiteSide: Boolean): PlayAction()
 }

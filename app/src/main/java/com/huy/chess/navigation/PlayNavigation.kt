@@ -45,7 +45,7 @@ fun NavGraphBuilder.playDestination(
         composable<Play> {
             PlayScreen(
                 showPlayOptionsDialog = { navController.navigate(PlayOptions) },
-                showEndGameDialog = {navController.navigate(EndGame) },
+                showEndGameDialog = {navController.navigate(EndGame(it)) },
                 popBackStack = { navController.popBackStack() }
             )
         }

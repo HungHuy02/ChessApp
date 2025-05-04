@@ -1,11 +1,13 @@
 package com.huy.chess.viewmodel
 
+import android.util.Log
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.play.PlayAction
 import com.huy.chess.ui.play.PlayEffect
 import com.huy.chess.ui.play.PlayState
 import com.huy.chess.utils.Constants
+import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.increment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,7 +39,16 @@ class PlayViewModel @Inject constructor() :
                 notation.add(action.move)
                 it.copy(notationList = notation)
             }
-            is PlayAction.Result -> sendEffect(PlayEffect.ShowEndGameDialog(action.gameResult))
+            is PlayAction.Result -> {
+                val gameResult = when(action.result) {
+                    2 -> if(action.whiteSide) GameResult.WIN_CHECKMATE else GameResult.LOSE_CHECKMATE
+                    3 -> GameResult.DRAW_STALEMATE
+                    4 -> GameResult.DRAW_THREEFOLD_REPETITION
+                    5 -> GameResult.DRAW_FIFTY_MOVE_RULE
+                    else -> GameResult.DRAW_INSUFFICIENT_MATERIAL
+                }
+                sendEffect(PlayEffect.ShowEndGameDialog(gameResult))
+            }
         }
     }
 }
