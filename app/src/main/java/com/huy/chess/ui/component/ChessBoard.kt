@@ -87,7 +87,7 @@ fun ChessBoard(
     modifier: Modifier = Modifier,
     onCapture: (Char) -> Unit = {},
     onMove: (String) -> Unit = {},
-    onResult: (GameResult) -> Unit = {}
+    onResult: (Int, Boolean) -> Unit = {_,_ -> }
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -217,8 +217,9 @@ fun ChessBoard(
 
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
                     whiteSide = !whiteSide
-                    if(!hasOneLegalMove()) {
-                        onResult(GameResult.WIN_CHECKMATE)
+                    val hasOneLegalMove = hasOneLegalMove()
+                    if(hasOneLegalMove > 1) {
+                        onResult(hasOneLegalMove, whiteSide)
                         isGameEnd = true
                     }
                 }
@@ -452,4 +453,4 @@ fun pieceToInt(p: Char): Int {
 external fun makeMove(source: Int, sourcePiece: Char, target: Int, targetPiece: Char, toPiece: Char): MoveResult
 external fun getLegalMoves(square: Int): IntArray
 external fun parseFen(fen: String)
-external fun hasOneLegalMove() : Boolean
+external fun hasOneLegalMove() : Int

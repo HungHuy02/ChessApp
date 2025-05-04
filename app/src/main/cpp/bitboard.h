@@ -23,7 +23,7 @@ MoveResult makeMove(int source, char sourcePiece, int target, char targetPiece, 
 vector<int> getLegalMoves(int encodeSquare);
 void parseFen(const char *fen);
 void initAll();
-bool hasOneLegalMove();
+int hasOneLegalMove();
 
 #endif
 

@@ -847,8 +847,16 @@ static inline int makeMove(int move, int move_flag) {
     return 0;
 }
 
-bool hasOneLegalMove() {
+// 0 -> normal, 1 -> check, 2 -> checkmate, 3 -> stalemate, 4 -> 3-fold rule
+// 5 -> 50-move rule, 6 -> insufficant material,
+int hasOneLegalMove() {
     LOGI("check has one legal move");
+    U64 hash = computeZobristHash();
+    recordPosition(hash);
+    if(isThreefoldRepetition(hash)) {
+        return 4;
+    }
+    bool isKingChecked = isSquareAttacked((side == white) ? getLastSignificant1stBit(bitboards[K]) : getLastSignificant1stBit(bitboards[k]), side);
     int sourceSquare, targetSquare;
     U64 bitboard, attacks;
     COPY_BOARD()
@@ -867,19 +875,19 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, Q, 0, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         } else {
                             int move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             } else {
                                 if ((sourceSquare >= a2 && sourceSquare <= h2) && !GET_BIT(occupancies[both], (targetSquare - 8)))
                                     move = ENCODE_MOVE(sourceSquare, (targetSquare - 8), piece, 0, 0, 1, 0, 0);
                                 if(makeMove(move, all_moves)) {
                                     TAKE_BACK()
-                                    return true;
+                                    return isKingChecked ? 1 : 0;
                                 }
                             }
                         }
@@ -892,13 +900,13 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, Q, 1, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         } else {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                         POP_BIT(attacks, targetSquare);
@@ -911,7 +919,7 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, targetEnpassant, piece, 0, 1, 0, 1, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                     }
@@ -923,16 +931,14 @@ bool hasOneLegalMove() {
                 if (castle & ks)  {
                     if (!GET_BIT(occupancies[both], f1) && !GET_BIT(occupancies[both], g1)) {
                         if (!isSquareAttacked(e1, black) && !isSquareAttacked(f1, black))
-                            // add_move(move_list, ENCODE_MOVE(e1, g1, piece, 0, 0, 0, 0, 1));
-                            return true;
+                            return isKingChecked ? 1 : 0;
                     }
                 }
 
                 if (castle & qs) {
                     if (!GET_BIT(occupancies[both], d1) && !GET_BIT(occupancies[both], c1) && !GET_BIT(occupancies[both], b1)) {
                         if (!isSquareAttacked(e1, black) && !isSquareAttacked(d1, black))
-                            // add_move(move_list, ENCODE_MOVE(e1, c1, piece, 0, 0, 0, 0, 1));
-                            return true;
+                            return isKingChecked ? 1 : 0;
                     }
                 }
             }
@@ -947,18 +953,18 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, q, 0, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         } else {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             } else if ((sourceSquare >= a7 && sourceSquare <= h7) && !GET_BIT(occupancies[both], (targetSquare + 8))) {
                                 move = ENCODE_MOVE(sourceSquare, (targetSquare + 8), piece, 0, 0, 1, 0, 0);
                                 if(makeMove(move, all_moves)) {
                                     TAKE_BACK()
-                                    return true;
+                                    return isKingChecked ? 1 : 0;
                                 }
                             }
                         }
@@ -972,13 +978,13 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, q, 1, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         } else {
                             move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                         POP_BIT(attacks, targetSquare);
@@ -992,7 +998,7 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(sourceSquare, target_enpassant, piece, 0, 1, 0, 1, 0);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                     }
@@ -1008,7 +1014,7 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(e8, g8, piece, 0, 0, 0, 0, 1);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                     }
@@ -1020,7 +1026,7 @@ bool hasOneLegalMove() {
                             move = ENCODE_MOVE(e8, c8, piece, 0, 0, 0, 0, 1);
                             if(makeMove(move, all_moves)) {
                                 TAKE_BACK()
-                                return true;
+                                return isKingChecked ? 1 : 0;
                             }
                         }
                     }
@@ -1040,13 +1046,13 @@ bool hasOneLegalMove() {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     } else {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     }
                     POP_BIT(attacks, targetSquare);
@@ -1064,13 +1070,13 @@ bool hasOneLegalMove() {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     } else {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     }
                     POP_BIT(attacks, targetSquare);
@@ -1088,13 +1094,13 @@ bool hasOneLegalMove() {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     } else {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     }
                     POP_BIT(attacks, targetSquare);
@@ -1114,13 +1120,13 @@ bool hasOneLegalMove() {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     } else {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     }
                     POP_BIT(attacks, targetSquare);
@@ -1139,13 +1145,13 @@ bool hasOneLegalMove() {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 0, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     } else {
                         move = ENCODE_MOVE(sourceSquare, targetSquare, piece, 0, 1, 0, 0, 0);
                         if(makeMove(move, all_moves)) {
                             TAKE_BACK()
-                            return true;
+                            return isKingChecked ? 1 : 0;
                         }
                     }
                     POP_BIT(attacks, targetSquare);
@@ -1154,7 +1160,7 @@ bool hasOneLegalMove() {
             }
         }
     }
-    return false;
+    return isKingChecked ? 2 : 3;
 }
 
 static inline vector<int> getOtherSamePieceSquares(U64 bitboard, int square) {
@@ -1522,11 +1528,6 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
             TAKE_BACK()
             return moveResult;
         }
-    }
-    U64 hash = computeZobristHash();
-    recordPosition(hash);
-    if(isThreefoldRepetition(hash)) {
-        moveResult.diffMove = -1;
     }
     return moveResult;
 }
