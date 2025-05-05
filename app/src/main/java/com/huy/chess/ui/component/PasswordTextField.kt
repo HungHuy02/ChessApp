@@ -29,6 +29,7 @@ import com.huy.chess.R
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
+    isError: Boolean = false,
     value: String,
     onTextChange: (String) -> Unit
 ) {
@@ -41,6 +42,7 @@ fun PasswordTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onTextChange,
+        isError = isError,
         placeholder = {
             Text(
                 text = stringResource(R.string.password_placeholder),

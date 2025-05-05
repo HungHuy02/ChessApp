@@ -20,6 +20,7 @@ import com.huy.chess.R
 @Composable
 fun AccountTextField(
     modifier: Modifier = Modifier,
+    isError: Boolean = false,
     value: String,
     onValueChange: (String) -> Unit
 ) {
@@ -28,6 +29,7 @@ fun AccountTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        isError = isError,
         placeholder = {
             Text(
                 text = stringResource(R.string.account_placeholder),

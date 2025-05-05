@@ -29,6 +29,7 @@ import com.facebook.login.LoginManager
 import com.huy.chess.R
 import com.huy.chess.data.auth.AccountManager
 import com.huy.chess.ui.component.AppButton
+import com.huy.chess.ui.component.ErrorAlert
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.PasswordTextField
 import com.huy.chess.ui.login.composables.AccountTextField
@@ -95,33 +96,42 @@ private fun Content(
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(Modifier.height(16.dp))
+        if(state.showError) {
+            ErrorAlert(
+                text = stringResource(R.string.account_or_password_not_valid)
+            )
+        }
         AccountTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = state.account
+            value = state.account,
+            isError = state.enableAccountError
         ) {
             onAction(LoginAction.AccountChange(it))
         }
         PasswordTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = state.password
+            value = state.password,
+            isError = state.enablePasswordError
         ) {
             onAction(LoginAction.PasswordChange(it))
         }
-        TextWithFullDivider()
-        AppButton(
-            onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
-            text = stringResource(R.string.login_with_facebook_text),
-            textStyle = MaterialTheme.typography.titleMedium,
-            painter = painterResource(R.drawable.facebook),
-            iconPosition = IconPosition.START
-        )
-        AppButton(
-            onClick = { onAction(LoginAction.ClickedLoginGoogleButton) },
-            text = stringResource(R.string.login_with_google_text),
-            textStyle = MaterialTheme.typography.titleMedium,
-            painter = painterResource(R.drawable.google),
-            iconPosition = IconPosition.START
-        )
+        if(state.showSocialLogin) {
+            TextWithFullDivider()
+            AppButton(
+                onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
+                text = stringResource(R.string.login_with_facebook_text),
+                textStyle = MaterialTheme.typography.titleMedium,
+                painter = painterResource(R.drawable.facebook),
+                iconPosition = IconPosition.START
+            )
+            AppButton(
+                onClick = { onAction(LoginAction.ClickedLoginGoogleButton) },
+                text = stringResource(R.string.login_with_google_text),
+                textStyle = MaterialTheme.typography.titleMedium,
+                painter = painterResource(R.drawable.google),
+                iconPosition = IconPosition.START
+            )
+        }
         Text(
             text = stringResource(R.string.forgot_password_text),
             color = MaterialTheme.colorScheme.onSurface,
