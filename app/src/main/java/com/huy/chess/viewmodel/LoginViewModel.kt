@@ -36,30 +36,44 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLogin() {
-        viewModelScope.launch {
-            val loginRequest = LoginRequest(state.value.account, state.value.password)
-            authRepository.login(loginRequest)
-                .onSuccess {
-                    userState.updateUser(it.name, it.email, it.avatar)
-                    dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
-                    dataStoreService.setRefreshToken(Utils.encodeAESCBC(it.refreshToken, Constants.REFRESH_TOKEN_ALIAS))
-                    sendEffect(LoginEffect.NavigateToHome)
-                }
-                .onFailure {
-
-                }
+        val isAccountEmpty = state.value.account.isEmpty()
+        val isPasswordEmpty = state.value.password.isEmpty()
+        if(!isAccountEmpty && !isPasswordEmpty)
+            viewModelScope.launch {
+                val loginRequest = LoginRequest(state.value.account, state.value.password)
+                authRepository.login(loginRequest)
+                    .onSuccess {
+                        userState.updateUser(it.name, it.email, it.avatar)
+                        dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
+                        dataStoreService.setRefreshToken(Utils.encodeAESCBC(it.refreshToken, Constants.REFRESH_TOKEN_ALIAS))
+                        sendEffect(LoginEffect.NavigateToHome)
+                    }
+                    .onFailure {
+                        updateState { it.copy(showError = true) }
+                    }
+            }
+        else {
+            updateState { it.copy(enableAccountError = isAccountEmpty, enablePasswordError = isPasswordEmpty) }
         }
     }
 
     private fun updateAccount(state: LoginState, text: String): LoginState {
+        val showSocialLogin = text.isEmpty() && state.password.isEmpty()
         return state.copy(
-            account = text
+            account = text,
+            enableAccountError = false,
+            showError = false,
+            showSocialLogin = showSocialLogin
         )
     }
 
     private fun updatePassword(state: LoginState, text: String): LoginState {
+        val showSocialLogin = text.isEmpty() && state.account.isEmpty()
         return state.copy(
-            password = text
+            password = text,
+            enablePasswordError = false,
+            showError = false,
+            showSocialLogin = showSocialLogin
         )
     }
 }

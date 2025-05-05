@@ -237,6 +237,8 @@
     <string name="agreement_text">do thỏa thuận</string>
     <string name="out_of_move">do hết nước đi</string>
 
+    <string name="account_or_password_not_valid">Tên tài khoản hoặc mật khẩu không hợp lệ</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

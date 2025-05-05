@@ -144,4 +144,5 @@
     <string name="insufficient_material_text">do không đủ quân</string>
     <string name="agreement_text">do thỏa thuận</string>
     <string name="out_of_move">do hết nước đi</string>
+    <string name="account_or_password_not_valid">Tên tài khoản hoặc mật khẩu không hợp lệ</string>
 </resources>
