@@ -1,2 +1,3 @@
 /build
 google-services.json
+/src/main/jniLibs/arm64-v8a/lib_stockfish.so
