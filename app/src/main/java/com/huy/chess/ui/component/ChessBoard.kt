@@ -27,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -363,6 +364,38 @@ fun ChessBoard(
                 )
             }
         }
+        drawPath(
+            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
+            color = Color.Green
+        )
+    }
+}
+
+fun createArrowPath(x: Float, y: Float, spotSize: Float) : Path {
+    return Path().apply {
+        moveTo(x + 10, y)
+        lineTo(x + 40, y)
+        lineTo(x + 40, y + spotSize - spotSize / 2)
+        lineTo(x + 50, y + spotSize - spotSize / 2)
+        lineTo(x + 25, y + spotSize)
+        lineTo(x, y + spotSize - spotSize / 2)
+        lineTo(x + 10, y + spotSize - spotSize / 2)
+        close()
+    }
+}
+
+fun createKnightArrowPath(x: Float, y: Float, spotSize: Float) : Path {
+    return Path().apply {
+        moveTo(x, y)
+        lineTo(x + 30, y)
+        lineTo(x + 30, y + spotSize + 15)
+        lineTo(x + 15 - 1.5f * spotSize, y + spotSize + 15)
+        lineTo(x + 15 - 1.5f * spotSize, y + spotSize + 25)
+        lineTo(x + 15 - 2 * spotSize, y + spotSize)
+        lineTo(x + 15 - 1.5f * spotSize, y + spotSize - 25)
+        lineTo(x + 15 - 1.5f * spotSize, y + spotSize - 15)
+        lineTo(x, y + spotSize - 15)
+        close()
     }
 }
 
