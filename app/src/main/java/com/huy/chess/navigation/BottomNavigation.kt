@@ -3,7 +3,9 @@ package com.huy.chess.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import com.huy.chess.R
+import com.huy.chess.ui.dialog.playonline.PlayOnlineDialog
 import com.huy.chess.ui.home.HomeScreen
 import com.huy.chess.ui.moreoptions.MoreOptionsScreen
 import com.huy.chess.ui.puzzle.PuzzleScreen
@@ -43,6 +45,7 @@ sealed class BottomNavScreens(
 }
 
 fun NavGraphBuilder.bottomDestination(
+    navController: NavController,
     navigatePlay: () -> Unit,
     navigateDailyPuzzle: () -> Unit
 ) {
@@ -55,7 +58,7 @@ fun NavGraphBuilder.bottomDestination(
             navigateToBot = { },
             navigateToPuzzle = { },
             navigateToStudy = { },
-            showPlayOnlineDialog = { }
+            showPlayOnlineDialog = { navController.navigate(PlayOnline) }
         )
     }
 
@@ -69,6 +72,12 @@ fun NavGraphBuilder.bottomDestination(
 
     composable<TopLevelDestination.MoreOptions> {
         MoreOptionsScreen()
+    }
+    dialog<PlayOnline>{
+        PlayOnlineDialog(
+            popBackStack = { navController.popBackStack() },
+            navigateWaiting = navigatePlay
+        )
     }
 }
 

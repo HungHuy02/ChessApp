@@ -145,4 +145,7 @@
     <string name="agreement_text">do thỏa thuận</string>
     <string name="out_of_move">do hết nước đi</string>
     <string name="account_or_password_not_valid">Tên tài khoản hoặc mật khẩu không hợp lệ</string>
+    <string name="random_player">10 phút với đối thủ ngẫu nhiên</string>
+    <string name="start_text">START</string>
+    <string name="cancel_text">CANCEL</string>
 </resources>
