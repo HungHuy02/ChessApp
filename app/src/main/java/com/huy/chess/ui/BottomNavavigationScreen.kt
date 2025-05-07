@@ -71,6 +71,7 @@ fun BottomNavigationScreen(
             modifier = Modifier.padding(it)
         ) {
             bottomDestination(
+                navController = navController,
                 navigatePlay = navigatePlay,
                 navigateDailyPuzzle = navigateDailyPuzzle
             )
