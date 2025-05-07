@@ -21,7 +21,13 @@ class TokenAuthenticator @Inject constructor(
 ) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
-        val newAccessToken: String = runBlocking(dispatcher) {
+        if (response.request.url.encodedPath.endsWith("token")) {
+            runBlocking(dispatcher) {
+                dataStoreService.setRefreshToken(byteArrayOf())
+            }
+            return null
+        }
+        val newAccessToken: String? = runBlocking(dispatcher) {
             val refreshToken = dataStoreService.getRefreshToken()
             if(refreshToken.isNotEmpty())
                 authRepository.get().refresh(Utils.decodeAESCBC(refreshToken, Constants.REFRESH_TOKEN_ALIAS))
@@ -29,10 +35,12 @@ class TokenAuthenticator @Inject constructor(
                         dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
                         return@runBlocking it.accessToken
                     }
-                    .onFailure { return@runBlocking "" }
-            ""
+                    .onFailure {
+                        return@runBlocking null
+                    }
+            null
         }
-        if(newAccessToken.isEmpty()) return null
+        if(newAccessToken.isNullOrEmpty()) return null
         return response.request.newBuilder()
             .header("Authorization", "Bearer $newAccessToken")
             .build()

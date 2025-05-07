@@ -13,12 +13,21 @@ open class BaseRepository {
                     ?: Result.failure(Exception("Empty body"))
             } else {
                 val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                return Result.failure(Exception("Error: ${response.code()} - $errorBody"))
+                val exception = if(response.code() == 403) ApiException.Forbidden("Forbidden: $errorBody")
+                else Exception("Error: ${response.code()} - $errorBody")
+                return Result.failure(exception)
             }
         } catch (e: Exception) {
             Log.e("ApiError", "API call failed: ${e.message}", e)
             Result.failure(e)
         }
     }
+}
 
+sealed class ApiException(message: String) : Exception(message) {
+    class Unauthorized(message: String) : ApiException(message)
+    class Forbidden(message: String) : ApiException(message)
+    class NotFound(message: String) : ApiException(message)
+    class ServerError(message: String) : ApiException(message)
+    class Unknown(message: String) : ApiException(message)
 }
