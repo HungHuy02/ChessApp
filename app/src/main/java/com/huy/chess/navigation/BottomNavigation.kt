@@ -9,6 +9,7 @@ import com.huy.chess.ui.dialog.playonline.PlayOnlineDialog
 import com.huy.chess.ui.home.HomeScreen
 import com.huy.chess.ui.moreoptions.MoreOptionsScreen
 import com.huy.chess.ui.puzzle.PuzzleScreen
+import com.huy.chess.ui.solvepuzzles.SolvePuzzlesScreen
 
 sealed class BottomNavScreens(
      val icon: Int,
@@ -47,7 +48,8 @@ sealed class BottomNavScreens(
 fun NavGraphBuilder.bottomDestination(
     navController: NavController,
     navigatePlay: () -> Unit,
-    navigateDailyPuzzle: () -> Unit
+    navigateDailyPuzzle: () -> Unit,
+    navigateSolvePuzzles: () -> Unit
 ) {
     composable<TopLevelDestination.Home> {
         HomeScreen(
@@ -64,7 +66,7 @@ fun NavGraphBuilder.bottomDestination(
 
     composable<TopLevelDestination.Puzzles> {
         PuzzleScreen(
-            navigateSolvePuzzles = {},
+            navigateSolvePuzzles = navigateSolvePuzzles,
             navigateDailyPuzzles = navigateDailyPuzzle,
             navigateSetupPuzzleRush = {}
         )
@@ -83,5 +85,6 @@ fun NavGraphBuilder.bottomDestination(
             navigateWaiting = navigatePlay
         )
     }
+
 }
 

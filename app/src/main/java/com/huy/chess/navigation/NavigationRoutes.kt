@@ -53,6 +53,8 @@ object DailyPuzzle
 data class EndGame(val gameResult: GameResult)
 @Serializable
 object PlayOnline
+@Serializable
+object SolvePuzzles
 
 sealed class TopLevelDestination {
     @Serializable
