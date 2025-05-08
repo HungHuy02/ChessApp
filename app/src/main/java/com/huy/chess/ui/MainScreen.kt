@@ -17,6 +17,7 @@ import com.huy.chess.navigation.Profile
 import com.huy.chess.navigation.Register
 import com.huy.chess.navigation.RegisterDialog
 import com.huy.chess.navigation.SelectDate
+import com.huy.chess.navigation.SolvePuzzles
 import com.huy.chess.navigation.Welcome
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
@@ -29,6 +30,7 @@ import com.huy.chess.ui.gamearchive.GameArchiveScreen
 import com.huy.chess.ui.language.LanguageScreen
 import com.huy.chess.ui.profile.ProfileScreen
 import com.huy.chess.ui.selectdate.SelectDateScreen
+import com.huy.chess.ui.solvepuzzles.SolvePuzzlesScreen
 import com.huy.chess.ui.welcome.WelcomeScreen
 
 @Composable
@@ -47,7 +49,8 @@ fun MainScreen() {
                     navigateFriends = { navController.navigate(Friends) },
                     navigateProfile = { navController.navigate(Profile) },
                     navigateNotification = { },
-                    navigateDailyPuzzle = { navController.navigate(DailyPuzzle) }
+                    navigateDailyPuzzle = { navController.navigate(DailyPuzzle) },
+                    navigateSolvePuzzles = { navController.navigate(SolvePuzzles) }
                 )
             }
             authDestination(navController)
@@ -103,6 +106,11 @@ fun MainScreen() {
                     navigateSelectDate = { navController.navigate(SelectDate) },
                     popBackStack = { navController.popBackStack() }
                 )
+            }
+            composable<SolvePuzzles> {
+                SolvePuzzlesScreen {
+                    navController.popBackStack()
+                }
             }
         }
     }

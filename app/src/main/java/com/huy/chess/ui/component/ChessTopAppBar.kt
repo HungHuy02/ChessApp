@@ -26,16 +26,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
 import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.navigation.TopLevelDestination
 import com.huy.chess.ui.BottomNavAction
 import com.huy.chess.ui.BottomNavState
+import com.huy.chess.ui.theme.ChessGlyphFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -205,6 +208,56 @@ fun ChessTopAppBar(
             modifier = Modifier.align(Alignment.Center)
         )
         action()
+    }
+}
+
+@Composable
+fun ChessTopAppBar(
+    modifier: Modifier = Modifier,
+    onClickBack: () -> Unit,
+    onClickSettings: () -> Unit,
+    icon: Painter,
+    title: String,
+) {
+    Box(
+        modifier = modifier.fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.arrow_back_24px),
+            contentDescription = "back icon",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .clickable {
+                    onClickBack()
+                }
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.align(Alignment.Center)
+        ) {
+            Icon(
+                painter = icon,
+                contentDescription = "icon",
+                tint = Color.Unspecified,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+        Text(
+            text = "\u00B7",
+            fontFamily = ChessGlyphFontFamily,
+            fontSize = 18.sp,
+            modifier = Modifier.align(Alignment.CenterEnd)
+                .clickable {
+                    onClickSettings()
+                }
+        )
+
     }
 }
 
