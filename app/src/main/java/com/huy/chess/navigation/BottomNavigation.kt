@@ -63,7 +63,11 @@ fun NavGraphBuilder.bottomDestination(
     }
 
     composable<TopLevelDestination.Puzzles> {
-        PuzzleScreen()
+        PuzzleScreen(
+            navigateSolvePuzzles = {},
+            navigateDailyPuzzles = navigateDailyPuzzle,
+            navigateSetupPuzzleRush = {}
+        )
     }
 
     composable<TopLevelDestination.Study> {
