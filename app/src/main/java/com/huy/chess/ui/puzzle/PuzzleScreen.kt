@@ -8,24 +8,47 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.IconPosition
+import com.huy.chess.viewmodel.PuzzleViewModel
 
 @Composable
-fun PuzzleScreen() {
+fun PuzzleScreen(
+    viewModel: PuzzleViewModel = hiltViewModel(),
+    navigateSolvePuzzles: () -> Unit,
+    navigateDailyPuzzles: () -> Unit,
+    navigateSetupPuzzleRush: () -> Unit
+) {
+    LaunchedEffect(Unit) {
+        viewModel.event.collect {
+            when(it) {
+                PuzzleEffect.NavigateDailyPuzzles -> navigateDailyPuzzles()
+                PuzzleEffect.NavigateSetupPuzzleRush -> navigateSetupPuzzleRush()
+                PuzzleEffect.NavigateSolvePuzzles -> navigateSolvePuzzles()
+            }
+        }
+    }
+    Content(viewModel::sendAction)
+}
+
+@Composable
+private fun Content(
+    onAction: (PuzzleAction) -> Unit
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-//        ChessBoard(list = list)
         ChessBoard()
         Column (
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -35,20 +58,20 @@ fun PuzzleScreen() {
                 .align(Alignment.BottomCenter)
         ) {
             AppButton(
-                onClick = {},
+                onClick = { onAction(PuzzleAction.ClickedSolvePuzzles) },
                 text = stringResource(R.string.solve_puzzles_text),
                 iconPosition = IconPosition.NONE,
                 modifier = Modifier.fillMaxWidth()
             )
             AppButton(
-                onClick = {},
+                onClick = { onAction(PuzzleAction.ClickedPuzzleRush) },
                 text = stringResource(R.string.puzzle_rush_text),
                 iconPosition = IconPosition.NEXT_TO_TEXT,
-                painter = painterResource(R.drawable.puzzles),
+                painter = painterResource(R.drawable.rush),
                 modifier = Modifier.fillMaxWidth()
             )
             AppButton(
-                onClick = {},
+                onClick = { onAction(PuzzleAction.ClickedDailyPuzzle) },
                 text = stringResource(R.string.daily_puzzle_text),
                 iconPosition = IconPosition.NEXT_TO_TEXT,
                 painter = painterResource(R.drawable.dailypuzzle),
