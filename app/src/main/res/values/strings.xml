@@ -246,6 +246,7 @@
     <string name="puzzle_solved_text">Câu đố đã được giải!</string>
     <string name="wrong_text">Sai</string>
     <string name="try_text">Thử lại</string>
+    <string name="start_over_text">Bắt đầu lại</string>
 
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
