@@ -71,6 +71,7 @@ private fun Content(
             }
         )
         PuzzleBottomBar(
+            type = PuzzleDescriptionType.Correct,
             modifier = Modifier.constrainAs(bottomBar) {
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
