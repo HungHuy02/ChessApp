@@ -25,6 +25,7 @@ open class BaseRepository {
 }
 
 sealed class ApiException(message: String) : Exception(message) {
+    class AccountExists(message: String) : ApiException(message)
     class Unauthorized(message: String) : ApiException(message)
     class Forbidden(message: String) : ApiException(message)
     class NotFound(message: String) : ApiException(message)

@@ -9,6 +9,7 @@ import com.huy.chess.data.model.request.LoginRequest
 import com.huy.chess.data.model.request.RegisterRequest
 import com.huy.chess.data.model.response.LoginResponse
 import com.huy.chess.data.model.response.RefreshResponse
+import com.huy.chess.data.model.response.VerifyEmailResponse
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
 import com.huy.chess.utils.uriToFile
@@ -38,5 +39,9 @@ class AuthRepository @Inject constructor(
 
     suspend fun refresh(token: String): Result<RefreshResponse> {
         return safeApiCall { authApi.refresh("Bearer $token") }
+    }
+
+    suspend fun verifyEmail(email: String) : Result<VerifyEmailResponse> {
+        return safeApiCall { authApi.verifyEmail(email) }
     }
 }

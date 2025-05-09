@@ -151,4 +151,6 @@
     <string name="puzzle_solved_text">Câu đố đã được giải!</string>
     <string name="wrong_text">Sai</string>
     <string name="try_text">Thử lại</string>
+    <string name="account_exists_text">An account already exists with this email address.</string>
+    <string name="not_valid_email_text">Đây không phải là một địa chỉ email khả dụng.</string>
 </resources>

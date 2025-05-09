@@ -41,10 +41,10 @@ fun NavGraphBuilder.authDestination(
             }
             val registerViewModel = hiltViewModel<RegisterViewModel>(parentEntry)
             EmailInputScreen(
-                registerViewModel = registerViewModel
-            ) {
-                navController.navigate(PasswordInput)
-            }
+                registerViewModel = registerViewModel,
+                navigateToPasswordInput = { navController.navigate(PasswordInput) },
+                navigateToLogin = { navController.navigate(Login) }
+            )
         }
         composable<PasswordInput> {
             val parentEntry = remember(it) {
