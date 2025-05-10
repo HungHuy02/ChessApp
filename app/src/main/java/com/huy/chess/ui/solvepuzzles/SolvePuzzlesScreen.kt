@@ -17,6 +17,7 @@ import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.solvepuzzles.composable.PuzzleBottomBar
 import com.huy.chess.ui.solvepuzzles.composable.PuzzleDescription
 import com.huy.chess.ui.solvepuzzles.composable.PuzzleDescriptionType
+import com.huy.chess.utils.Constants
 import com.huy.chess.viewmodel.SolvePuzzlesViewModel
 
 @Composable
@@ -64,6 +65,7 @@ private fun Content(
             }
         )
         ChessBoard(
+            fen = "r3r1k1/5ppp/2p5/p2p1bP1/P2Q3P/2P5/2KPq1B1/R1B5 w - - 3 23",
             modifier = Modifier.constrainAs(board) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)

@@ -18,6 +18,30 @@ import javax.crypto.spec.IvParameterSpec
 
 object Utils {
 
+    fun fenToBoard(fen: String): Pair<List<MutableList<Piece>>, Boolean> {
+        var list: List<MutableList<Piece>> = List(8) { mutableListOf() }
+        val strings = fen.split(" ")
+        var rank = 0
+        var file = 0
+        strings[0].forEach {
+            if(it != '/')
+                if(it.isDigit()) {
+                    for(i in 0..(it - '1')) {
+                        file += i
+                        list[rank].add(Piece(rank, file, ' '))
+                    }
+                } else {
+                    file++
+                    list[rank].add(Piece(rank ,file, it))
+                }
+            else {
+                rank++
+                file = 0
+            }
+        }
+        return list to (strings[1] == "w")
+    }
+
     fun initBoard(): List<MutableList<Piece>> {
         return List(8) { row ->
             mutableStateListOf(*Array(8) { col -> getInitialPiece(row, col) })
