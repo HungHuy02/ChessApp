@@ -24,16 +24,17 @@ object Utils {
         var rank = 0
         var file = 0
         strings[0].forEach {
-            if(it != '/')
-                if(it.isDigit()) {
-                    for(i in 0..(it - '1')) {
+            if(it != '/') {
+                if (it.isDigit()) {
+                    for (i in 0..(it - '1')) {
                         file += i
                         list[rank].add(Piece(rank, file, ' '))
                     }
                 } else {
-                    file++
-                    list[rank].add(Piece(rank ,file, it))
+                    list[rank].add(Piece(rank, file, it))
                 }
+                file++
+            }
             else {
                 rank++
                 file = 0
