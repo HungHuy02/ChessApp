@@ -28,6 +28,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -315,58 +316,313 @@ fun ChessBoard(
             }
         }
         if(isPromoting) {
-            val x = promotionPair.second % 8
-            val y = promotionPair.second / 8
-            if(whiteSide) {
-                drawRect(
-                    color = Color.White,
-                    topLeft = Offset(x * cellSize, y * cellSize),
-                    size = Size(cellSize, cellSize * 4)
-                )
-                drawImage(
-                    image = list[10],
-                    topLeft = Offset(x * cellSize, y * cellSize),
-                )
-                drawImage(
-                    image = list[9],
-                    topLeft = Offset(x * cellSize, (y + 1) * cellSize),
-                )
-                drawImage(
-                    image = list[7],
-                    topLeft = Offset(x * cellSize, (y + 2) * cellSize),
-                )
-                drawImage(
-                    image = list[8],
-                    topLeft = Offset(x * cellSize, (y + 3) * cellSize),
-                )
-            } else {
-                val rY = (y * cellSize) - cellSize * 3
-                drawRect(
-                    color = Color.White,
-                    topLeft = Offset(x * cellSize, rY),
-                    size = Size(cellSize, cellSize * 4)
-                )
-                drawImage(
-                    image = list[2],
-                    topLeft = Offset(x * cellSize, rY),
-                )
-                drawImage(
-                    image = list[1],
-                    topLeft = Offset(x * cellSize, rY + cellSize),
-                )
-                drawImage(
-                    image = list[3],
-                    topLeft = Offset(x * cellSize, rY + cellSize * 2),
-                )
-                drawImage(
-                    image = list[4],
-                    topLeft = Offset(x * cellSize, rY + cellSize * 3),
-                )
-            }
+            drawPawnPromoteSelection(
+                promotionPair = promotionPair,
+                whiteSide = whiteSide,
+                cellSize = cellSize,
+                list = list
+            )
         }
         drawPath(
             path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
             color = Color.Green
+        )
+    }
+}
+
+@Composable
+fun ChessBoard(
+    modifier: Modifier = Modifier,
+    onMove: (String) -> Unit = {},
+    fen: String
+) {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current.density
+    val boardSize = (configuration.screenWidthDp * density).toInt()
+    val cellSize = boardSize / 8
+    val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
+    val list = remember { getChessPiecePainters(context, cellSize) }
+    var whiteSide: Boolean by remember { mutableStateOf(true) }
+    val board = remember {
+        val pair = Utils.fenToBoard(fen)
+        whiteSide = pair.second
+        pair.first
+    }
+
+    var isGameEnd: Boolean by remember { mutableStateOf(false) }
+    var isPromoting: Boolean by remember { mutableStateOf(false) }
+    var movedSpot : List<Piece> by remember { mutableStateOf(emptyList()) }
+    var specificPieceMoves : List<Int> by remember { mutableStateOf(emptyList())  }
+    var selectedPiece: Piece? by remember { mutableStateOf(null) }
+    var desSpot: Piece? by remember { mutableStateOf(null) }
+    val pieceOffset = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+    var isMoving by remember { mutableStateOf(false) }
+    var promotionPair by remember { mutableStateOf(0 to 0) }
+
+    if(isPromoting) {
+        LaunchedEffect(selectedPiece) {
+            Log.e("tag", "test")
+            if(selectedPiece != null) {
+                if(selectedPiece!!.y == (promotionPair.second % 8)) {
+                    if(whiteSide) {
+                        if(selectedPiece!!.x in 0..3) {
+                            val target = when(selectedPiece!!.x) {
+                                0 -> 'Q'
+                                1 -> 'N'
+                                2 -> 'R'
+                                3 -> 'B'
+                                else -> ' '
+                            }
+                            val x = promotionPair.second / 8
+                            val y = promotionPair.second % 8
+                            val result = makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target)
+                            onMove(result.notation)
+                            board[x][y] = Piece(x, y, target)
+
+//                        movedSpot = listOf(selectedPiece!!, desSpot!!)
+                            whiteSide = !whiteSide
+                        } else {
+                            val x = promotionPair.first / 8
+                            val y = promotionPair.first % 8
+                            board[x][y] = Piece(x, y, 'p')
+                        }
+                    }else {
+                        if(selectedPiece!!.x in 4..7) {
+                            val target = when(selectedPiece!!.x) {
+                                4 -> 'b'
+                                5 -> 'r'
+                                6 -> 'n'
+                                7 -> 'q'
+                                else -> ' '
+                            }
+                            val x = promotionPair.second / 8
+                            val y = promotionPair.second % 8
+                            val result = makeMove(promotionPair.first, 'p', promotionPair.second,' ', target)
+                            onMove(result.notation)
+                            board[x][y] = Piece(x, y, target)
+
+//                        movedSpot = listOf(selectedPiece!!, desSpot!!)
+                            whiteSide = !whiteSide
+                        } else {
+                            val x = promotionPair.first / 8
+                            val y = promotionPair.first % 8
+                            board[x][y] = Piece(x, y, 'p')
+                        }
+                    }
+                } else {
+                    val x = promotionPair.first / 8
+                    val y = promotionPair.first % 8
+                    board[x][y] = Piece(x, y, if(whiteSide) 'P' else 'p')
+                }
+                selectedPiece = null
+                isPromoting = false
+                promotionPair = 0 to 0
+            }
+        }
+    }
+
+    LaunchedEffect(desSpot) {
+        if (selectedPiece != null && desSpot != null) {
+            val startX = selectedPiece!!.y * cellSize.toFloat()
+            val startY = selectedPiece!!.x * cellSize.toFloat()
+            val endX = desSpot!!.y * cellSize.toFloat()
+            val endY = desSpot!!.x * cellSize.toFloat()
+
+            specificPieceMoves = emptyList()
+
+            val result = makeMove(selectedPiece!!.x * 8 + selectedPiece!!.y, selectedPiece!!.piece, desSpot!!.x * 8 + desSpot!!.y, desSpot!!.piece, ' ')
+            Log.e("tag", result.diffMove.toString())
+            if (result.diffMove == 0) {
+                isMoving = true
+                pieceOffset.snapTo(Offset(startX, startY))
+                pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
+                promotionPair = selectedPiece!!.x * 8 + selectedPiece!!.y to desSpot!!.x * 8 + desSpot!!.y
+                board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
+                isMoving = false
+                isPromoting = true
+            } else {
+                if(result.diffMove != -1) {
+                    isMoving = true
+                    pieceOffset.snapTo(Offset(startX, startY))
+                    pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
+                    if(result.diffMove != 65) {
+                        Log.e("tag", "source ${result.diffMove and 0x3f}")
+                        Log.e("tag", "taget ${(result.diffMove and 0xfc0) shr 6}")
+                        val source = result.diffMove and 0x3f
+                        val sourceX = source / 8
+                        val sourceY = source % 8
+                        val target = (result.diffMove and 0xfc0) shr 6
+                        val targetX = target / 8
+                        val targetY = target % 8
+                        board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
+                        board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
+                    }
+                    isMoving = false
+
+                    board[desSpot!!.x][desSpot!!.y] = Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
+                    board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
+
+                    movedSpot = listOf(selectedPiece!!, desSpot!!)
+                    whiteSide = !whiteSide
+                }
+            }
+            selectedPiece = null
+            desSpot = null
+        }
+    }
+
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(configuration.screenWidthDp.dp)
+            .then(
+                if (!isGameEnd)
+                    Modifier.pointerInput(Unit) {
+                        detectTapGestures { offset ->
+                            val row = (offset.y / cellSize).toInt()
+                            val col = (offset.x / cellSize).toInt()
+                            if (row in 0..7 && col in 0..7) {
+                                if (isPromoting) {
+                                    selectedPiece = Piece(row, col, ' ')
+                                } else if ((selectedPiece == null && board[row][col].piece.isUpperCase() == whiteSide) || (!board[row][col].piece.isWhitespace() && selectedPiece?.piece?.isUpperCase() == board[row][col].piece.isUpperCase())) {
+                                    selectedPiece = board[row][col]
+                                    specificPieceMoves =
+                                        getLegalMoves((row * 8 + col) or (pieceToInt(selectedPiece!!.piece) shl 6)).map { (it and 0xfc0) shr 6 }
+                                } else {
+                                    if (selectedPiece != null)
+                                        desSpot = board[row][col]
+                                }
+                            }
+                        }
+                    }
+                else Modifier
+            )
+    ) {
+        val cellSize = size.width / 8
+        drawImage(
+            image = boardBitmap,
+            topLeft = Offset(0f, 0f)
+        )
+        selectedPiece?.let {
+            drawRect(
+                color = Color.Yellow.copy(alpha = 0.5f),
+                topLeft = Offset(it.y * cellSize, it.x * cellSize),
+                size = Size(cellSize, cellSize)
+            )
+        }
+        for(spot in movedSpot) {
+            drawRect(
+                color = Color.Yellow.copy(alpha = 0.5f),
+                topLeft = Offset(spot.y * cellSize, spot.x * cellSize),
+                size = Size(cellSize, cellSize)
+            )
+        }
+
+        for(square in specificPieceMoves) {
+            val col = square % 8
+            val row = square / 8
+
+            val centerX = col * cellSize + cellSize / 2
+            val centerY = row * cellSize + cellSize / 2
+
+            if (board[row][col].piece == ' ') {
+                drawCircle(
+                    color = Color.White,
+                    radius = cellSize / 6,
+                    center = Offset(centerX, centerY)
+                )
+            } else {
+                drawCircle(
+                    color = Color.White,
+                    radius = cellSize / 2.5f,
+                    center = Offset(centerX, centerY),
+                    style = Stroke(width = cellSize / 12)
+                )
+            }
+        }
+
+        for (row in 0 until 8) {
+            for (col in 0 until 8) {
+                val piece = board[row][col]
+                if (piece.piece != ' ') {
+                    val isMovingPiece = selectedPiece == piece && isMoving
+                    val offset = if (isMovingPiece) pieceOffset.value else Offset(col * cellSize, row * cellSize)
+
+                    drawImage(
+                        image = list[getPieceDrawableId(piece.piece)],
+                        topLeft = offset
+                    )
+                }
+            }
+        }
+        if(isPromoting) {
+            drawPawnPromoteSelection(
+                promotionPair = promotionPair,
+                whiteSide = whiteSide,
+                cellSize = cellSize,
+                list = list
+            )
+        }
+        drawPath(
+            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
+            color = Color.Green
+        )
+    }
+}
+
+private fun DrawScope.drawPawnPromoteSelection(
+    promotionPair: Pair<Int, Int>,
+    whiteSide: Boolean,
+    cellSize: Float,
+    list: List<ImageBitmap>
+) {
+    val x = promotionPair.second % 8
+    val y = promotionPair.second / 8
+    if(whiteSide) {
+        drawRect(
+            color = Color.White,
+            topLeft = Offset(x * cellSize, y * cellSize),
+            size = Size(cellSize, cellSize * 4)
+        )
+        drawImage(
+            image = list[10],
+            topLeft = Offset(x * cellSize, y * cellSize),
+        )
+        drawImage(
+            image = list[9],
+            topLeft = Offset(x * cellSize, (y + 1) * cellSize),
+        )
+        drawImage(
+            image = list[7],
+            topLeft = Offset(x * cellSize, (y + 2) * cellSize),
+        )
+        drawImage(
+            image = list[8],
+            topLeft = Offset(x * cellSize, (y + 3) * cellSize),
+        )
+    } else {
+        val rY = (y * cellSize) - cellSize * 3
+        drawRect(
+            color = Color.White,
+            topLeft = Offset(x * cellSize, rY),
+            size = Size(cellSize, cellSize * 4)
+        )
+        drawImage(
+            image = list[2],
+            topLeft = Offset(x * cellSize, rY),
+        )
+        drawImage(
+            image = list[1],
+            topLeft = Offset(x * cellSize, rY + cellSize),
+        )
+        drawImage(
+            image = list[3],
+            topLeft = Offset(x * cellSize, rY + cellSize * 2),
+        )
+        drawImage(
+            image = list[4],
+            topLeft = Offset(x * cellSize, rY + cellSize * 3),
         )
     }
 }
