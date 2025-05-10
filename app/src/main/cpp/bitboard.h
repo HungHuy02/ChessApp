@@ -19,9 +19,9 @@ struct MoveResult {
     int diffMove;
 };
 
-MoveResult makeMove(int source, char sourcePiece, int target, char targetPiece, char toPiece);
+MoveResult makeMove(int source, char sourcePiece, int target, char targetPiece, char toPiece, bool isPuzzle);
 vector<int> getLegalMoves(int encodeSquare);
-void parseFen(const char *fen);
+bool parseFen(const char *fen);
 void initAll();
 int hasOneLegalMove();
 

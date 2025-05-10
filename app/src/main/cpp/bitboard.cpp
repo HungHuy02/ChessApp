@@ -367,6 +367,10 @@ U64 rookMasks[64];
 U64 bishopAttacks[64][512];
 U64 rookAttacks[64][4096];
 
+static inline string moveToString(int source,int target) {
+    return string(squareToCoordinate[source]) + string(squareToCoordinate[target]);
+}
+
 static inline int countBit(U64 board) {
     int count = 0;
     while(board) {
@@ -456,7 +460,7 @@ void initZobrist() {
     }
 }
 
-void parseFen(const char *fen) {
+bool parseFen(const char *fen) {
     memset(bitboards, 0ULL, sizeof(bitboards));
     memset(occupancies, 0ULL, sizeof(occupancies));
     side = 0;
@@ -516,6 +520,7 @@ void parseFen(const char *fen) {
     occupancies[both] |= occupancies[white];
     occupancies[both] |= occupancies[black];
     recordPosition(computeZobristHash());
+    return side == white;
 }
 
 U64 maskPawnAttacks(int side, int square) {
@@ -1336,7 +1341,7 @@ string generateAlgebraicNotation(int move) {
 }
 
 
-MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
+MoveResult makeMove(int source, char sP, int target, char tP, char toP, bool isPuzzle) {
     MoveResult moveResult;
     moveResult.diffMove = -1;
     moveResult.notation = "";
@@ -1386,14 +1391,14 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                     int move = ENCODE_MOVE(source, target, P, 0, 0, 0, 0, 0);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = 65;
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
                 if(source >= a2 && source <= h2 && target == (source - 16) && !GET_BIT(occupancies[both], (source - 16))) {
                     int move = ENCODE_MOVE(source, target, P, 0, 0, 1, 0, 0);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = 65;
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
             }
@@ -1403,7 +1408,7 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                 int move = ENCODE_MOVE(source, target, p, 0, 0, 0, 1, 0);
                 if (makeMove(move, all_moves)) {
                     moveResult.diffMove = ENCODE_MOVE(diffSquare, diffSquare, sourcePiece, 0, 0, 0, 0, 0);
-                    moveResult.notation = generateAlgebraicNotation(move);
+                    moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                 }
             }
             break;
@@ -1425,14 +1430,14 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                     int move = ENCODE_MOVE(source, target, sourcePiece, 0, 0, 0, 0, 1);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = ENCODE_MOVE(h1, f1, sourcePiece, 0, 0, 0, 0, 0);
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
                 if (target == c1 && (castle & QS)) {
                     int move = ENCODE_MOVE(source, target, sourcePiece, 0, 0, 0, 0, 1);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = ENCODE_MOVE(a1, d1, sourcePiece, 0, 0, 0, 0, 0);
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
             }
@@ -1461,14 +1466,14 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                     int move = ENCODE_MOVE(source, target, p, 0, 0, 0, 0, 0);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = 65;
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
                 if(source >= a7 && source <= h7 && target == (source + 16) && !GET_BIT(occupancies[both], (source + 16))) {
                     int move = ENCODE_MOVE(source, target, p, 0, 0, 1, 0, 0);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = 65;
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
             }
@@ -1478,7 +1483,7 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                 int move = ENCODE_MOVE(source, target, p, 0, 0, 0, 1, 0);
                 if (makeMove(move, all_moves)) {
                     moveResult.diffMove = ENCODE_MOVE(diffSquare, diffSquare, sourcePiece, 0, 0, 0, 0, 0);
-                    moveResult.notation = generateAlgebraicNotation(move);
+                    moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                 }
             }
             break;
@@ -1500,14 +1505,14 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
                     int move = ENCODE_MOVE(source, target, sourcePiece, 0, 0, 0, 0, 1);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = ENCODE_MOVE(h8, f8, sourcePiece, 0, 0, 0, 0, 0);
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
                 if (target == c8 && (castle & qs)) {
                     int move = ENCODE_MOVE(source, target, sourcePiece, 0, 0, 0, 0, 1);
                     if (makeMove(move, all_moves)) {
                         moveResult.diffMove = ENCODE_MOVE(a8, d8, sourcePiece, 0, 0, 0, 0, 0);
-                        moveResult.notation = generateAlgebraicNotation(move);
+                        moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
                     }
                 }
             }
@@ -1522,7 +1527,7 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP) {
             int move = ENCODE_MOVE(source, target, sourcePiece, 0, (targetPiece != -1), 0, 0, 0);
             if (makeMove(move, all_moves)) {
                 moveResult.diffMove = 65;
-                moveResult.notation = generateAlgebraicNotation(move);
+                moveResult.notation = isPuzzle ? moveToString(source, target) : generateAlgebraicNotation(move);
             }
         } else {
             TAKE_BACK()
