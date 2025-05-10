@@ -334,6 +334,7 @@ fun ChessBoard(
 fun ChessBoard(
     modifier: Modifier = Modifier,
     onMove: (String) -> Unit = {},
+    isGameEnd: Boolean = false,
     fen: String
 ) {
     val context = LocalContext.current
@@ -350,7 +351,6 @@ fun ChessBoard(
         pair.first
     }
 
-    var isGameEnd: Boolean by remember { mutableStateOf(false) }
     var isPromoting: Boolean by remember { mutableStateOf(false) }
     var movedSpot : List<Piece> by remember { mutableStateOf(emptyList()) }
     var specificPieceMoves : List<Int> by remember { mutableStateOf(emptyList())  }
@@ -376,7 +376,7 @@ fun ChessBoard(
                             }
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
-                            val result = makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target)
+                            val result = makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target, true)
                             onMove(result.notation)
                             board[x][y] = Piece(x, y, target)
 
@@ -398,7 +398,7 @@ fun ChessBoard(
                             }
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
-                            val result = makeMove(promotionPair.first, 'p', promotionPair.second,' ', target)
+                            val result = makeMove(promotionPair.first, 'p', promotionPair.second,' ', target, true)
                             onMove(result.notation)
                             board[x][y] = Piece(x, y, target)
 
@@ -431,8 +431,8 @@ fun ChessBoard(
 
             specificPieceMoves = emptyList()
 
-            val result = makeMove(selectedPiece!!.x * 8 + selectedPiece!!.y, selectedPiece!!.piece, desSpot!!.x * 8 + desSpot!!.y, desSpot!!.piece, ' ')
-            Log.e("tag", result.diffMove.toString())
+            val result = makeMove(selectedPiece!!.x * 8 + selectedPiece!!.y, selectedPiece!!.piece, desSpot!!.x * 8 + desSpot!!.y, desSpot!!.piece, ' ', true)
+            Log.e("tag", result.notation)
             if (result.diffMove == 0) {
                 isMoving = true
                 pieceOffset.snapTo(Offset(startX, startY))
@@ -444,6 +444,7 @@ fun ChessBoard(
             } else {
                 if(result.diffMove != -1) {
                     isMoving = true
+                    onMove(result.notation)
                     pieceOffset.snapTo(Offset(startX, startY))
                     pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
                     if(result.diffMove != 65) {
@@ -739,7 +740,7 @@ fun pieceToInt(p: Char): Int {
     }
 }
 
-external fun makeMove(source: Int, sourcePiece: Char, target: Int, targetPiece: Char, toPiece: Char): MoveResult
+external fun makeMove(source: Int, sourcePiece: Char, target: Int, targetPiece: Char, toPiece: Char, isPuzzle: Boolean = false): MoveResult
 external fun getLegalMoves(square: Int): IntArray
-external fun parseFen(fen: String)
+external fun parseFen(fen: String): Boolean
 external fun hasOneLegalMove() : Int

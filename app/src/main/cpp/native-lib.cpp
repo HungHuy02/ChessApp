@@ -22,8 +22,8 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_huy_chess_ui_component_ChessBoardKt_makeMove(JNIEnv *env, jobject thiz, jint source,
                                             jchar source_piece, jint target, jchar target_piece,
-                                            jchar to_piece) {
-    MoveResult result = makeMove(source, source_piece, target, target_piece, to_piece);
+                                            jchar to_piece, jboolean is_puzzle) {
+    MoveResult result = makeMove(source, source_piece, target, target_piece, to_piece, is_puzzle);
     return convertToJavaMoveResult(env, result);
 }
 
@@ -37,11 +37,12 @@ Java_com_huy_chess_ui_component_ChessBoardKt_getLegalMoves(JNIEnv *env, jobject 
 }
 
 extern "C"
-JNIEXPORT void JNICALL
+JNIEXPORT jboolean JNICALL
 Java_com_huy_chess_ui_component_ChessBoardKt_parseFen(JNIEnv *env, jobject thiz, jstring jfen) {
     const char *fen = env->GetStringUTFChars(jfen, 0);
-    parseFen(fen);
+    const bool side = parseFen(fen);
     env->ReleaseStringUTFChars(jfen, fen);
+    return side ? JNI_TRUE : JNI_FALSE;
 }
 
 extern "C"
