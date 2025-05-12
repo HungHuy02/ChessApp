@@ -333,6 +333,7 @@ fun ChessBoard(
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
+    nextMove: String? = null,
     onMove: (String) -> Unit = {},
     isGameEnd: Boolean = false,
     fen: String
@@ -465,7 +466,19 @@ fun ChessBoard(
                     board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
 
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
-                    whiteSide = !whiteSide
+                    nextMove?.let {
+                        val sourceX = rankToRow(it[1])
+                        val sourceY = fileToCol(it[0])
+                        val targetX = rankToRow(it[3])
+                        val targetY = fileToCol(it[2])
+                        val r =  makeMove(sourceX * 8 + sourceY, board[sourceX][sourceY].piece, targetX * 8 + targetY, board[targetX][targetY].piece, ' ', true)
+                        isMoving = true
+                        pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
+                        pieceOffset.animateTo(Offset(targetX * cellSize.toFloat(), targetY * cellSize.toFloat()), animationSpec = tween(300))
+                        isMoving = false
+                        board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
+                        board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
+                    }
                 }
             }
             selectedPiece = null
@@ -739,6 +752,9 @@ fun pieceToInt(p: Char): Int {
         else -> -1
     }
 }
+
+fun fileToCol(file: Char) : Int = file - 'a'
+fun rankToRow(rank: Char) : Int = '8' - rank
 
 external fun makeMove(source: Int, sourcePiece: Char, target: Int, targetPiece: Char, toPiece: Char, isPuzzle: Boolean = false): MoveResult
 external fun getLegalMoves(square: Int): IntArray
