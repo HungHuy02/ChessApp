@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.huy.chess.data.model.Piece
 import java.security.KeyStore
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -139,5 +141,11 @@ object Utils {
         val ivSpec = IvParameterSpec(iv)
         cipher.init(Cipher.DECRYPT_MODE, getKey(alias), ivSpec)
         return cipher.doFinal(encoded).decodeToString()
+    }
+
+    fun getToday(): String {
+        val today = LocalDate.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return today.format(formatter)
     }
 }

@@ -14,6 +14,7 @@ import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.dailypuzzle.composable.DailyPuzzleBottomBar
 import com.huy.chess.ui.dailypuzzle.composable.DateChange
 import com.huy.chess.ui.dailypuzzle.composable.DescriptionText
+import com.huy.chess.utils.enums.PuzzleStatus
 import com.huy.chess.viewmodel.DailyPuzzleViewModel
 
 @Composable
@@ -45,8 +46,8 @@ private fun Content(
     ) {
         val (topBar, pane, board, description, bar) = createRefs()
         ChessTopAppBar(
-            title = "test",
-            action = { onAction(DailyPuzzleAction.ClickedBackButton) },
+            title = state.title,
+            action = {  },
             onClickBack = { onAction(DailyPuzzleAction.ClickedBackButton) },
             modifier = Modifier.constrainAs(topBar) {
                 top.linkTo(parent.top)
@@ -64,13 +65,18 @@ private fun Content(
                 end.linkTo(parent.end)
             }
         )
-        ChessBoard(
-            modifier = Modifier
-                .constrainAs(board) {
-                    top.linkTo(parent.top, margin = (-20).dp)
-                    bottom.linkTo(parent.bottom)
-                }
-        )
+        state.fen?.let {
+            ChessBoard(
+                fen = it,
+                onMove = { onAction(DailyPuzzleAction.Move(it)) },
+                isGameEnd = state.puzzleStatus == PuzzleStatus.FINISH,
+                modifier = Modifier
+                    .constrainAs(board) {
+                        top.linkTo(parent.top, margin = (-20).dp)
+                        bottom.linkTo(parent.bottom)
+                    }
+            )
+        }
 
         DescriptionText(
             puzzleStatus = state.puzzleStatus,

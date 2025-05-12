@@ -31,11 +31,15 @@ fun DescriptionText(
         verticalAlignment = Alignment.CenterVertically
     ) {
         when(puzzleStatus) {
-            PuzzleStatus.START -> {
+            PuzzleStatus.START_WHITE,
+            PuzzleStatus.START_BLACK-> {
                 Box(Modifier.size(4.dp).background(color = Color.White))
                 Spacer(Modifier.width(4.dp))
                 Text(
-                    text = stringResource(R.string.white_player_turn_text)
+                    text = stringResource(
+                        if(puzzleStatus == PuzzleStatus.START_WHITE) R.string.white_player_turn_text
+                        else R.string.black_player_turn_text
+                    )
                 )
             }
             PuzzleStatus.CORRECT_MOVE -> {
