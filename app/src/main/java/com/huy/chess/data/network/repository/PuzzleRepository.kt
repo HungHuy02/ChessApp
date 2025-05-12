@@ -8,5 +8,5 @@ class PuzzleRepository @Inject constructor(
     private val puzzleApi: PuzzleApi
 ) : BaseRepository() {
 
-    suspend fun getDailyPuzzle() = safeApiCall { puzzleApi.getDailyPuzzle() }
+    suspend fun getDailyPuzzle(date: String) = safeApiCall { puzzleApi.getDailyPuzzle(date) }
 }

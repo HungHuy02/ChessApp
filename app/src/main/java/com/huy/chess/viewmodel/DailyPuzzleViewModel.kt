@@ -1,14 +1,38 @@
 package com.huy.chess.viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
+import com.huy.chess.data.network.repository.PuzzleRepository
+import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleAction
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleEffect
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleState
+import com.huy.chess.utils.Utils
+import com.huy.chess.utils.enums.PuzzleStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DailyPuzzleViewModel @Inject constructor() : BaseViewModel<DailyPuzzleState, DailyPuzzleAction, DailyPuzzleEffect>(DailyPuzzleState()) {
+class DailyPuzzleViewModel @Inject constructor(private val puzzleRepository: PuzzleRepository) : BaseViewModel<DailyPuzzleState, DailyPuzzleAction, DailyPuzzleEffect>(DailyPuzzleState()) {
+
+    init {
+        viewModelScope.launch {
+            val date = Utils.getToday()
+            puzzleRepository.getDailyPuzzle(date)
+                .onSuccess { puzzle ->
+                    val side = parseFen(puzzle.fen)
+                    updateState { it.copy(
+                        title = puzzle.title,
+                        date = puzzle.date,
+                        fen = puzzle.fen,
+                        moves = puzzle.moves.split(" "),
+                        puzzleStatus = if(side) PuzzleStatus.START_WHITE else PuzzleStatus.START_BLACK
+                    ) }
+            }
+        }
+    }
+
     override fun processAction(action: DailyPuzzleAction) {
         when(action) {
             DailyPuzzleAction.ClickedAnalysis -> {}
@@ -18,6 +42,21 @@ class DailyPuzzleViewModel @Inject constructor() : BaseViewModel<DailyPuzzleStat
             DailyPuzzleAction.ClickedHint -> {}
             DailyPuzzleAction.ClickedReset -> {}
             DailyPuzzleAction.ClickedDate -> sendEffect(DailyPuzzleEffect.NavigateSelectDate)
+            is DailyPuzzleAction.Move -> {
+                val value = state.value
+                if(action.move == value.moves[value.puzzleStep]) {
+                    if(value.puzzleStep == value.moves.size - 1) {
+                        updateState { it.copy(puzzleStatus = PuzzleStatus.FINISH) }
+                    } else {
+                        updateState { it.copy(
+                            puzzleStep = it.puzzleStep + 2,
+                            puzzleStatus = PuzzleStatus.CORRECT_MOVE
+                        ) }
+                    }
+                } else {
+                    updateState { it.copy(puzzleStatus = PuzzleStatus.WRONG_MOVE) }
+                }
+            }
         }
     }
 }

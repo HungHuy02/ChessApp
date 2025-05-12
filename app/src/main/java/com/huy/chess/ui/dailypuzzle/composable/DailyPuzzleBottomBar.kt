@@ -35,7 +35,8 @@ fun DailyPuzzleBottomBar(
         modifier = modifier
     ) {
         when(puzzleStatus) {
-            PuzzleStatus.START,
+            PuzzleStatus.START_WHITE,
+            PuzzleStatus.START_BLACK,
             PuzzleStatus.CORRECT_MOVE -> {
                 Text(
                     text = buildAnnotatedString {

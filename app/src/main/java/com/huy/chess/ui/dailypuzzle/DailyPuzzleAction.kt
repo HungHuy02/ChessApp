@@ -8,4 +8,5 @@ sealed class DailyPuzzleAction {
     data object ClickedBack: DailyPuzzleAction()
     data object ClickedForward: DailyPuzzleAction()
     data object ClickedDate: DailyPuzzleAction()
+    data class Move(val move: String): DailyPuzzleAction()
 }

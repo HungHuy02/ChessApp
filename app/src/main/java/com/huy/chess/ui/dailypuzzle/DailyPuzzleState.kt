@@ -4,5 +4,9 @@ import com.huy.chess.utils.enums.PuzzleStatus
 
 data class DailyPuzzleState (
     val date: String = "",
-    val puzzleStatus: PuzzleStatus = PuzzleStatus.WRONG_MOVE
+    val title: String = "",
+    val fen: String? = null,
+    val moves: List<String> = emptyList(),
+    val puzzleStep: Int = 0,
+    val puzzleStatus: PuzzleStatus = PuzzleStatus.START_WHITE
 )
