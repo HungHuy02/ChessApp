@@ -29,13 +29,13 @@ object Utils {
             if(it != '/') {
                 if (it.isDigit()) {
                     for (i in 0..(it - '1')) {
-                        file += i
                         list[rank].add(Piece(rank, file, ' '))
+                        file++
                     }
                 } else {
                     list[rank].add(Piece(rank, file, it))
+                    file++
                 }
-                file++
             }
             else {
                 rank++
