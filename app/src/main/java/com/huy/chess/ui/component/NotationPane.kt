@@ -1,4 +1,4 @@
-package com.huy.chess.ui.play.composables
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.huy.chess.ui.play.composables
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -10,8 +10,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import com.huy.chess.ui.component.getChessPiecePainters
-import com.huy.chess.utils.increment
 
 @Composable
 fun CapturedPiece(

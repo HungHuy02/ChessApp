@@ -11,6 +11,7 @@ import com.huy.chess.ui.dialog.endgame.EndGameDialog
 import com.huy.chess.ui.dialog.playoptions.PlayOptionsDialog
 import com.huy.chess.ui.newgame.NewGameScreen
 import com.huy.chess.ui.play.PlayScreen
+import com.huy.chess.ui.playbot.PlayBotScreen
 import com.huy.chess.ui.setupbot.SetupBotScreen
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleScreen
 
@@ -34,6 +35,14 @@ fun NavGraphBuilder.playDestination(
         }
         composable<SetupBot> {
             SetupBotScreen(
+                popBackStack = { navController.popBackStack() },
+                navigatePlayBot = { navController.navigate(PlayBot(it)) }
+            )
+        }
+        composable<PlayBot> {
+            PlayBotScreen(
+                showPlayOptionsDialog = { navController.navigate(PlayOptions) },
+                showEndGameDialog = {navController.navigate(EndGame(it)) },
                 popBackStack = { navController.popBackStack() }
             )
         }

@@ -45,6 +45,7 @@ class SetupBotViewModel @Inject constructor(
                 if(state.value.stockfishBotLevel != action.level)
                     updateState { it.copy(stockfishBotLevel = action.level) }
             }
+            SetupBotAction.ClickedPlay -> sendEffect(SetupBotEffect.NavigatePlayBot(state.value.stockfishBotLevel))
         }
     }
 }

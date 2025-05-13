@@ -30,19 +30,22 @@ import com.huy.chess.ui.setupbot.composables.LevelSelect
 import com.huy.chess.ui.setupbot.composables.PieceSelect
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleAction
 import com.huy.chess.utils.enums.TimeType
+import com.huy.chess.utils.toInt
 import com.huy.chess.utils.toName
 import com.huy.chess.viewmodel.SetupBotViewModel
 
 @Composable
 fun SetupBotScreen(
     viewModel: SetupBotViewModel = hiltViewModel(),
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
+    navigatePlayBot: (Int) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
                 SetupBotEffect.PopBackStack -> popBackStack()
+                is SetupBotEffect.NavigatePlayBot -> navigatePlayBot(it.level.toInt())
             }
         }
     }
@@ -142,7 +145,7 @@ private fun Content(
         )
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            onClick = {},
+            onClick = { onAction(SetupBotAction.ClickedPlay) },
             text = stringResource(R.string.play_text),
             iconPosition = IconPosition.NONE,
             modifier = Modifier.fillMaxWidth()
