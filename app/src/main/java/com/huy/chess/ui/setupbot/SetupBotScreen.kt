@@ -69,7 +69,10 @@ private fun Content(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
-        PieceSelect()
+        PieceSelect(
+            side = state.side,
+            onClick = { onAction(SetupBotAction.ClickedSide(it)) }
+        )
         Text(
             text = stringResource(R.string.level_text),
             style = MaterialTheme.typography.labelSmall,
