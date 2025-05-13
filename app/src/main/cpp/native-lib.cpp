@@ -52,6 +52,13 @@ Java_com_huy_chess_ui_component_ChessBoardKt_hasOneLegalMove(JNIEnv *env, jobjec
     return static_cast<jint>(result);
 }
 
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_huy_chess_ui_component_ChessBoardKt_fenOtherPart(JNIEnv *env, jobject thiz) {
+    string result = fenOtherPart();
+    return env->NewStringUTF(result.c_str());
+}
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     initAll();
     return JNI_VERSION_1_6;

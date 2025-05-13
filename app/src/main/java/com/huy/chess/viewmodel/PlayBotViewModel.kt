@@ -43,6 +43,7 @@ class PlayBotViewModel @Inject constructor(
                 }
             }
             is PlayBotAction.Move -> {
+                Log.e("tag", action.fen)
                 updateState {
                     val notation = state.value.notationList.toMutableList()
                     notation.add(action.move)
