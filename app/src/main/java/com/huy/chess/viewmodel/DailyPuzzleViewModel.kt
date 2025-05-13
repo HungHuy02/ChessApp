@@ -50,7 +50,8 @@ class DailyPuzzleViewModel @Inject constructor(private val puzzleRepository: Puz
                     } else {
                         updateState { it.copy(
                             puzzleStep = it.puzzleStep + 2,
-                            puzzleStatus = PuzzleStatus.CORRECT_MOVE
+                            puzzleStatus = PuzzleStatus.CORRECT_MOVE,
+                            nextMove = it.moves[it.puzzleStep + 1]
                         ) }
                     }
                 } else {
