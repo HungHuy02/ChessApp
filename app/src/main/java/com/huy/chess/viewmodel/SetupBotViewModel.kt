@@ -37,6 +37,10 @@ class SetupBotViewModel @Inject constructor(
                 }
             }
             SetupBotAction.ClickShowMore -> updateState { it.copy(showTimeControl = !it.showTimeControl) }
+            is SetupBotAction.ClickedSide -> {
+                if(state.value.side != action.side)
+                    updateState { it.copy(side = action.side) }
+            }
         }
     }
 }
