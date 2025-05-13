@@ -68,7 +68,7 @@ private fun Content(
         state.fen?.let {
             ChessBoard(
                 fen = it,
-                nextMove = state.moves.getOrNull(state.puzzleStep + 1),
+                nextMove = state.nextMove,
                 onMove = { onAction(DailyPuzzleAction.Move(it)) },
                 isGameEnd = state.puzzleStatus == PuzzleStatus.FINISH,
                 modifier = Modifier

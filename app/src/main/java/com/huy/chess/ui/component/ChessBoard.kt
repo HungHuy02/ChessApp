@@ -361,6 +361,37 @@ fun ChessBoard(
     var isMoving by remember { mutableStateOf(false) }
     var promotionPair by remember { mutableStateOf(0 to 0) }
 
+    nextMove?.let {
+        LaunchedEffect(Unit) {
+            val sourceX = rankToRow(it[1])
+            val sourceY = fileToCol(it[0])
+            val targetX = rankToRow(it[3])
+            val targetY = fileToCol(it[2])
+            val result =  makeMove(sourceX * 8 + sourceY, board[sourceX][sourceY].piece, targetX * 8 + targetY, board[targetX][targetY].piece, it.getOrNull(4) ?: ' ', true)
+            isMoving = true
+            pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
+            pieceOffset.animateTo(Offset(targetX * cellSize.toFloat(), targetY * cellSize.toFloat()), animationSpec = tween(300))
+
+            if(result.diffMove != 65) {
+                Log.e("tag", "source ${result.diffMove and 0x3f}")
+                Log.e("tag", "taget ${(result.diffMove and 0xfc0) shr 6}")
+                val source = result.diffMove and 0x3f
+                val diffSourceX = source / 8
+                val diffSourceY = source % 8
+                val target = (result.diffMove and 0xfc0) shr 6
+                val diffTargetX = target / 8
+                val diffTargetY = target % 8
+                board[diffTargetX][diffTargetY] = Piece(diffTargetX, diffTargetY, board[diffSourceX][diffSourceY].piece)
+                board[diffSourceX][diffSourceY] = Piece(diffSourceX, diffSourceY, ' ')
+            }
+            isMoving = false
+            board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
+            board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
+
+            movedSpot = listOf(board[sourceX][sourceY], board[targetX][targetY])
+        }
+    }
+
     if(isPromoting) {
         LaunchedEffect(selectedPiece) {
             Log.e("tag", "test")
@@ -466,19 +497,6 @@ fun ChessBoard(
                     board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
 
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
-                    nextMove?.let {
-                        val sourceX = rankToRow(it[1])
-                        val sourceY = fileToCol(it[0])
-                        val targetX = rankToRow(it[3])
-                        val targetY = fileToCol(it[2])
-                        val r =  makeMove(sourceX * 8 + sourceY, board[sourceX][sourceY].piece, targetX * 8 + targetY, board[targetX][targetY].piece, ' ', true)
-                        isMoving = true
-                        pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
-                        pieceOffset.animateTo(Offset(targetX * cellSize.toFloat(), targetY * cellSize.toFloat()), animationSpec = tween(300))
-                        isMoving = false
-                        board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
-                        board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
-                    }
                 }
             }
             selectedPiece = null

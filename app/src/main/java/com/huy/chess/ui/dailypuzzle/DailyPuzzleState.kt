@@ -7,6 +7,7 @@ data class DailyPuzzleState (
     val title: String = "",
     val fen: String? = null,
     val moves: List<String> = emptyList(),
+    val nextMove: String? = null,
     val puzzleStep: Int = 0,
     val puzzleStatus: PuzzleStatus = PuzzleStatus.START_WHITE
 )
