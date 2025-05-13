@@ -41,6 +41,10 @@ class SetupBotViewModel @Inject constructor(
                 if(state.value.side != action.side)
                     updateState { it.copy(side = action.side) }
             }
+            is SetupBotAction.ClickedLevel -> {
+                if(state.value.stockfishBotLevel != action.level)
+                    updateState { it.copy(stockfishBotLevel = action.level) }
+            }
         }
     }
 }
