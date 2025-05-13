@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import com.huy.chess.data.model.Piece
+import com.huy.chess.ui.component.fenOtherPart
 import java.security.KeyStore
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -43,6 +44,28 @@ object Utils {
             }
         }
         return list to (strings[1] == "w")
+    }
+
+    fun boardToFen(board: List<List<Piece>>) : String {
+        var fen = ""
+        board.forEachIndexed { index, list ->
+            var emptyCount = 0
+            list.forEach {
+                if(it.piece == ' ') {
+                    emptyCount++
+                } else {
+                    if(emptyCount != 0) {
+                        fen += emptyCount
+                        emptyCount = 0
+                    }
+                    fen += it.piece
+                }
+            }
+            if(emptyCount != 0) fen += emptyCount
+            if(index != 7) fen += '/'
+        }
+        fen += fenOtherPart()
+        return fen
     }
 
     fun initBoard(): List<MutableList<Piece>> {

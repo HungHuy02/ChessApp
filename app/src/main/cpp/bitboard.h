@@ -24,6 +24,7 @@ vector<int> getLegalMoves(int encodeSquare);
 bool parseFen(const char *fen);
 void initAll();
 int hasOneLegalMove();
+string fenOtherPart();
 
 #endif
 

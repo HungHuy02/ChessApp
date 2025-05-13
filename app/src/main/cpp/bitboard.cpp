@@ -132,6 +132,8 @@ U64 occupancies[3];
 int side;
 int enpassant = no_sq;
 int castle;
+int halfMoveClock;
+int fullMove;
 
 
 U64 zobristTable[12][64];
@@ -466,6 +468,8 @@ bool parseFen(const char *fen) {
     side = 0;
     enpassant = no_sq;
     castle = 0;
+    halfMoveClock = 0;
+    fullMove = 0;
     for(int rank = 0; rank < 8; rank++) {
         for (int file = 0; file < 8; file++) {
             int square = rank * 8 + file;
@@ -511,6 +515,21 @@ bool parseFen(const char *fen) {
     } else
         enpassant = no_sq;
 
+    fen += 2;
+
+    int i = 0;
+    while (isdigit(fen[i])) {
+        halfMoveClock = halfMoveClock * 10 + (fen[i] - '0');
+        i++;
+    }
+    fen += i + 1;
+
+    i = 0;
+    while (isdigit(fen[i])) {
+        fullMove = fullMove * 10 + (fen[i] - '0');
+        i++;
+    }
+
     for(int piece = P; piece <= K; piece++) {
         occupancies[white] |= bitboards[piece];
     }
@@ -521,6 +540,29 @@ bool parseFen(const char *fen) {
     occupancies[both] |= occupancies[black];
     recordPosition(computeZobristHash());
     return side == white;
+}
+
+string fenOtherPart() {
+    string result = " ";
+    result += side == white ? "w " : "b ";
+    string castleRight = "";
+    if(castle & KS) castleRight += 'K';
+    if(castle & QS) castleRight += 'Q';
+    if(castle & ks) castleRight += 'k';
+    if(castle & qs) castleRight += 'q';
+    if(castleRight == "") castleRight = '-';
+    result += castleRight + ' ';
+    if(enpassant == no_sq) result += "- ";
+    else {
+        int file = enpassant % 8;
+        int rank = 7 - (enpassant / 8);
+        result += char('a' + file);
+        result += char('1' + rank);
+        result += ' ';
+    }
+    result += to_string(halfMoveClock) + ' ';
+    result += to_string(fullMove);
+    return result;
 }
 
 U64 maskPawnAttacks(int side, int square) {

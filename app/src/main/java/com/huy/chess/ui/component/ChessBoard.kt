@@ -408,8 +408,8 @@ fun ChessBoard(
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
                             val result = makeMove(promotionPair.first, 'P', promotionPair.second, ' ', target)
-                            onMove(result.notation, "")
                             board[x][y] = Piece(x, y, target)
+                            onMove(result.notation, Utils.boardToFen(board))
 
 //                        movedSpot = listOf(selectedPiece!!, desSpot!!)
                             whiteSide = !whiteSide
@@ -430,8 +430,8 @@ fun ChessBoard(
                             val x = promotionPair.second / 8
                             val y = promotionPair.second % 8
                             val result = makeMove(promotionPair.first, 'p', promotionPair.second,' ', target)
-                            onMove(result.notation, "")
                             board[x][y] = Piece(x, y, target)
+                            onMove(result.notation, Utils.boardToFen(board))
 
 //                        movedSpot = listOf(selectedPiece!!, desSpot!!)
                             whiteSide = !whiteSide
@@ -475,7 +475,6 @@ fun ChessBoard(
             } else {
                 if(result.diffMove != -1) {
                     isMoving = true
-                    onMove(result.notation, "")
                     pieceOffset.snapTo(Offset(startX, startY))
                     pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
                     if(result.diffMove != 65) {
@@ -496,7 +495,7 @@ fun ChessBoard(
 
                     board[desSpot!!.x][desSpot!!.y] = Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
                     board[selectedPiece!!.x][selectedPiece!!.y] = Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
-
+                    onMove(result.notation, Utils.boardToFen(board))
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
                     whiteSide = !whiteSide
                     val hasOneLegalMove = hasOneLegalMove()
@@ -1059,3 +1058,4 @@ external fun makeMove(source: Int, sourcePiece: Char, target: Int, targetPiece: 
 external fun getLegalMoves(square: Int): IntArray
 external fun parseFen(fen: String): Boolean
 external fun hasOneLegalMove() : Int
+external fun fenOtherPart() : String
