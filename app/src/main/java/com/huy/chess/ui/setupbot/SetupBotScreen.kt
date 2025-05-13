@@ -78,7 +78,10 @@ private fun Content(
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
-        LevelSelect()
+        LevelSelect(
+            onClick = { onAction(SetupBotAction.ClickedLevel(it)) },
+            level = state.stockfishBotLevel
+        )
         RowItem(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.time_control_text),
