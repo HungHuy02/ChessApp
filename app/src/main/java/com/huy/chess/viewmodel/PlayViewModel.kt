@@ -1,9 +1,6 @@
 package com.huy.chess.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.service.StockfishService
 import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.play.PlayAction
 import com.huy.chess.ui.play.PlayEffect
@@ -12,21 +9,14 @@ import com.huy.chess.utils.Constants
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.increment
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayViewModel @Inject constructor(
-    private val stockfishService: StockfishService
-) :
+class PlayViewModel @Inject constructor() :
     BaseViewModel<PlayState, PlayAction, PlayEffect>(PlayState()) {
 
     init {
         parseFen(Constants.START_FEN)
-        viewModelScope.launch {
-            stockfishService.setupNewGame(level = 2)
-            stockfishService.findBestMove(Constants.START_FEN)
-        }
     }
 
     override fun processAction(action: PlayAction) {

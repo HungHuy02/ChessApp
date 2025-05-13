@@ -55,6 +55,8 @@ data class EndGame(val gameResult: GameResult)
 object PlayOnline
 @Serializable
 object SolvePuzzles
+@Serializable
+data class PlayBot(val level: Int)
 
 sealed class TopLevelDestination {
     @Serializable

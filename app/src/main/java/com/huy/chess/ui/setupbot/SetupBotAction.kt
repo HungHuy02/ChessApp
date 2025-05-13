@@ -10,4 +10,5 @@ sealed class SetupBotAction {
     data object ClickedBack: SetupBotAction()
     data class ClickedSide(val side: Side): SetupBotAction()
     data class ClickedLevel(val level: StockfishBotLevel): SetupBotAction()
+    data object ClickedPlay: SetupBotAction()
 }

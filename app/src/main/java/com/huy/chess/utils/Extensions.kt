@@ -12,6 +12,7 @@ import java.io.File
 import com.huy.chess.R
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.enums.GameResultInfo
+import com.huy.chess.utils.enums.StockfishBotLevel
 import com.squareup.moshi.Moshi
 import org.json.JSONObject
 
@@ -110,6 +111,19 @@ fun GameResult.toResult(): GameResultInfo {
         GameResult.DRAW_INSUFFICIENT_MATERIAL -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.insufficient_material_text)
         GameResult.DRAW_AGREEMENT -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.agreement_text)
         GameResult.DRAW_TIMEOUT_INSUFFICIENT_MATERIAL -> GameResultInfo("1/2-1/2", R.string.draw_text, R.string.insufficient_material_text)
+    }
+}
+
+fun StockfishBotLevel.toInt() : Int {
+    return when(this) {
+        StockfishBotLevel.ONE -> 1
+        StockfishBotLevel.TWO -> 2
+        StockfishBotLevel.THREE -> 3
+        StockfishBotLevel.FOUR -> 4
+        StockfishBotLevel.FIVE -> 5
+        StockfishBotLevel.SIX -> 6
+        StockfishBotLevel.SEVEN -> 7
+        StockfishBotLevel.EIGHT -> 8
     }
 }
 

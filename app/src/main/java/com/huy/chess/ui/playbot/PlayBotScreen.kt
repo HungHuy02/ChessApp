@@ -1,4 +1,4 @@
-package com.huy.chess.ui.play
+package com.huy.chess.ui.playbot
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -10,19 +10,19 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.huy.chess.R
+import com.huy.chess.ui.component.CapturedPiece
 import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.NotationPane
-import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.Timer
-import com.huy.chess.viewmodel.PlayViewModel
-import com.huy.chess.R
-import com.huy.chess.ui.component.CapturedPiece
+import com.huy.chess.ui.playbot.composables.PlayBotScreenBottomBar
 import com.huy.chess.utils.enums.GameResult
+import com.huy.chess.viewmodel.PlayBotViewModel
 
 @Composable
-fun PlayScreen(
-    viewModel: PlayViewModel = hiltViewModel(),
+fun PlayBotScreen(
+    viewModel: PlayBotViewModel = hiltViewModel(),
     showPlayOptionsDialog: () -> Unit,
     showEndGameDialog: (GameResult) -> Unit,
     popBackStack: () -> Unit
@@ -31,9 +31,9 @@ fun PlayScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
-                PlayEffect.PopBackStack -> popBackStack()
-                PlayEffect.ShowPlayOptionsDialog -> showPlayOptionsDialog()
-                is PlayEffect.ShowEndGameDialog -> showEndGameDialog(it.gameResult)
+                PlayBotEffect.PopBackStack -> popBackStack()
+                PlayBotEffect.ShowPlayOptionsDialog -> showPlayOptionsDialog()
+                is PlayBotEffect.ShowEndGameDialog -> showEndGameDialog(it.gameResult)
             }
         }
     }
@@ -42,8 +42,8 @@ fun PlayScreen(
 
 @Composable
 private fun Content(
-    state: PlayState,
-    onAction: (PlayAction) -> Unit
+    state: PlayBotState,
+    onAction: (PlayBotAction) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
@@ -51,7 +51,7 @@ private fun Content(
         val (topBar, pane, board, capture, timerTop, timerBottom, bar) = createRefs()
         ChessTopAppBar(
             title = stringResource(R.string.app_name),
-            onClickBack = { onAction(PlayAction.ClickedBackButton) },
+            onClickBack = { onAction(PlayBotAction.ClickedBackButton) },
             modifier = Modifier.constrainAs(topBar) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
@@ -70,9 +70,10 @@ private fun Content(
         )
 
         ChessBoard(
-            onCapture = { onAction(PlayAction.PieceCaptured(it)) },
-            onMove = { onAction(PlayAction.Move(it)) },
-            onResult = { result, whiteSide -> onAction(PlayAction.Result(result, whiteSide)) },
+            onCapture = { onAction(PlayBotAction.PieceCaptured(it)) },
+            onMove = {move, fen -> onAction(PlayBotAction.Move(move, fen)) },
+            onResult = { result, whiteSide -> onAction(PlayBotAction.Result(result, whiteSide)) },
+            nextMove = state.nextMove,
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
@@ -107,7 +108,7 @@ private fun Content(
             }
         )
 
-        PlayScreenBottomBar(
+        PlayBotScreenBottomBar (
             onClick = onAction,
             modifier = Modifier.constrainAs(bar) {
                 bottom.linkTo(parent.bottom)
