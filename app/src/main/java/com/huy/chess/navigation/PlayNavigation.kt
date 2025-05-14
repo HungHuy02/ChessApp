@@ -12,6 +12,7 @@ import com.huy.chess.ui.dialog.playoptions.PlayOptionsDialog
 import com.huy.chess.ui.newgame.NewGameScreen
 import com.huy.chess.ui.play.PlayScreen
 import com.huy.chess.ui.playbot.PlayBotScreen
+import com.huy.chess.ui.playonline.PlayOnlineScreen
 import com.huy.chess.ui.setupbot.SetupBotScreen
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleScreen
 
@@ -25,7 +26,7 @@ fun NavGraphBuilder.playDestination(
                 navigateToSetupBot = { navController.navigate(SetupBot) },
                 navigateToSetupTwoPeople = { navController.navigate(SetupTwoPeople) },
                 popBackStack = { navController.popBackStack() },
-                navigateToPlay = { navController.navigate(Play) }
+                navigateToPlayOnline = { navController.navigate(PlayOnline) }
             )
         }
         composable<ChangeTime> {
@@ -53,6 +54,13 @@ fun NavGraphBuilder.playDestination(
         }
         composable<Play> {
             PlayScreen(
+                showPlayOptionsDialog = { navController.navigate(PlayOptions) },
+                showEndGameDialog = {navController.navigate(EndGame(it)) },
+                popBackStack = { navController.popBackStack() }
+            )
+        }
+        composable<PlayOnline> {
+            PlayOnlineScreen(
                 showPlayOptionsDialog = { navController.navigate(PlayOptions) },
                 showEndGameDialog = {navController.navigate(EndGame(it)) },
                 popBackStack = { navController.popBackStack() }
