@@ -41,7 +41,6 @@ import com.huy.chess.R
 import com.huy.chess.data.model.MoveResult
 import com.huy.chess.data.model.Piece
 import com.huy.chess.utils.Utils
-import com.huy.chess.utils.enums.GameResult
 
 private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
@@ -336,7 +335,7 @@ fun ChessBoard(
 fun ChessBoard(
     modifier: Modifier = Modifier,
     onCapture: (Char) -> Unit = {},
-    onMove: (String, String) -> Unit = {_,_ -> },
+    onMove: (String, String?) -> Unit = {_,_ -> },
     onResult: (Int, Boolean) -> Unit = {_,_ -> },
     nextMove: String? = null,
 ) {
@@ -366,7 +365,7 @@ fun ChessBoard(
             val sourceY = fileToCol(it[0])
             val targetX = rankToRow(it[3])
             val targetY = fileToCol(it[2])
-            val result =  makeMove(sourceX * 8 + sourceY, board[sourceX][sourceY].piece, targetX * 8 + targetY, board[targetX][targetY].piece, it.getOrNull(4) ?: ' ', true)
+            val result =  makeMove(sourceX * 8 + sourceY, board[sourceX][sourceY].piece, targetX * 8 + targetY, board[targetX][targetY].piece, it.getOrNull(4) ?: ' ')
             isMoving = true
             pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
             pieceOffset.animateTo(Offset(targetX * cellSize.toFloat(), targetY * cellSize.toFloat()), animationSpec = tween(300))
@@ -387,6 +386,7 @@ fun ChessBoard(
             board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
             board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
             whiteSide = !whiteSide
+            onMove(result.notation, null)
             movedSpot = listOf(board[sourceX][sourceY], board[targetX][targetY])
         }
     }

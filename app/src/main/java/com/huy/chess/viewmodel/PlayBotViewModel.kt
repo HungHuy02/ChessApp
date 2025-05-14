@@ -2,6 +2,7 @@ package com.huy.chess.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.service.StockfishService
 import com.huy.chess.ui.component.parseFen
@@ -43,11 +44,17 @@ class PlayBotViewModel @Inject constructor(
                 }
             }
             is PlayBotAction.Move -> {
-                Log.e("tag", action.fen)
+                Log.e("tag", action.fen ?: "null")
                 updateState {
                     val notation = state.value.notationList.toMutableList()
                     notation.add(action.move)
-                    it.copy(notationList = notation)
+                    it.copy(notationList = notation, nextMove = null)
+                }
+                action.fen?.let {
+                    viewModelScope.launch {
+                        val move = stockfishService.findBestMove(it)
+                        updateState { it.copy(nextMove = move) }
+                    }
                 }
             }
             is PlayBotAction.Result -> {
