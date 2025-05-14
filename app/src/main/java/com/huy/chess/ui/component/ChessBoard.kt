@@ -383,11 +383,17 @@ fun ChessBoard(
                 board[diffSourceX][diffSourceY] = Piece(diffSourceX, diffSourceY, ' ')
             }
             isMoving = false
+            if(board[targetX][targetY].piece != ' ') onCapture(board[targetX][targetY].piece)
             board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
             board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
             whiteSide = !whiteSide
             onMove(result.notation, null)
             movedSpot = listOf(board[sourceX][sourceY], board[targetX][targetY])
+            val hasOneLegalMove = hasOneLegalMove()
+            if(hasOneLegalMove > 1) {
+                onResult(hasOneLegalMove, whiteSide)
+                isGameEnd = true
+            }
         }
     }
 
