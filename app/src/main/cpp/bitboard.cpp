@@ -139,18 +139,19 @@ int fullMove;
 U64 zobristTable[12][64];
 static unordered_map<U64, int> history;
 
-#define COPY_BOARD()                                                      \
-    U64 bitboards_copy[12], occupancies_copy[3];                          \
-    int side_copy, enpassant_copy, castle_copy;                           \
-    memcpy(bitboards_copy, bitboards, 96);                                \
-    memcpy(occupancies_copy, occupancies, 24);                            \
-    side_copy = side, enpassant_copy = enpassant, castle_copy = castle;
+#define COPY_BOARD()                                                                    \
+    U64 bitboards_copy[12], occupancies_copy[3];                                        \
+    int side_copy, enpassant_copy, castle_copy, halfMoveClock_copy, fullMove_copy;      \
+    memcpy(bitboards_copy, bitboards, 96);                                              \
+    memcpy(occupancies_copy, occupancies, 24);                                          \
+    side_copy = side, enpassant_copy = enpassant, castle_copy = castle;                 \
+    halfMoveClock_copy = halfMoveClock, fullMove_copy = fullMove;
 
 #define TAKE_BACK()                                                       \
     memcpy(bitboards, bitboards_copy, 96);                                \
     memcpy(occupancies, occupancies_copy, 24);                            \
-    side = side_copy, enpassant = enpassant_copy, castle = castle_copy;
-
+    side = side_copy, enpassant = enpassant_copy, castle = castle_copy;   \
+    halfMoveClock = halfMoveClock_copy, fullMove = fullMove_copy;
 /*
 8   0 1 1 1 1 1 1 1
 7   0 1 1 1 1 1 1 1
@@ -811,7 +812,11 @@ static inline int makeMove(int move, int move_flag) {
         POP_BIT(bitboards[piece], sourceSquare);
         SET_BIT(bitboards[piece], targetSquare);
 
+        if(piece == p || piece == P) halfMoveClock = 0;
+        else halfMoveClock++;
+
         if (capture) {
+            halfMoveClock = 0;
             int start_piece, end_piece;
             if (side == white) {
                 start_piece = p;
@@ -879,6 +884,7 @@ static inline int makeMove(int move, int move_flag) {
         occupancies[both] |= occupancies[white];
         occupancies[both] |= occupancies[black];
 
+        if(side == black) fullMove++;
         side ^= 1;
         if (isSquareAttacked((side == white) ? getLastSignificant1stBit(bitboards[k]) : getLastSignificant1stBit(bitboards[K]), side)) {
             TAKE_BACK()
