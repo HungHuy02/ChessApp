@@ -7,7 +7,7 @@
     <string name="play_online_dec_text">Đấu với ai đó cùng cấp độ với bạn!</string>
     <string name="solve_puzzles_dec_text">Tìm bước đi đúng đắn</string>
     <string name="daily_puzzle_text">Câu đố hàng ngày</string>
-    <string name="daily_puzzles_dec_text">Đã giải bởi</string>
+    <string name="daily_puzzles_dec_text">Đã giải bởi %d</string>
     <string name="play_with_bot_text">Chơi với máy</string>
     <string name="play_with_bot_dec_text">Stockfish - Tùy Chỉnh</string>
     <string name="study_text">Học Hỏi</string>

@@ -86,7 +86,7 @@ fun ChessTopAppBar(
         },
         navigationIcon = {
             if (currentDestination?.route.equals(TopLevelDestination.Home::class.qualifiedName)) {
-                if(state.user.email == null) {
+                if(!state.isLogin) {
                     TextButton(onClick = { onClick(BottomNavAction.ClickedLogin) }) {
                         Text(
                             text = stringResource(R.string.login_text),
@@ -111,7 +111,7 @@ fun ChessTopAppBar(
         },
         actions = {
             if (currentDestination?.route.equals(TopLevelDestination.Home::class.qualifiedName)) {
-                if(state.user.email == null) {
+                if(!state.isLogin) {
                     Button(
                         onClick = { onClick(BottomNavAction.ClickedRegister) },
                         contentPadding = PaddingValues(horizontal = 4.dp),

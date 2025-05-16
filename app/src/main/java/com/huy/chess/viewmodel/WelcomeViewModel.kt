@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.base.NoAction
-import com.huy.chess.data.globalstate.UserState
 import com.huy.chess.data.network.repository.PuzzleRepository
 import com.huy.chess.data.network.repository.UserRepository
 import com.huy.chess.data.preferences.dailyPuzzleDataStore
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class WelcomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val puzzleRepository: PuzzleRepository,
-    private val userState: UserState,
     @ApplicationContext private val context: Context
 ) : BaseViewModel<WelcomeState, NoAction, WelcomeEffect>(WelcomeState.Default){
 
@@ -30,19 +28,17 @@ class WelcomeViewModel @Inject constructor(
         viewModelScope.launch {
             userRepository.getDetails()
                 .onSuccess {response ->
-                    userState.updateUser(response.name, response.email, response.avatar)
                     context.userDataStore.updateData {
                         it.toBuilder()
                             .setIsLogin(true)
                             .setName(response.name)
                             .setEmail(response.email)
-                            .setAvatar(response.avatar)
+                            .setAvatar(response.avatar ?: "")
                             .setElo(800)
                             .build()
                     }
                 }
                 .onFailure {
-                    context.userDataStore.updateData { it.toBuilder().setIsLogin(false).build() }
                 }
             puzzleRepository.getDailyPuzzle(Utils.getToday())
                 .onSuccess { dailyPuzzle ->

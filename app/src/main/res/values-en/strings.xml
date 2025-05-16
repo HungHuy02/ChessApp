@@ -8,7 +8,7 @@
     <string name="play_online_dec_text">min vs Random</string>
     <string name="solve_puzzles_dec_text">Start Your Journey!</string>
     <string name="daily_puzzle_text">Daily Puzzle</string>
-    <string name="daily_puzzles_dec_text">Solved By</string>
+    <string name="daily_puzzles_dec_text">Solved By %d</string>
     <string name="play_with_bot_text">Play Computer</string>
     <string name="play_with_bot_dec_text">Stockfish - Challenge</string>
     <string name="study_text">Take Lessons</string>
