@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.huy.chess.proto";
+option java_multiple_files = true;
+
+message DailyPuzzle {
+  string title = 1;
+  string fen = 2;
+  string moves= 3;
+  string date = 4;
+  string videoUrl = 5;
+  int32 solvedCount = 6;
+  int32 commentCount = 7;
+  bool isSolved = 8;
+}
