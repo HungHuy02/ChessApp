@@ -49,6 +49,7 @@ fun NavGraphBuilder.playDestination(
         }
         composable<SetupTwoPeople> {
             SetupTwoPeopleScreen(
+                navigatePlay = { navController.navigate(Play) },
                 popBackStack = { navController.popBackStack() }
             )
         }

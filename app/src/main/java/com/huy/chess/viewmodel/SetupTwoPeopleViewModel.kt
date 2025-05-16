@@ -23,7 +23,12 @@ class SetupTwoPeopleViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             context.setupTwoDataStore.data.collect {settings ->
-                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
+                updateState {
+                    it.copy(
+                        selectedTime = enumValues<TimeType>()[settings.selectedTime],
+                        enableRotateBoard = settings.rotateBoard
+                    )
+                }
             }
         }
     }
@@ -42,7 +47,24 @@ class SetupTwoPeopleViewModel @Inject constructor(
             is SetupTwoPeopleAction.ChangeBlackName -> updateState { it.copy(blackName = action.value) }
             is SetupTwoPeopleAction.ChangeWhiteName -> updateState { it.copy(whiteName = action.value) }
             SetupTwoPeopleAction.ClickedChange -> updateState { it.copy(blackName = it.whiteName, whiteName = it.blackName) }
-            SetupTwoPeopleAction.ChangeRotateBoard -> updateState { it.copy(enableRotateBoard = !it.enableRotateBoard) }
+            SetupTwoPeopleAction.ChangeRotateBoard -> {
+                updateState { it.copy(enableRotateBoard = !it.enableRotateBoard) }
+                viewModelScope.launch {
+                    context.setupTwoDataStore.updateData { it.toBuilder().setRotateBoard(state.value.enableRotateBoard).build() }
+                }
+            }
+            SetupTwoPeopleAction.ClickedPlay -> {
+                with(state.value) {
+                    sendEffect(
+                        SetupTwoPeopleEffect.NavigatePlay(
+                            whiteName = whiteName,
+                            blackName = blackName,
+                            time = selectedTime,
+                            enableRotate = enableRotateBoard
+                        )
+                    )
+                }
+            }
         }
     }
 }

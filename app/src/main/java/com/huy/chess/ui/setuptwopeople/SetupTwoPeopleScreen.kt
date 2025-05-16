@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import com.huy.chess.viewmodel.SetupTwoPeopleViewModel
 @Composable
 fun SetupTwoPeopleScreen(
     viewModel: SetupTwoPeopleViewModel = hiltViewModel(),
+    navigatePlay: () -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
@@ -37,6 +39,7 @@ fun SetupTwoPeopleScreen(
         viewModel.event.collect {
             when(it) {
                 SetupTwoPeopleEffect.PopBackStack -> popBackStack()
+                is SetupTwoPeopleEffect.NavigatePlay -> navigatePlay()
             }
         }
     }
@@ -90,8 +93,8 @@ private fun Content(
         )
         Spacer(modifier = Modifier.weight(1f))
         AppButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {},
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            onClick = { onAction(SetupTwoPeopleAction.ClickedPlay) },
             text = stringResource(R.string.play_text),
             iconPosition = IconPosition.NONE
         )
