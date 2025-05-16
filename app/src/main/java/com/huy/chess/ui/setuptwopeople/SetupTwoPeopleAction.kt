@@ -10,4 +10,5 @@ sealed class SetupTwoPeopleAction {
     data class ChangeBlackName(val value: String): SetupTwoPeopleAction()
     data object ClickedChange: SetupTwoPeopleAction()
     data object ChangeRotateBoard: SetupTwoPeopleAction()
+    data object ClickedPlay: SetupTwoPeopleAction()
 }
