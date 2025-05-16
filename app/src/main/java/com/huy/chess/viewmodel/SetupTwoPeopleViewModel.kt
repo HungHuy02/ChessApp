@@ -3,7 +3,7 @@ package com.huy.chess.viewmodel
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.preferences.settingsDataStore
+import com.huy.chess.data.preferences.setupTwoDataStore
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleAction
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleEffect
 import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleState
@@ -22,8 +22,8 @@ class SetupTwoPeopleViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            context.settingsDataStore.data.collect {settings ->
-                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTimeTwo]) }
+            context.setupTwoDataStore.data.collect {settings ->
+                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
             }
         }
     }
@@ -33,8 +33,8 @@ class SetupTwoPeopleViewModel @Inject constructor(
             SetupTwoPeopleAction.ClickedBack -> sendEffect(SetupTwoPeopleEffect.PopBackStack)
             is SetupTwoPeopleAction.ClickedButton -> {
                 viewModelScope.launch {
-                    context.settingsDataStore.updateData {
-                        it.toBuilder().setSelectedTimeTwo(action.timeType.ordinal).build()
+                    context.setupTwoDataStore.updateData {
+                        it.toBuilder().setSelectedTime(action.timeType.ordinal).build()
                     }
                 }
             }
