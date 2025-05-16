@@ -71,7 +71,7 @@ private fun Content(
             ) {
                 item {
                     HomeItems(
-                        fen = Constants.START_FEN,
+                        fen = state.onlineFen,
                         list = list,
                         title = stringResource(R.string.play_online_text),
                         description = stringResource(R.string.play_online_dec_text),
@@ -82,7 +82,7 @@ private fun Content(
 
                 item {
                     HomeItems(
-                        fen = Constants.START_FEN,
+                        fen = state.puzzleFen,
                         list = list,
                         title = stringResource(R.string.solve_puzzles_text),
                         description = stringResource(R.string.solve_puzzles_dec_text),
@@ -93,10 +93,10 @@ private fun Content(
 
                 item {
                     HomeItems(
-                        fen = Constants.START_FEN,
+                        fen = state.dailyPuzzleFen,
                         list = list,
                         title = stringResource(R.string.daily_puzzle_text),
-                        description = stringResource(R.string.daily_puzzles_dec_text),
+                        description = stringResource(R.string.daily_puzzles_dec_text, state.totalSolved),
                         icon = R.drawable.dailypuzzle,
                         onClick = { onAction(HomeAction.ClickedDailyPuzzle) }
                     )
@@ -104,7 +104,7 @@ private fun Content(
 
                 item {
                     HomeItems(
-                        fen = Constants.START_FEN,
+                        fen = state.botFen,
                         list = list,
                         title = stringResource(R.string.play_with_bot_text),
                         description = stringResource(R.string.play_with_bot_dec_text),

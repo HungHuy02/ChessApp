@@ -1,23 +1,25 @@
 package com.huy.chess.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.globalstate.UserState
-import com.huy.chess.data.network.repository.AuthRepository
-import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.network.repository.AuthRepository
+import com.huy.chess.data.preferences.userDataStore
+import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.ui.login.LoginAction
 import com.huy.chess.ui.login.LoginEffect
 import com.huy.chess.ui.login.LoginState
 import com.huy.chess.utils.Constants
 import com.huy.chess.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userState: UserState,
+    @ApplicationContext private val context: Context,
     private val authRepository: AuthRepository,
     private val dataStoreService: DataStoreService
 ) :
@@ -43,7 +45,15 @@ class LoginViewModel @Inject constructor(
                 val loginRequest = LoginRequest(state.value.account, state.value.password)
                 authRepository.login(loginRequest)
                     .onSuccess {
-                        userState.updateUser(it.name, it.email, it.avatar)
+                        context.userDataStore.updateData {user ->
+                            user.toBuilder()
+                                .setIsLogin(true)
+                                .setName(it.name)
+                                .setEmail(it.email)
+                                .setAvatar(it.avatar)
+                                .setElo(800)
+                                .build()
+                        }
                         dataStoreService.setAccessToken(Utils.encodeAESCBC(it.accessToken, Constants.ACCESS_TOKEN_ALIAS))
                         dataStoreService.setRefreshToken(Utils.encodeAESCBC(it.refreshToken, Constants.REFRESH_TOKEN_ALIAS))
                         sendEffect(LoginEffect.NavigateToHome)

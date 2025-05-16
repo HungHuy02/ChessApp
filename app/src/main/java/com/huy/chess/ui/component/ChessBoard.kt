@@ -981,9 +981,7 @@ fun ChessBoard(
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val density = LocalDensity.current.density
     val boardSizeDp = configuration.screenWidthDp / 3
-    val boardSize = (boardSizeDp * density).toInt()
     val boardBitmap = remember { Utils.loadBitmap(context, R.drawable.chess_board) }
     val rows = fen.split(" ")[0].split("/")
     Box(
