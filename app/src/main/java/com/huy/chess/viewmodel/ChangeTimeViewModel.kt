@@ -2,9 +2,8 @@ package com.huy.chess.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.preferences.settingsDataStore
+import com.huy.chess.data.preferences.changeTimeDataStore
 import com.huy.chess.ui.changetime.ChangeTimeAction
 import com.huy.chess.ui.changetime.ChangeTimeEffect
 import com.huy.chess.ui.changetime.ChangeTimeState
@@ -21,8 +20,14 @@ class ChangeTimeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            context.settingsDataStore.data.collect {settings ->
-                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
+            context.changeTimeDataStore.data.collect {settings ->
+                updateState {
+                    it.copy(
+                        selectedTime = enumValues<TimeType>()[settings.selectedTime],
+                        initTime = settings.initTime,
+                        plusTime = settings.plusTime
+                    )
+                }
             }
         }
     }
@@ -33,7 +38,7 @@ class ChangeTimeViewModel @Inject constructor(
             is ChangeTimeAction.ClickedButton -> {
                 updateState { it.copy(selectedTime = action.selectedTime) }
                 viewModelScope.launch {
-                    context.settingsDataStore.updateData {
+                    context.changeTimeDataStore.updateData {
                         it.toBuilder().setSelectedTime(action.selectedTime.ordinal).build()
                     }
                 }

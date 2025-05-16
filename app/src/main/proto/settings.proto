@@ -4,9 +4,25 @@ option java_package = "com.huy.chess.proto";
 option java_multiple_files = true;
 
 message Settings {
+
+}
+
+message ChangeTimeSettings {
   int32 selectedTime = 1;
-  int32 selectedTimeBot = 2;
-  int32 selectedTimeTwo = 3;
+  int32 initTime = 2;
+  int32 plusTime = 3;
+}
+
+message SetupBotSettings {
+  int32 level = 1;
+  int32 selectedTime = 2;
+  bool enableSuggest = 3;
+  bool enableTakeBack = 4;
+}
+
+message SetupTwoSettings {
+  int32 selectedTime = 1;
+  bool rotateBoard = 2;
 }
 
 message Language {

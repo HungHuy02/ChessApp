@@ -3,7 +3,7 @@ package com.huy.chess.viewmodel
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.preferences.settingsDataStore
+import com.huy.chess.data.preferences.changeTimeDataStore
 import com.huy.chess.ui.newgame.NewGameAction
 import com.huy.chess.ui.newgame.NewGameEffect
 import com.huy.chess.ui.newgame.NewGameState
@@ -20,7 +20,7 @@ class NewGameViewModel @Inject constructor(
     BaseViewModel<NewGameState, NewGameAction, NewGameEffect>(NewGameState()) {
     init {
         viewModelScope.launch {
-            context.settingsDataStore.data.collect { settings ->
+            context.changeTimeDataStore.data.collect { settings ->
                 updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
             }
         }

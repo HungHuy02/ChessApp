@@ -180,7 +180,10 @@ private fun Content(
                         painter = painterResource(R.drawable.build_24px),
                         text = stringResource(R.string.custom_text)
                     )
-                    CustomTimeSelect()
+                    CustomTimeSelect(
+                        initTime = state.initTime,
+                        plusTime = state.plusTime
+                    )
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.huy.chess.viewmodel
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.preferences.settingsDataStore
+import com.huy.chess.data.preferences.setupBotDataStore
 import com.huy.chess.ui.setupbot.SetupBotAction
 import com.huy.chess.ui.setupbot.SetupBotEffect
 import com.huy.chess.ui.setupbot.SetupBotState
@@ -20,8 +20,8 @@ class SetupBotViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            context.settingsDataStore.data.collect {settings ->
-                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTimeBot]) }
+            context.setupBotDataStore.data.collect {settings ->
+                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
             }
         }
     }
@@ -31,8 +31,8 @@ class SetupBotViewModel @Inject constructor(
             SetupBotAction.ClickedBack -> sendEffect(SetupBotEffect.PopBackStack)
             is SetupBotAction.ClickedButton -> {
                 viewModelScope.launch {
-                    context.settingsDataStore.updateData {
-                        it.toBuilder().setSelectedTimeBot(action.timeType.ordinal).build()
+                    context.setupBotDataStore.updateData {
+                        it.toBuilder().setSelectedTime(action.timeType.ordinal).build()
                     }
                 }
             }

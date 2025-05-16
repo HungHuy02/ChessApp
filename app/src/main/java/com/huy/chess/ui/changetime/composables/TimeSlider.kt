@@ -24,11 +24,12 @@ import com.huy.chess.R
 @Composable
 fun TimeSlider(
     modifier: Modifier = Modifier,
+    time: Float,
     maxSelect: Float,
     isInitialTime: Boolean
 ) {
     var sliderPosition by remember {
-        mutableFloatStateOf(0f)
+        mutableFloatStateOf(time)
     }
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Text(

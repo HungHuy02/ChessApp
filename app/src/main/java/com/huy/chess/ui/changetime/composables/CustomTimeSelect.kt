@@ -16,7 +16,11 @@ import com.huy.chess.utils.Constants
 import com.huy.chess.R
 
 @Composable
-fun CustomTimeSelect(modifier: Modifier = Modifier) {
+fun CustomTimeSelect(
+    modifier: Modifier = Modifier,
+    initTime: Int,
+    plusTime: Int
+) {
     Card(
         onClick = {},
         shape = MaterialTheme.shapes.medium,
@@ -25,8 +29,16 @@ fun CustomTimeSelect(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            TimeSlider(maxSelect = Constants.MAX_TIME_SELECT, isInitialTime = true)
-            TimeSlider(maxSelect = Constants.MAX_BONUS_TIME_SELECT, isInitialTime = false)
+            TimeSlider(
+                maxSelect = Constants.MAX_TIME_SELECT,
+                time = initTime.toFloat(),
+                isInitialTime = true
+            )
+            TimeSlider(
+                maxSelect = Constants.MAX_BONUS_TIME_SELECT,
+                time = plusTime.toFloat(),
+                isInitialTime = false
+            )
             Button(
                 onClick = {},
                 shape = MaterialTheme.shapes.small,
