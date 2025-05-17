@@ -87,6 +87,7 @@ fun getChessPieceBitmap(context: Context): List<Bitmap> {
 @Composable
 fun ChessBoard(
     modifier: Modifier = Modifier,
+    autoRotate: Boolean = false,
     onCapture: (Char) -> Unit = {},
     onMove: (String) -> Unit = {},
     onResult: (Int, Boolean) -> Unit = {_,_ -> }

@@ -18,6 +18,7 @@ import com.huy.chess.ui.play.composables.Timer
 import com.huy.chess.viewmodel.PlayViewModel
 import com.huy.chess.R
 import com.huy.chess.ui.component.CapturedPiece
+import com.huy.chess.ui.play.composables.PlayerArea
 import com.huy.chess.utils.enums.GameResult
 
 @Composable
@@ -48,7 +49,7 @@ private fun Content(
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        val (topBar, pane, board, capture, timerTop, timerBottom, bar) = createRefs()
+        val (topBar, pane, board, playerTop, playerBottom, timerTop, timerBottom, bar) = createRefs()
         ChessTopAppBar(
             title = stringResource(R.string.app_name),
             onClickBack = { onAction(PlayAction.ClickedBackButton) },
@@ -69,7 +70,19 @@ private fun Content(
             }
         )
 
+        PlayerArea(
+            name = "Test",
+            map = state.capturedPiece,
+            side = !state.bottomSide,
+            modifier = Modifier.constrainAs(playerTop) {
+                top.linkTo(pane.bottom)
+                start.linkTo(parent.start, margin = 24.dp)
+                bottom.linkTo(board.top)
+            }
+        )
+
         ChessBoard(
+            autoRotate = false,
             onCapture = { onAction(PlayAction.PieceCaptured(it)) },
             onMove = { onAction(PlayAction.Move(it)) },
             onResult = { result, whiteSide -> onAction(PlayAction.Result(result, whiteSide)) },
@@ -80,13 +93,15 @@ private fun Content(
                 }
         )
 
-        CapturedPiece(
+        PlayerArea(
+            name = "Test",
             map = state.capturedPiece,
-            modifier = Modifier
-                .constrainAs(capture) {
-                    top.linkTo(board.bottom, margin = 16.dp)
-                    start.linkTo(parent.start, margin = 16.dp)
-                }
+            side = state.bottomSide,
+            modifier = Modifier.constrainAs(playerBottom) {
+                top.linkTo(board.bottom)
+                start.linkTo(parent.start, margin = 24.dp)
+                bottom.linkTo(bar.top)
+            }
         )
 
         Timer(
