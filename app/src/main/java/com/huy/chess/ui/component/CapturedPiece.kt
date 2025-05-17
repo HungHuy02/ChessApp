@@ -20,7 +20,7 @@ fun CapturedPiece(
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current.density
     val boardSize = (configuration.screenWidthDp * density).toInt()
-    val cellSize = boardSize / 14
+    val cellSize = boardSize / 22
     val pieceSize = cellSize / 3f
 
     val list = remember { getChessPiecePainters(context, cellSize) }
@@ -56,16 +56,15 @@ fun CapturedPiece(
 fun CapturedPiece(
     modifier: Modifier = Modifier,
     map: MutableMap<Char, Int>,
+    list: List<ImageBitmap>,
     side: Boolean
 ) {
-    val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current.density
     val boardSize = (configuration.screenWidthDp * density).toInt()
-    val cellSize = boardSize / 14
+    val cellSize = boardSize / 22
     val pieceSize = cellSize / 3f
 
-    val list = remember { getChessPiecePainters(context, cellSize) }
     Canvas(modifier = modifier) {
         var currentX = - (pieceSize * 2)
         if(side)
