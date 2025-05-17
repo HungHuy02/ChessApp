@@ -52,6 +52,49 @@ fun CapturedPiece(
     }
 }
 
+@Composable
+fun CapturedPiece(
+    modifier: Modifier = Modifier,
+    map: MutableMap<Char, Int>,
+    side: Boolean
+) {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current.density
+    val boardSize = (configuration.screenWidthDp * density).toInt()
+    val cellSize = boardSize / 14
+    val pieceSize = cellSize / 3f
+
+    val list = remember { getChessPiecePainters(context, cellSize) }
+    Canvas(modifier = modifier) {
+        var currentX = - (pieceSize * 2)
+        if(side)
+            listOf('P', 'N', 'B', 'R', 'Q').forEach { pieceType ->
+                map[pieceType]?.let { count ->
+                    currentX = drawPiece(
+                        count = count,
+                        imageBitmap = list[getPieceDrawableId(pieceType)],
+                        x = currentX,
+                        y = 0f,
+                        distance = pieceSize
+                    )
+                }
+            }
+        else
+            listOf('p', 'n', 'b', 'r', 'q').forEach { pieceType ->
+                map[pieceType]?.let { count ->
+                    currentX = drawPiece(
+                        count = count,
+                        imageBitmap = list[getPieceDrawableId(pieceType)],
+                        x = currentX,
+                        y = 0f,
+                        distance = pieceSize
+                    )
+                }
+            }
+    }
+}
+
 fun DrawScope.drawPiece(
     count: Int,
     imageBitmap: ImageBitmap,
