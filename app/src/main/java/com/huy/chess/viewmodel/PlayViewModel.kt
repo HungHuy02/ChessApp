@@ -21,7 +21,6 @@ class PlayViewModel @Inject constructor() :
 
     override fun processAction(action: PlayAction) {
         when(action) {
-            PlayAction.ClickedAdd -> {}
             PlayAction.ClickedBack -> {}
             PlayAction.ClickedForward -> {}
             PlayAction.ClickedMore -> sendEffect(PlayEffect.ShowPlayOptionsDialog)
@@ -48,6 +47,7 @@ class PlayViewModel @Inject constructor() :
                 }
                 sendEffect(PlayEffect.ShowEndGameDialog(gameResult))
             }
+            PlayAction.ClickedAnalysis -> {}
         }
     }
 }

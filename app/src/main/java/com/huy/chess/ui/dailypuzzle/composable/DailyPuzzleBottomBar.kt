@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
-import com.huy.chess.ui.play.PlayAction
 import com.huy.chess.ui.theme.ChessGlyphFontFamily
 import com.huy.chess.utils.enums.PuzzleStatus
 
@@ -118,31 +117,26 @@ fun PlayScreenBottomBarItem(
 
 sealed class PlayScreenBottomBarItem(
     @DrawableRes val icon: Int,
-    @StringRes val label: Int,
-    val playAction: PlayAction
+    @StringRes val label: Int
 ) {
     data object Options : PlayScreenBottomBarItem(
         icon = R.drawable.format_list_bulleted_24px,
-        label = R.string.more_options_text,
-        playAction = PlayAction.ClickedMore
+        label = R.string.more_options_text
     )
 
     data object Add : PlayScreenBottomBarItem(
         icon = R.drawable.add_24px,
-        label = R.string.more_options_text,
-        playAction = PlayAction.ClickedAdd
+        label = R.string.more_options_text
     )
 
     data object Back : PlayScreenBottomBarItem(
         icon = R.drawable.chevron_left_24px,
-        label = R.string.back_text,
-        playAction = PlayAction.ClickedBack
+        label = R.string.back_text
     )
 
     data object Forward : PlayScreenBottomBarItem(
         icon = R.drawable.chevron_right_24px,
-        label = R.string.forward_text,
-        playAction = PlayAction.ClickedForward
+        label = R.string.forward_text
     )
 
     companion object {

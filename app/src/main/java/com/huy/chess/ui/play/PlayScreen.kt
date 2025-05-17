@@ -21,7 +21,6 @@ import com.huy.chess.ui.component.NotationPane
 import com.huy.chess.ui.component.getChessPiecePainters
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.PlayerArea
-import com.huy.chess.ui.play.composables.Timer
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.viewmodel.PlayViewModel
 
@@ -61,7 +60,7 @@ private fun Content(
     ) {
         val (topBar, pane, board, playerTop, playerBottom, bar) = createRefs()
         ChessTopAppBar(
-            title = stringResource(R.string.app_name),
+            title = stringResource(R.string.pass_and_play_text),
             onClickBack = { onAction(PlayAction.ClickedBackButton) },
             modifier = Modifier.constrainAs(topBar) {
                 top.linkTo(parent.top)
