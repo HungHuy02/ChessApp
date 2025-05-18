@@ -60,6 +60,7 @@ private fun Content(
             title = stringResource(R.string.pass_and_play_text),
             onClickBack = { onAction(SetupTwoPeopleAction.ClickedBack) }
         )
+        Spacer(Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.play_with_friend_offline),
             style = MaterialTheme.typography.labelMedium,
