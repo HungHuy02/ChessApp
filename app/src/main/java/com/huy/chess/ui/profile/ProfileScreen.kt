@@ -66,7 +66,7 @@ private fun Content(
             onClickBack = {
                 onAction(ProfileAction.ClickedBack)
             },
-            action = {
+            onAction = {
                 Icon(
                     painter = painterResource(R.drawable.qr_code_24px),
                     contentDescription = "qr icon",

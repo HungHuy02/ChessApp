@@ -60,11 +60,11 @@ private fun Content(onAction: (FriendsAction) -> Unit) {
         ChessTopAppBar(
             onClickBack = { onAction(FriendsAction.ClickedBack) },
             title = stringResource(R.string.friend_text),
-            action = {
+            onAction = {
                 Icon(
                     painter = painterResource(R.drawable.qr_code_24px),
                     contentDescription = "qr icon",
-                    modifier = Modifier.align(Alignment.CenterEnd)
+                    modifier = Modifier
                         .clickable {
                             onAction(FriendsAction.ClickedQR)
                         }
