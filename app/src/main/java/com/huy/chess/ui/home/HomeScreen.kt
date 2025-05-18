@@ -1,16 +1,20 @@
 package com.huy.chess.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,6 +25,7 @@ import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.getChessPieceBitmap
 import com.huy.chess.ui.home.composables.HomeItems
 import com.huy.chess.utils.Constants
+import com.huy.chess.utils.Utils
 import com.huy.chess.viewmodel.HomeViewModel
 
 @Composable
@@ -38,7 +43,7 @@ fun HomeScreen(
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.event.collect {
-            when(it) {
+            when (it) {
                 HomeEffect.NavigateDailyPuzzle -> navigateToDailyPuzzle()
                 HomeEffect.NavigateGameArchive -> navigateToGameArchive()
                 HomeEffect.NavigateHistory -> navigateToHistory()
@@ -60,19 +65,24 @@ private fun Content(
 ) {
     val context = LocalContext.current
     val list = remember { getChessPieceBitmap(context) }
+    val configuration = LocalConfiguration.current
+    val boardSizeDp = configuration.screenWidthDp / 4
+    val boardBitmap = remember { Utils.loadBitmap(context, R.drawable.chess_board) }
     Column(
         modifier = Modifier
-            .padding(start = 16.dp, top = 16.dp, end = 16.dp)
+            .padding(top = 16.dp)
     ) {
-        if(!state.isLogin)
-            LazyColumn (
+        if (!state.isLogin)
+            LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).padding(horizontal = 16.dp)
             ) {
                 item {
                     HomeItems(
                         fen = state.onlineFen,
                         list = list,
+                        boardSizeDp = boardSizeDp,
+                        boardBitmap = boardBitmap,
                         title = stringResource(R.string.play_online_text),
                         description = stringResource(R.string.play_online_dec_text),
                         icon = R.drawable.playwhite_cea685ba,
@@ -84,6 +94,8 @@ private fun Content(
                     HomeItems(
                         fen = state.puzzleFen,
                         list = list,
+                        boardSizeDp = boardSizeDp,
+                        boardBitmap = boardBitmap,
                         title = stringResource(R.string.solve_puzzles_text),
                         description = stringResource(R.string.solve_puzzles_dec_text),
                         icon = R.drawable.puzzles,
@@ -95,8 +107,13 @@ private fun Content(
                     HomeItems(
                         fen = state.dailyPuzzleFen,
                         list = list,
+                        boardSizeDp = boardSizeDp,
+                        boardBitmap = boardBitmap,
                         title = stringResource(R.string.daily_puzzle_text),
-                        description = stringResource(R.string.daily_puzzles_dec_text, state.totalSolved),
+                        description = stringResource(
+                            R.string.daily_puzzles_dec_text,
+                            state.totalSolved
+                        ),
                         icon = R.drawable.dailypuzzle,
                         onClick = { onAction(HomeAction.ClickedDailyPuzzle) }
                     )
@@ -106,6 +123,8 @@ private fun Content(
                     HomeItems(
                         fen = state.botFen,
                         list = list,
+                        boardSizeDp = boardSizeDp,
+                        boardBitmap = boardBitmap,
                         title = stringResource(R.string.play_with_bot_text),
                         description = stringResource(R.string.play_with_bot_dec_text),
                         icon = R.drawable.stockfish,
@@ -117,6 +136,8 @@ private fun Content(
                     HomeItems(
                         fen = Constants.START_FEN,
                         list = list,
+                        boardSizeDp = boardSizeDp,
+                        boardBitmap = boardBitmap,
                         title = stringResource(R.string.study_text),
                         description = stringResource(R.string.study_dec_text),
                         icon = R.drawable.lessons,
@@ -124,15 +145,23 @@ private fun Content(
                     )
                 }
             }
-        else {}
+        else {
+        }
 
-        AppButton(
-            onClick = { onAction(HomeAction.ClickedPlay) },
-            text = stringResource(R.string.play_text),
-            textColor = Color.White,
-            iconPosition = IconPosition.NONE,
-            modifier = Modifier.fillMaxWidth()
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(top = 8.dp)
+        ) {
+            AppButton(
+                onClick = { onAction(HomeAction.ClickedPlay) },
+                text = stringResource(R.string.play_text),
+                textColor = Color.White,
+                iconPosition = IconPosition.NONE,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            )
+        }
     }
 }
 

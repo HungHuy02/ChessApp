@@ -24,6 +24,8 @@ import com.huy.chess.ui.component.ChessBoard
 fun HomeItems(
     fen: String,
     list: List<Bitmap>,
+    boardSizeDp: Int,
+    boardBitmap: Bitmap,
     title: String,
     description: String,
     @DrawableRes icon: Int,
@@ -37,7 +39,12 @@ fun HomeItems(
             onClick()
         }
     ) {
-        ChessBoard(list = list, fen = fen)
+        ChessBoard(
+            list = list,
+            fen = fen,
+            boardSizeDp = boardSizeDp,
+            boardBitmap = boardBitmap,
+        )
         Column(modifier = Modifier.padding(start = 16.dp)) {
             Text(
                 text = title,
