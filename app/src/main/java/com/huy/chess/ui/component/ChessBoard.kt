@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
@@ -260,74 +261,78 @@ fun ChessBoard(
             )
     ) {
         val cellSize = size.width / 8
-        drawImage(
-            image = boardBitmap,
-            topLeft = Offset(0f, 0f)
-        )
-        selectedPiece?.let {
-            drawRect(
-                color = Color.Yellow.copy(alpha = 0.5f),
-                topLeft = Offset(it.y * cellSize, it.x * cellSize),
-                size = Size(cellSize, cellSize)
+        val haflCellSize = cellSize / 2
+        val (pieceRotate, boardRotate) = if(!whiteSide && autoRotate) 0f to 180f else if (!whiteSide && !autoRotate) 180f to 0f else 0f to 0f
+        rotate(boardRotate) {
+            drawImage(
+                image = boardBitmap,
+                topLeft = Offset(0f, 0f)
             )
-        }
-        for(spot in movedSpot) {
-            drawRect(
-                color = Color.Yellow.copy(alpha = 0.5f),
-                topLeft = Offset(spot.y * cellSize, spot.x * cellSize),
-                size = Size(cellSize, cellSize)
-            )
-        }
-
-        for(square in specificPieceMoves) {
-            val col = square % 8
-            val row = square / 8
-
-            val centerX = col * cellSize + cellSize / 2
-            val centerY = row * cellSize + cellSize / 2
-
-            if (board[row][col].piece == ' ') {
-                drawCircle(
-                    color = Color.White,
-                    radius = cellSize / 6,
-                    center = Offset(centerX, centerY)
-                )
-            } else {
-                drawCircle(
-                    color = Color.White,
-                    radius = cellSize / 2.5f,
-                    center = Offset(centerX, centerY),
-                    style = Stroke(width = cellSize / 12)
+            selectedPiece?.let {
+                drawRect(
+                    color = Color.Yellow.copy(alpha = 0.5f),
+                    topLeft = Offset(it.y * cellSize, it.x * cellSize),
+                    size = Size(cellSize, cellSize)
                 )
             }
-        }
+            for(spot in movedSpot) {
+                drawRect(
+                    color = Color.Yellow.copy(alpha = 0.5f),
+                    topLeft = Offset(spot.y * cellSize, spot.x * cellSize),
+                    size = Size(cellSize, cellSize)
+                )
+            }
 
-        for (row in 0 until 8) {
-            for (col in 0 until 8) {
-                val piece = board[row][col]
-                if (piece.piece != ' ') {
-                    val isMovingPiece = selectedPiece == piece && isMoving
-                    val offset = if (isMovingPiece) pieceOffset.value else Offset(col * cellSize, row * cellSize)
+            for(square in specificPieceMoves) {
+                val col = square % 8
+                val row = square / 8
 
-                    drawImage(
-                        image = list[getPieceDrawableId(piece.piece)],
-                        topLeft = offset
+                val centerX = col * cellSize + cellSize / 2
+                val centerY = row * cellSize + cellSize / 2
+
+                if (board[row][col].piece == ' ') {
+                    drawCircle(
+                        color = Color.White,
+                        radius = cellSize / 6,
+                        center = Offset(centerX, centerY)
+                    )
+                } else {
+                    drawCircle(
+                        color = Color.White,
+                        radius = cellSize / 2.5f,
+                        center = Offset(centerX, centerY),
+                        style = Stroke(width = cellSize / 12)
                     )
                 }
             }
-        }
-        if(isPromoting) {
-            drawPawnPromoteSelection(
-                promotionPair = promotionPair,
-                whiteSide = whiteSide,
-                cellSize = cellSize,
-                list = list
+            for (row in 0 until 8) {
+                for (col in 0 until 8) {
+                    val piece = board[row][col]
+                    if (piece.piece != ' ') {
+                        val isMovingPiece = selectedPiece == piece && isMoving
+                        val offset = if (isMovingPiece) pieceOffset.value else Offset(col * cellSize, row * cellSize)
+                        rotate(pieceRotate, offset + Offset(haflCellSize, haflCellSize)) {
+                            drawImage(
+                                image = list[getPieceDrawableId(piece.piece)],
+                                topLeft = offset
+                            )
+                        }
+                    }
+                }
+            }
+            if(isPromoting) {
+                drawPawnPromoteSelection(
+                    promotionPair = promotionPair,
+                    whiteSide = whiteSide,
+                    cellSize = cellSize,
+                    list = list
+                )
+            }
+            drawPath(
+                path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
+                color = Color.Green
             )
         }
-        drawPath(
-            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
-            color = Color.Green
-        )
     }
 }
 

@@ -67,7 +67,7 @@ fun CapturedPiece(
 
     Canvas(modifier = modifier) {
         var currentX = - (pieceSize * 2)
-        if(side)
+        if(!side)
             listOf('P', 'N', 'B', 'R', 'Q').forEach { pieceType ->
                 map[pieceType]?.let { count ->
                     currentX = drawPiece(

@@ -80,7 +80,8 @@ private fun Content(
         )
 
         PlayerArea(
-            name = "Test",
+            name = state.topName,
+            avatar = state.topAvatar,
             map = state.capturedPiece,
             side = !state.bottomSide,
             list = list,
@@ -92,7 +93,7 @@ private fun Content(
         )
 
         ChessBoard(
-            autoRotate = false,
+            autoRotate = state.autoRotate,
             onCapture = { onAction(PlayAction.PieceCaptured(it)) },
             onMove = { onAction(PlayAction.Move(it)) },
             onResult = { result, whiteSide -> onAction(PlayAction.Result(result, whiteSide)) },
@@ -104,7 +105,8 @@ private fun Content(
         )
 
         PlayerArea(
-            name = "Test",
+            name = state.bottomName,
+            avatar = state.bottomAvatar,
             map = state.capturedPiece,
             side = state.bottomSide,
             list = list,
@@ -115,26 +117,9 @@ private fun Content(
             }
         )
 
-//        Timer(
-//            time = 0,
-//            isWhite = true,
-//            modifier = Modifier.constrainAs(timerTop) {
-//                top.linkTo(board.bottom, margin = 10.dp)
-//                end.linkTo(parent.end)
-//            }
-//        )
-//
-//        Timer(
-//            time = 0,
-//            isWhite = false,
-//            modifier = Modifier.constrainAs(timerBottom) {
-//                top.linkTo(timerTop.bottom, margin = 10.dp)
-//                end.linkTo(timerTop.end)
-//            }
-//        )
-
         PlayScreenBottomBar(
             onClick = onAction,
+            isEnd = state.isEnd,
             modifier = Modifier.constrainAs(bar) {
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
