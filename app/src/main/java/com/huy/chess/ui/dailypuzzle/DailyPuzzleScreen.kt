@@ -47,7 +47,7 @@ private fun Content(
         val (topBar, pane, board, description, bar) = createRefs()
         ChessTopAppBar(
             title = state.title,
-            action = {  },
+            onAction = {  },
             onClickBack = { onAction(DailyPuzzleAction.ClickedBackButton) },
             modifier = Modifier.constrainAs(topBar) {
                 top.linkTo(parent.top)

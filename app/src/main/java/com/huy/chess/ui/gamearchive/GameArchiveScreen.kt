@@ -41,14 +41,14 @@ private fun Content(onAction: (GameArchiveAction) -> Unit) {
                 onAction(GameArchiveAction.ClickedBack)
             },
             title = stringResource(R.string.game_archive_text),
-            action = {
+            onAction = {
                 Icon(
                     painter = painterResource(R.drawable.search_24px),
                     contentDescription = "search icon",
-                    modifier = Modifier.align(Alignment.CenterEnd).
-                    clickable {
-                        onAction(GameArchiveAction.ClickedSearch)
-                    }
+                    modifier = Modifier
+                        .clickable {
+                            onAction(GameArchiveAction.ClickedSearch)
+                        }
                 )
             }
         )

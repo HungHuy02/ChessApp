@@ -1,13 +1,18 @@
 package com.huy.chess.ui.solvepuzzles
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,6 +21,7 @@ import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.solvepuzzles.composable.PuzzleBottomBar
 import com.huy.chess.ui.solvepuzzles.composable.PuzzleDescription
+import com.huy.chess.ui.theme.ChessGlyphFontFamily
 import com.huy.chess.viewmodel.SolvePuzzlesViewModel
 
 @Composable
@@ -44,10 +50,23 @@ private fun Content(
     ) {
         val (topBar, des, board, bottomBar) = createRefs()
         ChessTopAppBar(
-            onClickSettings = {},
             onClickBack = { onAction(SolvePuzzlesAction.ClickedBack) },
             title = stringResource(R.string.puzzle_text),
             icon = painterResource(R.drawable.puzzles),
+            onAction = {
+                Text(
+                    text = "\u00B7",
+                    fontFamily = ChessGlyphFontFamily,
+                    fontSize = 18.sp,
+                    modifier = Modifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) {
+
+                        }
+                )
+            },
             modifier = Modifier.constrainAs(topBar) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)

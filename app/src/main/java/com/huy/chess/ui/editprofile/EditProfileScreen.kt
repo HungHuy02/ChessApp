@@ -18,12 +18,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.editprofile.composable.TextWithRightIcon
 import com.huy.chess.ui.editprofile.composable.TextWithTextField
+import com.huy.chess.ui.theme.ChessGlyphFontFamily
 import com.huy.chess.viewmodel.EditProfileViewModel
 
 @Composable
@@ -51,10 +53,20 @@ private fun Content(
 ) {
     Column {
         ChessTopAppBar(
-            onClick = { onAction(EditProfileAction.ClickedLeft) },
+            onClickBack = { onAction(EditProfileAction.ClickedLeft) },
             title = stringResource(R.string.edit_profile_text),
-            isVerify = state.isVerify,
-            onClickDone = { onAction(EditProfileAction.ClickedDone) }
+            onAction = {
+                if(state.isVerify) {
+                    Text(
+                        text = "\u1F30",
+                        fontFamily = ChessGlyphFontFamily,
+                        fontSize = 20.sp,
+                        modifier = Modifier.clickable {
+                            onAction(EditProfileAction.ClickedDone)
+                        }
+                    )
+                }
+            }
         )
         Column {
             Row(
