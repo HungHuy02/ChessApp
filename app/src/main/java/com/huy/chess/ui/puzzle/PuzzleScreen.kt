@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -24,6 +25,7 @@ import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.getChessPieceBitmap
 import com.huy.chess.utils.Constants
+import com.huy.chess.utils.Utils
 import com.huy.chess.viewmodel.PuzzleViewModel
 
 @Composable
@@ -51,11 +53,19 @@ private fun Content(
 ) {
     val context = LocalContext.current
     val list = remember { getChessPieceBitmap(context) }
+    val configuration = LocalConfiguration.current
+    val boardSizeDp = configuration.screenWidthDp
+    val boardBitmap = remember { Utils.loadBitmap(context, R.drawable.chess_board) }
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        ChessBoard(list = list, fen = Constants.START_FEN)
+        ChessBoard(
+            list = list,
+            fen = Constants.START_FEN,
+            boardSizeDp = boardSizeDp,
+            boardBitmap = boardBitmap
+        )
         Column (
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier

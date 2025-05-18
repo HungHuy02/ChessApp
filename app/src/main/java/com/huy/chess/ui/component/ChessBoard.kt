@@ -983,12 +983,10 @@ fun createKnightArrowPath(x: Float, y: Float, spotSize: Float) : Path {
 fun ChessBoard(
     modifier: Modifier = Modifier,
     list: List<Bitmap>,
-    fen: String
+    fen: String,
+    boardSizeDp: Int,
+    boardBitmap: Bitmap
 ) {
-    val context = LocalContext.current
-    val configuration = LocalConfiguration.current
-    val boardSizeDp = configuration.screenWidthDp / 3
-    val boardBitmap = remember { Utils.loadBitmap(context, R.drawable.chess_board) }
     val rows = fen.split(" ")[0].split("/")
     Box(
         contentAlignment = Alignment.Center,
