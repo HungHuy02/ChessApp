@@ -33,11 +33,22 @@ class PlayViewModel @Inject constructor() :
                 }
             }
             is PlayAction.Move -> updateState {
-                val notation = state.value.notationList.toMutableList()
+                val notation = it.notationList.toMutableList()
                 notation.add(action.move)
-                it.copy(notationList = notation)
+                if(it.autoRotate)
+                    it.copy(
+                        notationList = notation,
+                        topName = it.bottomName,
+                        bottomName = it.topName,
+                        topAvatar = it.bottomAvatar,
+                        bottomAvatar = it.topAvatar,
+                        bottomSide = !it.bottomSide
+                    )
+                else
+                    it.copy(notationList = notation)
             }
             is PlayAction.Result -> {
+                updateState { it.copy(isEnd = true) }
                 val gameResult = when(action.result) {
                     2 -> if(action.whiteSide) GameResult.WIN_CHECKMATE else GameResult.LOSE_CHECKMATE
                     3 -> GameResult.DRAW_STALEMATE
