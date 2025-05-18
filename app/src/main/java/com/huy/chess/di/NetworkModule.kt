@@ -17,6 +17,7 @@ import com.huy.chess.BuildConfig
 import com.huy.chess.data.network.AuthInterceptor
 import com.huy.chess.data.network.api.PuzzleApi
 import com.huy.chess.data.network.api.UserApi
+import java.util.concurrent.TimeUnit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -57,6 +58,8 @@ object NetworkModule {
         tokenAuthenticator: TokenAuthenticator
     ) : OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(false)
             .addInterceptor(authInterceptor)
             .addInterceptor(httpLoggingInterceptor)
             .authenticator(tokenAuthenticator)
