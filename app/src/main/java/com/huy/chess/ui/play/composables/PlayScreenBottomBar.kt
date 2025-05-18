@@ -1,8 +1,11 @@
 package com.huy.chess.ui.play.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,6 +15,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.huy.chess.R
 import com.huy.chess.ui.play.PlayAction
@@ -26,6 +30,7 @@ fun PlayScreenBottomBar(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         PlayScreenBottomBarItem(
             icon = "\u1F85",
@@ -73,5 +78,6 @@ fun RowScope.PlayScreenBottomBarItem(
             .clickable {
                 onClick()
             }
+            .padding(vertical = 4.dp)
     )
 }

@@ -9,5 +9,6 @@ data class PlayState (
     val bottomAvatar: String = "",
     val topAvatar: String = "",
     val autoRotate: Boolean = false,
-    val isEnd: Boolean = false
+    val isEnd: Boolean = false,
+    val showDialog: Boolean = false
 )

@@ -4,6 +4,5 @@ import com.huy.chess.utils.enums.GameResult
 
 sealed class PlayEffect {
     data object PopBackStack: PlayEffect()
-    data object ShowPlayOptionsDialog: PlayEffect()
     data class ShowEndGameDialog(val gameResult: GameResult): PlayEffect()
 }

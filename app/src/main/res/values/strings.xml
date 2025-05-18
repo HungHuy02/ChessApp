@@ -251,6 +251,11 @@
     <string name="account_exists_text">Đã có một tài khoản được tạo bằng địa chỉ email này.</string>
     <string name="not_valid_email_text">Đây không phải là một địa chỉ email khả dụng.</string>
 
+    <string name="accept_defeat_text">Chấp nhận thua</string>
+    <string name="disable_board_rotation_text">Tắt chức năng xoay bàn cờ</string>
+    <string name="enable_board_rotation_text">Cho Phép xoay bàn cờ</string>
+    <string name="copy_pgn_text">Sao Chép PGN</string>
+
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>
     <string name="facebook_client_token" translatable="false">1af0b100c5405a48117d8496ced8ab88</string>

@@ -19,6 +19,7 @@ import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.NotationPane
 import com.huy.chess.ui.component.getChessPiecePainters
+import com.huy.chess.ui.play.composables.OptionsDialog
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
 import com.huy.chess.ui.play.composables.PlayerArea
 import com.huy.chess.utils.enums.GameResult
@@ -27,7 +28,6 @@ import com.huy.chess.viewmodel.PlayViewModel
 @Composable
 fun PlayScreen(
     viewModel: PlayViewModel = hiltViewModel(),
-    showPlayOptionsDialog: () -> Unit,
     showEndGameDialog: (GameResult) -> Unit,
     popBackStack: () -> Unit
 ) {
@@ -36,7 +36,6 @@ fun PlayScreen(
         viewModel.event.collect {
             when(it) {
                 PlayEffect.PopBackStack -> popBackStack()
-                PlayEffect.ShowPlayOptionsDialog -> showPlayOptionsDialog()
                 is PlayEffect.ShowEndGameDialog -> showEndGameDialog(it.gameResult)
             }
         }
@@ -55,6 +54,12 @@ private fun Content(
     val boardSize = (configuration.screenWidthDp * density).toInt()
     val cellSize = boardSize / 22
     val list = remember { getChessPiecePainters(context, cellSize) }
+    if(state.showDialog)
+        OptionsDialog(
+            onDismiss = { onAction(PlayAction.CloseDialog) },
+            enableRotate = state.autoRotate,
+            onClick = onAction
+        )
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {

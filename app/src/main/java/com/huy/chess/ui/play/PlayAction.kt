@@ -9,4 +9,8 @@ sealed class PlayAction {
     data class PieceCaptured(val piece: Char): PlayAction()
     data class Move(val move: String) : PlayAction()
     data class Result(val result: Int, val whiteSide: Boolean): PlayAction()
+    data object ClickedCopyPgn: PlayAction()
+    data object ClickedRotate: PlayAction()
+    data object ClickedSurrender: PlayAction()
+    data object CloseDialog: PlayAction()
 }

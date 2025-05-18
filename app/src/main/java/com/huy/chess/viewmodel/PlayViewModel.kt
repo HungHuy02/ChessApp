@@ -23,7 +23,7 @@ class PlayViewModel @Inject constructor() :
         when(action) {
             PlayAction.ClickedBack -> {}
             PlayAction.ClickedForward -> {}
-            PlayAction.ClickedMore -> sendEffect(PlayEffect.ShowPlayOptionsDialog)
+            PlayAction.ClickedMore -> updateState { it.copy(showDialog = true) }
             PlayAction.ClickedBackButton -> sendEffect(PlayEffect.PopBackStack)
             is PlayAction.PieceCaptured -> {
                 updateState {
@@ -59,6 +59,10 @@ class PlayViewModel @Inject constructor() :
                 sendEffect(PlayEffect.ShowEndGameDialog(gameResult))
             }
             PlayAction.ClickedAnalysis -> {}
+            PlayAction.ClickedCopyPgn -> { updateState { it.copy(showDialog = false) } }
+            PlayAction.ClickedRotate -> updateState { it.copy(autoRotate = !it.autoRotate, showDialog = false) }
+            PlayAction.ClickedSurrender -> { updateState { it.copy(showDialog = false) } }
+            PlayAction.CloseDialog -> updateState { it.copy(showDialog = false) }
         }
     }
 }
