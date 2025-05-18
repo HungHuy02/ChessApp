@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination
@@ -52,33 +54,43 @@ fun ChessTopAppBar(
     currentDestination: NavDestination?,
     onClick: (BottomNavAction) -> Unit
 ) {
-    var icon: Int? = null
+    val icon: Int?
     var title: String? = null
+    var iconHeight: Dp = 32.dp
     when(currentDestination?.route) {
         TopLevelDestination.Home::class.qualifiedName -> {
-            title = stringResource(R.string.app_name)
+            icon = R.drawable.logo
+            iconHeight = 92.dp
         }
         TopLevelDestination.Study::class.qualifiedName -> {
             title = stringResource(R.string.puzzle_text)
-            icon = R.drawable.school_24px
+            icon = R.drawable.puzzles
         }
         TopLevelDestination.Puzzles::class.qualifiedName -> {
             title = stringResource(R.string.study_text)
+            icon = R.drawable.lessons
         }
         TopLevelDestination.MoreOptions::class.qualifiedName -> {
-            title = stringResource(R.string.more_options_text)
+            icon = R.drawable.logo
+            iconHeight = 108.dp
         }
         else -> {
-
+            icon = null
+            title = null
         }
     }
     CenterAlignedTopAppBar(
         title = {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 icon?.let {
                     Icon(
                         painter = painterResource(icon),
-                        contentDescription = "icon"
+                        contentDescription = "icon",
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(iconHeight)
                     )
                 }
                 title?.let {
@@ -106,10 +118,11 @@ fun ChessTopAppBar(
                         contentScale = ContentScale.FillBounds,
                         modifier = Modifier
                             .padding(start = 12.dp)
-                            .size(48.dp)
+                            .size(40.dp)
                             .clickable {
                                 onClick(BottomNavAction.ClickedProfile)
                             }
+                            .clip(MaterialTheme.shapes.small)
                     )
                 }
             }
