@@ -76,6 +76,8 @@ private fun Content(
         )
         NotationPane(
             notations = state.notationList,
+            currentNotation = state.currentFen - 1,
+            onClick = { onAction(PlayAction.ClickedNotation(it)) },
             modifier = Modifier.constrainAs(pane) {
                 top.linkTo(topBar.bottom)
                 start.linkTo(parent.start)

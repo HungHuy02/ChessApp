@@ -15,5 +15,6 @@ data class PlayState (
     val showDialog: Boolean = false,
     val listFen: MutableList<String> = mutableListOf(Constants.START_FEN),
     val currentFen: Int = 0,
-    val displayFen: String? = null
+    val displayFen: String? = null,
+
 )

@@ -2,6 +2,7 @@ package com.huy.chess.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,35 +17,38 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.huy.chess.ui.theme.TransparentBlack10
 
 @Composable
 fun NotationPane(
     modifier: Modifier = Modifier,
-    notations: List<String>
+    notations: List<String>,
+    currentNotation: Int = 0,
+    onClick: (Int) -> Unit = {}
 ) {
-    var state = rememberLazyListState()
-    LaunchedEffect(notations.size) {
-        if(notations.isNotEmpty())
-            state.animateScrollToItem(notations.size - 1)
+    val state = rememberLazyListState()
+    LaunchedEffect(currentNotation) {
+        if (currentNotation > 0)
+            if(notations.isNotEmpty())
+                state.animateScrollToItem(currentNotation)
     }
     LazyRow(
         modifier = modifier.fillMaxWidth().height(32.dp)
             .background(MaterialTheme.colorScheme.surface),
-        state = state
+        state = state,
+        verticalAlignment = Alignment.CenterVertically,
+        contentPadding = PaddingValues(start = 4.dp)
     ) {
         itemsIndexed(notations) { index, item ->
             NotationPaneItem(
                 number = if (index % 2 == 0) index / 2 + 1 else null,
-                text = item
+                text = item,
+                selected = index == currentNotation,
+                onClick = { onClick(index) }
             )
         }
     }
@@ -54,19 +58,19 @@ fun NotationPane(
 fun NotationPaneItem(
     modifier: Modifier = Modifier,
     number: Int?,
-    text: String
+    text: String,
+    selected: Boolean = false,
+    onClick: () -> Unit
 ) {
-    var isClick by remember {
-        mutableStateOf(false)
-    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
     ) {
         number?.let {
-            Spacer(modifier = Modifier.size(8.dp))
+            Spacer(modifier = Modifier.size(16.dp))
             Text(
                 text = "${number}.",
+                color = Color.Gray,
                 modifier = Modifier.padding(
                     top = 4.dp,
                     start = 2.dp,
@@ -75,36 +79,21 @@ fun NotationPaneItem(
                 )
             )
         }
-        Spacer(modifier = Modifier.size(8.dp))
+        Spacer(modifier = Modifier.size(12.dp))
         Text(
             text = text,
+            style = MaterialTheme.typography.labelLarge,
             modifier = Modifier
-                .background(if (isClick) Color.Gray else Color.Unspecified, RoundedCornerShape(2.dp))
+                .background(if (selected) Color.Gray else Color.Unspecified, RoundedCornerShape(2.dp))
                 .padding(bottom = 2.dp)
                 .background(
-                    if (isClick) Color.Cyan else Color.Unspecified,
+                    if (selected) TransparentBlack10 else Color.Unspecified,
                     RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp)
                 )
                 .padding(horizontal = 2.dp, vertical = 4.dp)
                 .clickable {
-                    isClick = !isClick
+                    onClick()
                 }
         )
     }
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    NotationPaneItem(
-        number = 1,
-        text = "a4"
-    )
-}
-
-@Preview(widthDp = 200)
-@Composable
-private fun PreviewPane() {
-    val strings = listOf("a4", "a5", "a6", "a7", "a8", "a4", "a5", "a6", "a7", "a8")
-    NotationPane(notations = strings)
 }
