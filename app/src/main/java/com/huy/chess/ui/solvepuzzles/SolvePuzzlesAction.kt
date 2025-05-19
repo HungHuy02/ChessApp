@@ -1,6 +1,8 @@
 package com.huy.chess.ui.solvepuzzles
 
 sealed class SolvePuzzlesAction {
+    data object ClickedBackArrow: SolvePuzzlesAction()
+    data object ClickedAnalysis: SolvePuzzlesAction()
     data object ClickedBack: SolvePuzzlesAction()
     data object ClickedSuggestion: SolvePuzzlesAction()
     data object ClickedRetry: SolvePuzzlesAction()

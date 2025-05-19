@@ -35,7 +35,7 @@ class SolvePuzzlesViewModel @Inject constructor() : BaseViewModel<SolvePuzzlesSt
     override fun processAction(action: SolvePuzzlesAction) {
         when(action) {
             SolvePuzzlesAction.ClickedAnswer -> {}
-            SolvePuzzlesAction.ClickedBack -> sendEffect(SolvePuzzlesEffect.PopBackStack)
+            SolvePuzzlesAction.ClickedBack -> {}
             SolvePuzzlesAction.ClickedContinue -> {
                 updateState { it.copy(currentPuzzleIndex = it.currentPuzzleIndex + 1) }
             }
@@ -53,6 +53,8 @@ class SolvePuzzlesViewModel @Inject constructor() : BaseViewModel<SolvePuzzlesSt
                     updateState { it.copy(type = PuzzleDescriptionType.Fail) }
                 }
             }
+            SolvePuzzlesAction.ClickedAnalysis -> {}
+            SolvePuzzlesAction.ClickedBackArrow -> sendEffect(SolvePuzzlesEffect.PopBackStack)
         }
     }
 

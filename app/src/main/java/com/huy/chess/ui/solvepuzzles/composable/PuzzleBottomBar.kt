@@ -1,5 +1,7 @@
 package com.huy.chess.ui.solvepuzzles.composable
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -21,63 +23,72 @@ import androidx.compose.ui.unit.sp
 import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
+import com.huy.chess.ui.solvepuzzles.SolvePuzzlesAction
 import com.huy.chess.ui.theme.ChessGlyphFontFamily
 
 @Composable
 fun PuzzleBottomBar(
     modifier: Modifier = Modifier,
     type: PuzzleDescriptionType,
+    onClick: (SolvePuzzlesAction) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         when(type) {
             PuzzleDescriptionType.BlackMove,
             PuzzleDescriptionType.WhiteMove -> {
                 Item(
                     icon = "\u0067",
-                    title = stringResource(R.string.suggest_text)
+                    title = stringResource(R.string.suggest_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedSuggestion) }
                 )
                 Item(
                     icon = "\u002C",
-                    title = stringResource(R.string.back_text)
+                    title = stringResource(R.string.back_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedBack) }
                 )
                 Item(
                     icon = "\u2026",
-                    title = stringResource(R.string.continue_text)
+                    title = stringResource(R.string.continue_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedContinue) }
                 )
             }
             PuzzleDescriptionType.Correct -> {
                 Item(
                     icon = "\u0394",
-                    title = stringResource(R.string.analysis_text)
-                )
-                Item(
-                    icon = "\u004C",
-                    title = stringResource(R.string.start_over_text)
+                    title = stringResource(R.string.analysis_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedAnalysis) }
                 )
                 Item(
                     color = MaterialTheme.colorScheme.primary,
                     text = stringResource(R.string.continue_text),
-                    onClick = {}
+                    onClick = { onClick(SolvePuzzlesAction.ClickedContinue) }
+                )
+                Item(
+                    icon = "\u004C",
+                    title = stringResource(R.string.start_over_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedRetry) }
                 )
             }
             PuzzleDescriptionType.Fail -> {
                 Item(
                     icon = "\u1F4C",
-                    title = stringResource(R.string.answer_text)
-                )
-                Item(
-                    icon = "\u005D",
-                    title = stringResource(R.string.continue_text)
+                    title = stringResource(R.string.answer_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedAnswer) }
                 )
                 Item(
                     color = MaterialTheme.colorScheme.error,
                     text = stringResource(R.string.try_text),
-                    onClick = {}
+                    onClick = { onClick(SolvePuzzlesAction.ClickedRetry) }
+                )
+                Item(
+                    icon = "\u005D",
+                    title = stringResource(R.string.continue_text),
+                    onClick = { onClick(SolvePuzzlesAction.ClickedContinue) }
                 )
             }
         }
@@ -86,10 +97,11 @@ fun PuzzleBottomBar(
 }
 
 @Composable
-private fun Item(
+private fun RowScope.Item(
     modifier: Modifier = Modifier,
     icon: String,
-    title: String
+    title: String,
+    onClick: () -> Unit
 ) {
     Text(
         text = buildAnnotatedString {
@@ -102,6 +114,11 @@ private fun Item(
         },
         textAlign = TextAlign.Center,
         modifier = modifier
+            .weight(1f)
+            .clickable {
+                onClick()
+            }
+            .padding(vertical = 4.dp)
     )
 }
 
@@ -113,7 +130,7 @@ private fun RowScope.Item(
     onClick: () -> Unit
 ) {
     AppButton(
-        modifier = modifier.weight(1f),
+        modifier = modifier.weight(2f),
         onClick = onClick,
         text = text,
         backgroundColor = color,
