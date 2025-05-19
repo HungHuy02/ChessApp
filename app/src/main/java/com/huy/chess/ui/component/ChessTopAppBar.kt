@@ -216,7 +216,8 @@ fun ChessTopAppBar(
                 Icon(
                     painter = it,
                     contentDescription = "icon",
-                    tint = Color.Unspecified
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(24.dp)
                 )
             }
             title?.let {

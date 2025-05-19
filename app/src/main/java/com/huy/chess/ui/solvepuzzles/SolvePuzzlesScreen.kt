@@ -50,7 +50,7 @@ private fun Content(
     ) {
         val (topBar, des, board, bottomBar) = createRefs()
         ChessTopAppBar(
-            onClickBack = { onAction(SolvePuzzlesAction.ClickedBack) },
+            onClickBack = { onAction(SolvePuzzlesAction.ClickedBackArrow) },
             title = stringResource(R.string.puzzle_text),
             icon = painterResource(R.drawable.puzzles),
             onAction = {
@@ -92,6 +92,7 @@ private fun Content(
         )
         PuzzleBottomBar(
             type = state.type,
+            onClick = onAction,
             modifier = Modifier.constrainAs(bottomBar) {
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
