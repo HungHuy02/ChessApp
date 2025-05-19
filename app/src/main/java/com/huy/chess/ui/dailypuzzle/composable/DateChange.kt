@@ -1,8 +1,10 @@
 package com.huy.chess.ui.dailypuzzle.composable
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +30,9 @@ fun DateChange(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .width(size.dp)
-            .clip(MaterialTheme.shapes.medium)
+            .padding(4.dp)
+            .background(MaterialTheme.colorScheme.surface, shape = MaterialTheme.shapes.large)
+            .clip(MaterialTheme.shapes.large)
             .clickable { onAction() }
     ) {
         Icon(
