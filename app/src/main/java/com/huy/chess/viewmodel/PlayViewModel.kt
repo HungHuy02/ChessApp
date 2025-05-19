@@ -1,5 +1,6 @@
 package com.huy.chess.viewmodel
 
+import android.util.Log
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.play.PlayAction
@@ -21,8 +22,28 @@ class PlayViewModel @Inject constructor() :
 
     override fun processAction(action: PlayAction) {
         when(action) {
-            PlayAction.ClickedBack -> {}
-            PlayAction.ClickedForward -> {}
+            PlayAction.ClickedBack -> {
+                if(state.value.currentFen > 0)
+                    updateState {
+                        val index = it.currentFen - 1
+                        Log.e("tag", "$index")
+                        it.copy(
+                            currentFen = index,
+                            displayFen = it.listFen[index]
+                        )
+                    }
+            }
+            PlayAction.ClickedForward -> {
+                if(state.value.currentFen < state.value.listFen.size - 1)
+                    updateState {
+                        val index = it.currentFen + 1
+                        Log.e("tag", "$index")
+                        it.copy(
+                            currentFen = index,
+                            displayFen = it.listFen[index]
+                        )
+                    }
+            }
             PlayAction.ClickedMore -> updateState { it.copy(showDialog = true) }
             PlayAction.ClickedBackButton -> sendEffect(PlayEffect.PopBackStack)
             is PlayAction.PieceCaptured -> {
@@ -35,6 +56,9 @@ class PlayViewModel @Inject constructor() :
             is PlayAction.Move -> updateState {
                 val notation = it.notationList.toMutableList()
                 notation.add(action.move)
+                val listFen = it.listFen
+                listFen.add(action.fen)
+                Log.e("tag", action.fen)
                 if(it.autoRotate)
                     it.copy(
                         notationList = notation,
@@ -42,10 +66,18 @@ class PlayViewModel @Inject constructor() :
                         bottomName = it.topName,
                         topAvatar = it.bottomAvatar,
                         bottomAvatar = it.topAvatar,
-                        bottomSide = !it.bottomSide
+                        bottomSide = !it.bottomSide,
+                        listFen = listFen,
+                        currentFen = it.currentFen + 1,
+                        displayFen = null
                     )
                 else
-                    it.copy(notationList = notation)
+                    it.copy(
+                        notationList = notation,
+                        listFen = listFen,
+                        currentFen = it.currentFen + 1,
+                        displayFen = null
+                    )
             }
             is PlayAction.Result -> {
                 updateState { it.copy(isEnd = true) }
