@@ -1,6 +1,5 @@
 package com.huy.chess.viewmodel
 
-import android.util.Log
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.play.PlayAction
@@ -26,10 +25,9 @@ class PlayViewModel @Inject constructor() :
                 if(state.value.currentFen > 0)
                     updateState {
                         val index = it.currentFen - 1
-                        Log.e("tag", "$index")
                         it.copy(
                             currentFen = index,
-                            displayFen = it.listFen[index]
+                            displayFen = it.listFen.getOrNull(index)
                         )
                     }
             }
@@ -37,7 +35,6 @@ class PlayViewModel @Inject constructor() :
                 if(state.value.currentFen < state.value.listFen.size - 1)
                     updateState {
                         val index = it.currentFen + 1
-                        Log.e("tag", "$index")
                         it.copy(
                             currentFen = index,
                             displayFen = it.listFen[index]
@@ -58,7 +55,6 @@ class PlayViewModel @Inject constructor() :
                 notation.add(action.move)
                 val listFen = it.listFen
                 listFen.add(action.fen)
-                Log.e("tag", action.fen)
                 if(it.autoRotate)
                     it.copy(
                         notationList = notation,
@@ -95,6 +91,14 @@ class PlayViewModel @Inject constructor() :
             PlayAction.ClickedRotate -> updateState { it.copy(autoRotate = !it.autoRotate, showDialog = false) }
             PlayAction.ClickedSurrender -> { updateState { it.copy(showDialog = false) } }
             PlayAction.CloseDialog -> updateState { it.copy(showDialog = false) }
+            is PlayAction.ClickedNotation -> {
+                val index = action.index + 1
+                if(index != state.value.currentFen)
+                    updateState { it.copy(
+                        currentFen = index,
+                        displayFen = it.listFen.get(index)
+                    ) }
+            }
         }
     }
 }

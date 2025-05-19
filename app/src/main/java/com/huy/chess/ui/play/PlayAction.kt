@@ -13,4 +13,5 @@ sealed class PlayAction {
     data object ClickedRotate: PlayAction()
     data object ClickedSurrender: PlayAction()
     data object CloseDialog: PlayAction()
+    data class ClickedNotation(val index: Int): PlayAction()
 }
