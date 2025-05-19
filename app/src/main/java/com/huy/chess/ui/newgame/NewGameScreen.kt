@@ -3,13 +3,12 @@ package com.huy.chess.ui.newgame
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,7 +22,8 @@ import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.IconPosition
-import com.huy.chess.ui.newgame.composables.SameButton
+import com.huy.chess.ui.newgame.composables.AddMoreButton
+import com.huy.chess.ui.newgame.composables.NewGameButton
 import com.huy.chess.ui.newgame.composables.TimeButton
 import com.huy.chess.viewmodel.NewGameViewModel
 
@@ -58,67 +58,62 @@ fun Content(
     onAction: (NewGameAction) -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier = Modifier.fillMaxSize(),
     ) {
         ChessTopAppBar(
             title = stringResource(R.string.new_game_text),
             onClickBack = { onAction(NewGameAction.ClickedBack) }
         )
-        TimeButton(
-            timeType = state.selectedTime,
-            modifier = Modifier.fillMaxWidth()
+        Spacer(Modifier.height(16.dp))
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            onAction(NewGameAction.ClickedChangeTime)
-        }
-        AppButton(
-            onClick = { onAction(NewGameAction.ClickedPlay) },
-            text = stringResource(R.string.new_game_text),
-            textStyle = MaterialTheme.typography.titleLarge,
-            textColor = MaterialTheme.colorScheme.onPrimary,
-            iconPosition = IconPosition.NONE,
-            modifier = Modifier.fillMaxWidth()
-        )
-        SameButton(
-            onClick = {  },
-            text = stringResource(R.string.play_with_friend_text),
-            painter = painterResource(R.drawable.handshake_8c90be47)
-        )
-        SameButton(
-            onClick = { onAction(NewGameAction.ClickedBot) },
-            text = stringResource(R.string.play_with_bot_text),
-            painter = painterResource(R.drawable.cute_bot_32735490)
-        )
-        TextButton(
-            onClick = { onAction(NewGameAction.ClickedMore) },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(R.string.more_text),
-                color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.displaySmall
-            )
-            Icon(
-                painter = painterResource(R.drawable.keyboard_arrow_down_24px),
-                contentDescription = "icon"
-            )
-        }
-        AnimatedVisibility(state.isShowMore) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            TimeButton(
+                timeType = state.selectedTime,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                SameButton(
-                    onClick = {},
-                    text = stringResource(R.string.custom_game_text),
-                    painter = painterResource(R.drawable.tune_24px)
-                )
-                SameButton(
-                    onClick = { onAction(NewGameAction.ClickedTwo) },
-                    text = stringResource(R.string.pass_and_play_text),
-                    painter = painterResource(R.drawable.friends)
-                )
+                onAction(NewGameAction.ClickedChangeTime)
+            }
+            AppButton(
+                onClick = { onAction(NewGameAction.ClickedPlay) },
+                text = stringResource(R.string.new_game_text),
+                textStyle = MaterialTheme.typography.titleLarge,
+                textColor = MaterialTheme.colorScheme.onPrimary,
+                iconPosition = IconPosition.NONE,
+                modifier = Modifier.fillMaxWidth()
+            )
+            NewGameButton(
+                onClick = {  },
+                text = stringResource(R.string.play_with_friend_text),
+                painter = painterResource(R.drawable.handshake_8c90be47)
+            )
+            NewGameButton(
+                onClick = { onAction(NewGameAction.ClickedBot) },
+                text = stringResource(R.string.play_with_bot_text),
+                painter = painterResource(R.drawable.cute_bot_32735490)
+            )
+            AddMoreButton(
+                isShow = state.isShowMore
+            ) {
+                onAction(NewGameAction.ClickedMore)
+            }
+            AnimatedVisibility(state.isShowMore) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    NewGameButton(
+                        onClick = {},
+                        text = stringResource(R.string.custom_game_text),
+                        painter = painterResource(R.drawable.tune_24px)
+                    )
+                    NewGameButton(
+                        onClick = { onAction(NewGameAction.ClickedTwo) },
+                        text = stringResource(R.string.pass_and_play_text),
+                        painter = painterResource(R.drawable.friends)
+                    )
+                }
             }
         }
     }
