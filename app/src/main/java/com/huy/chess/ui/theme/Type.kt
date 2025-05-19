@@ -29,6 +29,11 @@ val MontserratFontFamily = FontFamily(
     Font(resId = R.font.montserrat_semibold, weight = FontWeight.SemiBold),
 )
 
+val ChessSansFontFamily = FontFamily(
+    Font(resId = R.font.chess_sans_700),
+    Font(resId = R.font.chess_sans_800)
+)
+
 val ChessGlyphFontFamily = FontFamily(
     Font(resId = R.font.chessglyph)
 )
