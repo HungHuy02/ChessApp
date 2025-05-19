@@ -100,8 +100,9 @@ private fun Content(
         ChessBoard(
             autoRotate = state.autoRotate,
             onCapture = { onAction(PlayAction.PieceCaptured(it)) },
-            onMove = { onAction(PlayAction.Move(it)) },
+            onMove = {move, fen -> onAction(PlayAction.Move(move, fen)) },
             onResult = { result, whiteSide -> onAction(PlayAction.Result(result, whiteSide)) },
+            fen = state.displayFen,
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
