@@ -19,9 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.huy.chess.ui.theme.Green200
+import com.huy.chess.ui.theme.Green400
 
 @Composable
 fun AppButton(
@@ -31,6 +32,8 @@ fun AppButton(
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
     textStyle: TextStyle = MaterialTheme.typography.titleLarge,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    backgroundTopColor: Color = Green200,
+    backgroundBottomColor: Color = Green400,
     painter: Painter? = null,
     iconPosition: IconPosition,
     enable: Boolean = true
@@ -45,10 +48,10 @@ fun AppButton(
             ),
             enabled = enable,
             modifier = modifier
-                .background(color = Color.Gray, shape = RoundedCornerShape(10.dp))
+                .background(color = backgroundTopColor, shape = RoundedCornerShape(10.dp))
                 .padding(top = 0.8.dp)
-                .background(Color.Blue, shape = RoundedCornerShape(10.dp))
-                .padding(bottom = 1.dp)
+                .background(color = backgroundBottomColor, shape = RoundedCornerShape(10.dp))
+                .padding(bottom = 2.dp)
         ) {
             when (iconPosition) {
                 IconPosition.NONE -> Text(
@@ -93,23 +96,10 @@ fun AppButton(
             }
         }
     }
-
-
 }
 
 enum class IconPosition {
     NONE,
     START,
     NEXT_TO_TEXT
-}
-
-@Preview
-@Composable
-private fun Preview() {
-    AppButton(
-        onClick = {},
-        text = "test",
-        iconPosition = IconPosition.NONE,
-        modifier = Modifier.fillMaxWidth()
-    )
 }
