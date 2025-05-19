@@ -7,6 +7,7 @@ import com.huy.chess.data.preferences.dailyPuzzleDataStore
 import com.huy.chess.ui.home.HomeAction
 import com.huy.chess.ui.home.HomeEffect
 import com.huy.chess.ui.home.HomeState
+import com.huy.chess.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -20,12 +21,13 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             context.dailyPuzzleDataStore.data.collect {puzzle ->
-                updateState {
-                    it.copy(
-                        dailyPuzzleFen = puzzle.fen ?: "",
-                        totalSolved = puzzle.solvedCount
-                    )
-                }
+                if(puzzle.date == Utils.getToday())
+                    updateState {
+                        it.copy(
+                            dailyPuzzleFen = puzzle.fen ?: "",
+                            totalSolved = puzzle.solvedCount
+                        )
+                    }
             }
         }
     }

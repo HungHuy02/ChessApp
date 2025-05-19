@@ -8,6 +8,7 @@ import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleAction
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleEffect
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleState
+import com.huy.chess.utils.Utils
 import com.huy.chess.utils.enums.PuzzleStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,14 +23,16 @@ class DailyPuzzleViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             context.dailyPuzzleDataStore.data.collect {puzzle ->
-                val side = parseFen(puzzle.fen)
-                updateState { it.copy(
-                    title = puzzle.title,
-                    date = puzzle.date,
-                    fen = puzzle.fen,
-                    moves = puzzle.moves.split(" "),
-                    puzzleStatus = if(side) PuzzleStatus.START_WHITE else PuzzleStatus.START_BLACK
-                ) }
+                if (puzzle.date == Utils.getToday()) {
+                    val side = parseFen(puzzle.fen)
+                    updateState { it.copy(
+                        title = puzzle.title,
+                        date = puzzle.date,
+                        fen = puzzle.fen,
+                        moves = puzzle.moves.split(" "),
+                        puzzleStatus = if(side) PuzzleStatus.START_WHITE else PuzzleStatus.START_BLACK
+                    ) }
+                }
             }
         }
     }

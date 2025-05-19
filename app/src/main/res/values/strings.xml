@@ -219,6 +219,7 @@
     <string name="reset_board_text" translatable="false">Thiết lập lại bàn cờ</string>
     <string name="white_player_turn_text" translatable="false">Đến lượt phiên quân trắng di chuyển</string>
     <string name="black_player_turn_text" translatable="false">Đến lượt phiên quân đen di chuyển</string>
+    <string name="click_to_watch_video_text" translatable="false">Nhấp vào để xem video về thế đố này</string>
 
     <string name="you_won_text">Bạn đã thắng</string>
     <string name="white_win_text">Trắng thắng</string>

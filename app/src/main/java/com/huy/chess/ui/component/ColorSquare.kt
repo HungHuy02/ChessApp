@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun ColorSquare(
     modifier: Modifier = Modifier,
     color: Color,
-    size: Dp = 24.dp
+    size: Dp = 20.dp
 ) {
     Box(
         modifier
