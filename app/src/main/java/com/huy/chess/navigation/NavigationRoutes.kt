@@ -57,6 +57,10 @@ object PlayOnline
 object SolvePuzzles
 @Serializable
 data class PlayBot(val level: Int)
+@Serializable
+data object OnlineWaiting
+@Serializable
+data object Online
 
 sealed class TopLevelDestination {
     @Serializable

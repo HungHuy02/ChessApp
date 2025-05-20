@@ -182,6 +182,7 @@ fun ChessTopAppBar(
 fun ChessTopAppBar(
     modifier: Modifier = Modifier,
     icon: Painter? = null,
+    iconHeight: Dp = 24.dp,
     title: String? = null,
     isClose: Boolean = false,
     onClickBack: () -> Unit,
@@ -217,7 +218,7 @@ fun ChessTopAppBar(
                     painter = it,
                     contentDescription = "icon",
                     tint = Color.Unspecified,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.height(iconHeight)
                 )
             }
             title?.let {

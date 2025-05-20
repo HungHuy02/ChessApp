@@ -15,7 +15,7 @@ import com.huy.chess.ui.component.CapturedPiece
 import com.huy.chess.ui.component.ChessBoard
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.NotationPane
-import com.huy.chess.ui.play.composables.Timer
+import com.huy.chess.ui.component.Timer
 import com.huy.chess.ui.playbot.composables.PlayBotScreenBottomBar
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.viewmodel.PlayBotViewModel

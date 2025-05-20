@@ -21,7 +21,7 @@ import com.huy.chess.ui.component.NotationPane
 import com.huy.chess.ui.component.getChessPiecePainters
 import com.huy.chess.ui.play.composables.OptionsDialog
 import com.huy.chess.ui.play.composables.PlayScreenBottomBar
-import com.huy.chess.ui.play.composables.PlayerArea
+import com.huy.chess.ui.component.PlayerArea
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.viewmodel.PlayViewModel
 

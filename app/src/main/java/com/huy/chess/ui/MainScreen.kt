@@ -21,6 +21,7 @@ import com.huy.chess.navigation.SolvePuzzles
 import com.huy.chess.navigation.Welcome
 import com.huy.chess.navigation.authDestination
 import com.huy.chess.navigation.playDestination
+import com.huy.chess.navigation.playOnlineDestination
 import com.huy.chess.ui.component.FocusClearIme
 import com.huy.chess.ui.dailypuzzle.DailyPuzzleScreen
 import com.huy.chess.ui.dialog.register.RegisterDialog
@@ -55,6 +56,7 @@ fun MainScreen() {
             }
             authDestination(navController)
             playDestination(navController)
+            playOnlineDestination(navController)
             dialog<RegisterDialog> {
                 RegisterDialog(
                     navigateRegister = { navController.navigate(Register) }
