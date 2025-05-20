@@ -22,7 +22,7 @@ import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.IconPosition
-import com.huy.chess.ui.newgame.composables.AddMoreButton
+import com.huy.chess.ui.component.AddMoreButton
 import com.huy.chess.ui.newgame.composables.NewGameButton
 import com.huy.chess.ui.newgame.composables.TimeButton
 import com.huy.chess.viewmodel.NewGameViewModel
@@ -94,7 +94,8 @@ fun Content(
                 painter = painterResource(R.drawable.cute_bot_32735490)
             )
             AddMoreButton(
-                isShow = state.isShowMore
+                isShow = state.isShowMore,
+                text = stringResource(R.string.more_text)
             ) {
                 onAction(NewGameAction.ClickedMore)
             }

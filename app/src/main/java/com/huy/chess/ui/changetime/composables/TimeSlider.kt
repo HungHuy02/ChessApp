@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,13 +14,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.huy.chess.R
+import com.huy.chess.ui.theme.ChessSansFontFamily
+import com.huy.chess.ui.theme.Gray500
+import com.huy.chess.ui.theme.Gray600
+import com.huy.chess.ui.theme.MontserratFontFamily
 
 @Composable
 fun TimeSlider(
@@ -34,13 +39,13 @@ fun TimeSlider(
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier) {
         Text(
             text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                withStyle(SpanStyle(color = Color.White, fontFamily = MontserratFontFamily)) {
                     append(stringResource(if(isInitialTime) R.string.initial_time_text else R.string.bonus_time_text))
                 }
                 withStyle(
                     style = SpanStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold
+                        color = Color.White,
+                        fontFamily = ChessSansFontFamily
                     )
                 ) {
                     append(
@@ -66,6 +71,10 @@ fun TimeSlider(
                 value = sliderPosition,
                 valueRange = 0f..maxSelect,
                 onValueChange = { sliderPosition = it },
+                colors = SliderDefaults.colors(
+                    activeTrackColor = MaterialTheme.colorScheme.primary,
+                    inactiveTrackColor = Gray500
+                ),
                 modifier = Modifier.weight(1f)
             )
             Text(
