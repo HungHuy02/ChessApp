@@ -256,6 +256,9 @@
     <string name="disable_board_rotation_text">Tắt chức năng xoay bàn cờ</string>
     <string name="enable_board_rotation_text">Cho Phép xoay bàn cờ</string>
     <string name="copy_pgn_text">Sao Chép PGN</string>
+    
+    <string name="comming_soon_text" translatable="false">Sắp diễn ra...</string>
+    <string name="search_text" translatable="false">Tìm kiếm...</string>
 
     <string name="facebook_app_id" translatable="false">947195144209568</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb947195144209568</string>

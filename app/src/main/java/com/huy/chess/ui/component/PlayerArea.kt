@@ -1,4 +1,4 @@
-package com.huy.chess.ui.play.composables
+package com.huy.chess.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,16 +16,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.huy.chess.R
-import com.huy.chess.ui.component.CapturedPiece
 
 @Composable
 fun PlayerArea(
     modifier: Modifier = Modifier,
     name: String,
     avatar: String = "",
-    map: MutableMap<Char, Int>,
+    map: MutableMap<Char, Int> = mutableMapOf(),
     side: Boolean,
-    list: List<ImageBitmap>
+    list: List<ImageBitmap> = emptyList(),
+    time: Long? = null,
+    isRun: Boolean = false
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
@@ -46,6 +47,14 @@ fun PlayerArea(
                 map = map,
                 list = list,
                 side = side
+            )
+        }
+        time?.let {
+            Spacer(Modifier.weight(1f))
+            Timer(
+                time = it,
+                isWhite = side,
+                isRun = isRun
             )
         }
     }
