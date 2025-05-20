@@ -11,41 +11,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-
-@Composable
-fun RowItemWithSwitch(
-    modifier: Modifier = Modifier,
-    label: String
-) {
-    var checked by remember {
-        mutableStateOf(false)
-    }
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        Switch(
-            checked = checked,
-            onCheckedChange = {
-                checked = !checked
-            }
-        )
-    }
-}
 
 @Composable
 fun RowItemWithSwitch(
@@ -62,7 +32,7 @@ fun RowItemWithSwitch(
             .clickable {
                 onCheckedChange()
             }
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
         Text(
             text = label,
@@ -70,6 +40,7 @@ fun RowItemWithSwitch(
             color = MaterialTheme.colorScheme.onSurface
         )
         Switch(
+            modifier = Modifier.scale(0.7f),
             checked = checked,
             onCheckedChange = {
                 onCheckedChange()

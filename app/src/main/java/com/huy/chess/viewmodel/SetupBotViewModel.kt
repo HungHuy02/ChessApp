@@ -21,7 +21,13 @@ class SetupBotViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             context.setupBotDataStore.data.collect {settings ->
-                updateState { it.copy(selectedTime = enumValues<TimeType>()[settings.selectedTime]) }
+                updateState {
+                    it.copy(
+                        selectedTime = enumValues<TimeType>()[settings.selectedTime],
+                        enableSuggest = settings.enableSuggest,
+                        enableTakeback = settings.enableTakeBack
+                    )
+                }
             }
         }
     }
@@ -46,6 +52,24 @@ class SetupBotViewModel @Inject constructor(
                     updateState { it.copy(stockfishBotLevel = action.level) }
             }
             SetupBotAction.ClickedPlay -> sendEffect(SetupBotEffect.NavigatePlayBot(state.value.stockfishBotLevel))
+            SetupBotAction.ToggleSuggestion -> {
+                val enableSuggest = !state.value.enableSuggest
+                updateState { it.copy(enableSuggest = enableSuggest) }
+                viewModelScope.launch {
+                    context.setupBotDataStore.updateData {
+                        it.toBuilder().setEnableSuggest(enableSuggest).build()
+                    }
+                }
+            }
+            SetupBotAction.ToggleTakeback -> {
+                val enableTakeback = !state.value.enableTakeback
+                updateState { it.copy(enableTakeback = enableTakeback) }
+                viewModelScope.launch {
+                    context.setupBotDataStore.updateData {
+                        it.toBuilder().setEnableTakeBack(enableTakeback).build()
+                    }
+                }
+            }
         }
     }
 }

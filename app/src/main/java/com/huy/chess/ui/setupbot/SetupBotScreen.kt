@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,7 +29,6 @@ import com.huy.chess.ui.component.TimeButton
 import com.huy.chess.ui.setupbot.composables.IconWithText
 import com.huy.chess.ui.setupbot.composables.LevelSelect
 import com.huy.chess.ui.setupbot.composables.PieceSelect
-import com.huy.chess.ui.setuptwopeople.SetupTwoPeopleAction
 import com.huy.chess.utils.enums.TimeType
 import com.huy.chess.utils.toInt
 import com.huy.chess.utils.toName
@@ -58,33 +58,38 @@ private fun Content(
     onAction: (SetupBotAction) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         ChessTopAppBar(
             title = stringResource(R.string.play_with_bot_text),
             onClickBack = { onAction(SetupBotAction.ClickedBack) }
         )
+        Spacer(Modifier.height(16.dp))
         IconWithText()
+        Spacer(Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.play_with_color_text),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
+        Spacer(Modifier.height(16.dp))
         PieceSelect(
             side = state.side,
             onClick = { onAction(SetupBotAction.ClickedSide(it)) }
         )
+        Spacer(Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.level_text),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurface
         )
+        Spacer(Modifier.height(16.dp))
         LevelSelect(
             onClick = { onAction(SetupBotAction.ClickedLevel(it)) },
             level = state.stockfishBotLevel
         )
+        Spacer(Modifier.height(16.dp))
         RowItem(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.time_control_text),
@@ -132,15 +137,19 @@ private fun Content(
                     isSelected = state.selectedTime == TimeType.UNLIMITED,
                     onClick = { onAction(SetupBotAction.ClickedButton(it)) }
                 )
-
+                Spacer(Modifier.height(16.dp))
             }
         }
         RowItemWithSwitch(
             label = stringResource(R.string.suggest_text),
+            checked = state.enableSuggest,
+            onCheckedChange = { onAction(SetupBotAction.ToggleSuggestion) },
             modifier = Modifier.fillMaxWidth()
         )
         RowItemWithSwitch(
             label = stringResource(R.string.takeback_text),
+            checked = state.enableTakeback,
+            onCheckedChange = { onAction(SetupBotAction.ToggleTakeback) },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -148,7 +157,7 @@ private fun Content(
             onClick = { onAction(SetupBotAction.ClickedPlay) },
             text = stringResource(R.string.play_text),
             iconPosition = IconPosition.NONE,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
         )
     }
 }
