@@ -8,5 +8,7 @@ data class SetupBotState (
     val showTimeControl: Boolean = false,
     val selectedTime: TimeType = TimeType.UNLIMITED,
     val side: Side = Side.WHITE,
-    val stockfishBotLevel: StockfishBotLevel = StockfishBotLevel.ONE
+    val stockfishBotLevel: StockfishBotLevel = StockfishBotLevel.ONE,
+    val enableTakeback: Boolean = false,
+    val enableSuggest: Boolean = false
 )
