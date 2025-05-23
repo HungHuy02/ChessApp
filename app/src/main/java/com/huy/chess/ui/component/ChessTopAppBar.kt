@@ -63,12 +63,12 @@ fun ChessTopAppBar(
             iconHeight = 92.dp
         }
         TopLevelDestination.Study::class.qualifiedName -> {
-            title = stringResource(R.string.puzzle_text)
-            icon = R.drawable.puzzles
+            title = stringResource(R.string.learn_text)
+            icon = R.drawable.lessons
         }
         TopLevelDestination.Puzzles::class.qualifiedName -> {
-            title = stringResource(R.string.study_text)
-            icon = R.drawable.lessons
+            title = stringResource(R.string.puzzle_text)
+            icon = R.drawable.puzzles
         }
         TopLevelDestination.MoreOptions::class.qualifiedName -> {
             icon = R.drawable.logo
@@ -103,7 +103,7 @@ fun ChessTopAppBar(
         },
         navigationIcon = {
             if (currentDestination?.route.equals(TopLevelDestination.Home::class.qualifiedName)) {
-                if(!state.isLogin) {
+                if(state.isLogin) {
                     TextButton(onClick = { onClick(BottomNavAction.ClickedLogin) }) {
                         Text(
                             text = stringResource(R.string.login_text),

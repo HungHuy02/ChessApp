@@ -337,10 +337,10 @@ fun ChessBoard(
                     list = list
                 )
             }
-            drawPath(
-                path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
-                color = Color.Green
-            )
+//            drawPath(
+//                path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
+//                color = Color.Green
+//            )
         }
     }
 }
@@ -623,10 +623,10 @@ fun ChessBoard(
                 list = list
             )
         }
-        drawPath(
-            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
-            color = Color.Green
-        )
+//        drawPath(
+//            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
+//            color = Color.Green
+//        )
     }
 }
 
