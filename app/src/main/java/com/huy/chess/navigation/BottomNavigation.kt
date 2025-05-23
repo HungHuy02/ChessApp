@@ -34,12 +34,12 @@ sealed class BottomNavScreens(
         route = TopLevelDestination.Puzzles
     )
 
-    data object Study : BottomNavScreens(
-        icon = "\u1F20",
-        label = R.string.learn_text,
-        selectedColor = Blue300,
-        route = TopLevelDestination.Study
-    )
+//    data object Study : BottomNavScreens(
+//        icon = "\u1F20",
+//        label = R.string.learn_text,
+//        selectedColor = Blue300,
+//        route = TopLevelDestination.Study
+//    )
 
     data object MoreOptions : BottomNavScreens(
         icon = "\u0074",
@@ -49,7 +49,7 @@ sealed class BottomNavScreens(
     )
 
     companion object {
-        val items = listOf(Home, Puzzles, Study, MoreOptions)
+        val items = listOf(Home, Puzzles, MoreOptions)
     }
 }
 
