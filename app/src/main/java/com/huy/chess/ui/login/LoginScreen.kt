@@ -34,6 +34,7 @@ import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.PasswordTextField
 import com.huy.chess.ui.login.composables.AccountTextField
 import com.huy.chess.ui.login.composables.TextWithFullDivider
+import com.huy.chess.ui.theme.ChessSansFontFamily
 import com.huy.chess.viewmodel.LoginViewModel
 
 @Composable
@@ -93,6 +94,7 @@ private fun Content(
             text = stringResource(R.string.login_text),
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge,
+            fontFamily = ChessSansFontFamily,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(Modifier.height(16.dp))
@@ -120,16 +122,12 @@ private fun Content(
             AppButton(
                 onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
                 text = stringResource(R.string.login_with_facebook_text),
-                textStyle = MaterialTheme.typography.titleMedium,
-                painter = painterResource(R.drawable.facebook),
-                iconPosition = IconPosition.START
+                painter = painterResource(R.drawable.facebook)
             )
             AppButton(
                 onClick = { onAction(LoginAction.ClickedLoginGoogleButton) },
                 text = stringResource(R.string.login_with_google_text),
-                textStyle = MaterialTheme.typography.titleMedium,
-                painter = painterResource(R.drawable.google),
-                iconPosition = IconPosition.START
+                painter = painterResource(R.drawable.google)
             )
         }
         Text(
