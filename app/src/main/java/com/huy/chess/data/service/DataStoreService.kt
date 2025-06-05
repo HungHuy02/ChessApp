@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 private const val ACCESS_TOKEN = "access_token"
 private const val REFRESH_TOKEN = "refresh_token"
+private const val UUID = "uuid"
 
 class DataStoreService @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
@@ -27,5 +28,13 @@ class DataStoreService @Inject constructor(
 
     suspend fun setRefreshToken(token: ByteArray) = withContext(dispatcher) {
         dataStoreRepository.putByteArray(REFRESH_TOKEN, token)
+    }
+
+    suspend fun getUUID() : String = withContext(dispatcher) {
+        dataStoreRepository.getString(UUID) ?: ""
+    }
+
+    suspend fun setUUID(uuid: String) = withContext(dispatcher) {
+        dataStoreRepository.putString(UUID, uuid)
     }
 }

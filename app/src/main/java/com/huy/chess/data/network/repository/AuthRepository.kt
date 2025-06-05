@@ -6,10 +6,12 @@ import com.huy.chess.base.BaseRepository
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
 import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.request.RefreshRequest
 import com.huy.chess.data.model.request.RegisterRequest
 import com.huy.chess.data.model.response.LoginResponse
 import com.huy.chess.data.model.response.RefreshResponse
 import com.huy.chess.data.model.response.VerifyEmailResponse
+import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
 import com.huy.chess.utils.uriToFile
@@ -19,6 +21,7 @@ import javax.inject.Inject
 
 class AuthRepository @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val dataStoreService: DataStoreService,
     private val authApi: AuthApi
 ) : BaseRepository() {
     suspend fun register(request: RegisterRequest): Result<BaseResponse<Any>> {
@@ -38,7 +41,7 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun refresh(token: String): Result<RefreshResponse> {
-        return safeApiCall { authApi.refresh("Bearer $token") }
+        return safeApiCall { authApi.refresh("Bearer $token", RefreshRequest(dataStoreService.getUUID())) }
     }
 
     suspend fun verifyEmail(email: String) : Result<VerifyEmailResponse> {

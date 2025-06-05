@@ -8,6 +8,7 @@ import com.huy.chess.data.network.repository.PuzzleRepository
 import com.huy.chess.data.network.repository.UserRepository
 import com.huy.chess.data.preferences.dailyPuzzleDataStore
 import com.huy.chess.data.preferences.userDataStore
+import com.huy.chess.data.service.DataStoreService
 import com.huy.chess.ui.welcome.WelcomeEffect
 import com.huy.chess.ui.welcome.WelcomeState
 import com.huy.chess.utils.Utils
@@ -15,22 +16,27 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val puzzleRepository: PuzzleRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val dataStoreService: DataStoreService
 ) : BaseViewModel<WelcomeState, NoAction, WelcomeEffect>(WelcomeState.Default){
 
     init {
         viewModelScope.launch {
+            val uuid = dataStoreService.getUUID()
+            if(uuid.isEmpty()) dataStoreService.setUUID(UUID.randomUUID().toString())
             userRepository.getDetails()
                 .onSuccess {response ->
                     context.userDataStore.updateData {
                         it.toBuilder()
                             .setIsLogin(true)
+                            .setId(response.id)
                             .setName(response.name)
                             .setEmail(response.email)
                             .setAvatar(response.avatar ?: "")

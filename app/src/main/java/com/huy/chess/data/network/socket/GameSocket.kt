@@ -21,8 +21,12 @@ class GameSocket @Inject constructor() {
     companion object {
         const val TAG = "GameSocket"
         const val REQUEST_TO_PLAY =  "request_to_play"
+        const val MATCH_SUCCESSFUL =  "match_successful"
+        const val READY = "ready"
+        const val GAME_START = "game_start"
         const val MOVE = "move"
         const val WANT_TO_DRAW = "want_to_draw"
+        const val ACCEPT_DRAW = "accept_draw"
         const val RESULT = "result"
     }
 
@@ -41,6 +45,10 @@ class GameSocket @Inject constructor() {
         socket.emit(REQUEST_TO_PLAY, matchRequest.toJsonObject())
     }
 
+    fun ready() {
+        socket.emit(READY)
+    }
+
     fun move(move: Move) {
         socket.emit(MOVE, move.toJsonObject())
     }
@@ -49,11 +57,17 @@ class GameSocket @Inject constructor() {
         socket.emit(WANT_TO_DRAW)
     }
 
+    fun acceptDraw() {
+        socket.emit(ACCEPT_DRAW)
+    }
+
     fun result(result: Int) {
         socket.emit(RESULT, result.toJsonObject())
     }
 
+    fun onMatchSuccessful() : Flow<JsonObject> = socket.onEventFlow(MATCH_SUCCESSFUL)
     fun onMove() : Flow<JsonObject> = socket.onEventFlow(MOVE)
+    fun onGameStart() : Flow<JsonObject> = socket.onEventFlow(GAME_START)
     fun onWantToDraw() : Flow<JsonObject> = socket.onEventFlow(WANT_TO_DRAW)
     fun onResult() : Flow<JsonObject> = socket.onEventFlow(RESULT)
 }
