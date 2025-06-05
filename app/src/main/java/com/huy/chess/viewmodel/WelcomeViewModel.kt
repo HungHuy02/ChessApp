@@ -6,6 +6,7 @@ import com.huy.chess.base.BaseViewModel
 import com.huy.chess.base.NoAction
 import com.huy.chess.data.network.repository.PuzzleRepository
 import com.huy.chess.data.network.repository.UserRepository
+import com.huy.chess.data.network.socket.GameSocket
 import com.huy.chess.data.preferences.dailyPuzzleDataStore
 import com.huy.chess.data.preferences.userDataStore
 import com.huy.chess.data.service.DataStoreService
@@ -24,7 +25,8 @@ class WelcomeViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val puzzleRepository: PuzzleRepository,
     @ApplicationContext private val context: Context,
-    private val dataStoreService: DataStoreService
+    private val dataStoreService: DataStoreService,
+    private val socket: GameSocket
 ) : BaseViewModel<WelcomeState, NoAction, WelcomeEffect>(WelcomeState.Default){
 
     init {
@@ -60,6 +62,7 @@ class WelcomeViewModel @Inject constructor(
                             .build()
                     }
                 }
+            socket.connect()
             delay(1)
             sendEffect(WelcomeEffect.NavigateHome)
         }
