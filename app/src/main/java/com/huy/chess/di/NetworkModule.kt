@@ -17,7 +17,12 @@ import com.huy.chess.BuildConfig
 import com.huy.chess.data.network.AuthInterceptor
 import com.huy.chess.data.network.api.PuzzleApi
 import com.huy.chess.data.network.api.UserApi
+import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSession
+import javax.net.ssl.X509TrustManager
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -50,6 +55,22 @@ object NetworkModule {
             .build()
     }
 
+//    @Provides
+//    @Singleton
+//    fun provideOKHttpClient(
+//        httpLoggingInterceptor: HttpLoggingInterceptor,
+//        authInterceptor: AuthInterceptor,
+//        tokenAuthenticator: TokenAuthenticator
+//    ) : OkHttpClient {
+//        val builder = OkHttpClient.Builder()
+//            .connectTimeout(5, TimeUnit.SECONDS)
+//            .retryOnConnectionFailure(false)
+//            .addInterceptor(authInterceptor)
+//            .addInterceptor(httpLoggingInterceptor)
+//            .authenticator(tokenAuthenticator)
+//        return builder.build()
+//    }
+
     @Provides
     @Singleton
     fun provideOKHttpClient(
@@ -57,13 +78,40 @@ object NetworkModule {
         authInterceptor: AuthInterceptor,
         tokenAuthenticator: TokenAuthenticator
     ) : OkHttpClient {
-        val builder = OkHttpClient.Builder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .retryOnConnectionFailure(false)
-            .addInterceptor(authInterceptor)
-            .addInterceptor(httpLoggingInterceptor)
-            .authenticator(tokenAuthenticator)
-        return builder.build()
+        try {
+            val trustAllCerts = arrayOf<X509TrustManager>(object : X509TrustManager {
+                override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                    // Do nothing, trust all clients
+                }
+
+                override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                    // Do nothing, trust all servers
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf() // Return an empty array
+                }
+            })
+
+            val sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+            val sslSocketFactory = sslContext.socketFactory
+
+            val builder = OkHttpClient.Builder()
+            builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0])
+            builder.hostnameVerifier { hostname, session ->
+                true
+            }
+
+            return builder
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(false)
+                .addInterceptor(authInterceptor)
+                .addInterceptor(httpLoggingInterceptor)
+                .authenticator(tokenAuthenticator).build()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
     @Provides

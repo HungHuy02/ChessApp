@@ -3,6 +3,7 @@ package com.huy.chess.data.network.api
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.di.NoAuth
 import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.request.RefreshRequest
 import com.huy.chess.data.model.response.LoginResponse
 import com.huy.chess.data.model.response.RefreshResponse
 import com.huy.chess.data.model.response.VerifyEmailResponse
@@ -37,10 +38,10 @@ interface AuthApi {
     @POST("v1/auth/login")
     suspend fun login(@Body loginRequest: LoginRequest) : Response<LoginResponse>
 
-    @NoAuth
-    @GET("v1/auth/refresh_token")
+    @POST("v1/auth/refresh_token")
     suspend fun refresh(
-        @Header("Authorization") refreshToken: String
+        @Header("Authorization") refreshToken: String,
+        @Body refreshRequest: RefreshRequest
     ) : Response<RefreshResponse>
 
     @NoAuth

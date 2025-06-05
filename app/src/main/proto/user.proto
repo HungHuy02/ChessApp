@@ -5,8 +5,9 @@ option java_multiple_files = true;
 
 message User {
   bool isLogin = 1;
-  string name = 2;
-  string email = 3;
-  string avatar = 4;
-  int32 elo = 5;
+  string id = 2;
+  string name = 3;
+  string email = 4;
+  string avatar = 5;
+  int32 elo = 6;
 }

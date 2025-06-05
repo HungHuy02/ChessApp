@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
         val isPasswordEmpty = state.value.password.isEmpty()
         if(!isAccountEmpty && !isPasswordEmpty)
             viewModelScope.launch {
-                val loginRequest = LoginRequest(state.value.account, state.value.password)
+                val loginRequest = LoginRequest(state.value.account, state.value.password, dataStoreService.getUUID())
                 authRepository.login(loginRequest)
                     .onSuccess {
                         context.userDataStore.updateData {user ->
