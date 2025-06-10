@@ -1,6 +1,7 @@
 package com.huy.chess.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.model.MatchRequest
@@ -30,6 +31,7 @@ class OnlineWaitingViewModel @Inject constructor(
                 MatchRequest(user.id, user.elo, 8)
             )
             gameSocket.onMatchSuccessful().collect {
+                Log.e("tag", it.toString())
                 sendEffect(OnlineWaitingEffect.NavigatePlayOnline)
             }
         }

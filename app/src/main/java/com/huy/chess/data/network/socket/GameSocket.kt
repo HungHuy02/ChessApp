@@ -1,7 +1,6 @@
 package com.huy.chess.data.network.socket
 
 import android.util.Log
-import com.huy.chess.BuildConfig
 import com.huy.chess.data.model.MatchRequest
 import com.huy.chess.data.model.Move
 import com.huy.chess.data.service.DataStoreService
@@ -18,9 +17,8 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.JsonObject
 import okhttp3.OkHttpClient
+import org.json.JSONObject
 import java.net.URISyntaxException
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -33,7 +31,7 @@ import javax.net.ssl.X509TrustManager
 @Singleton
 class GameSocket @Inject constructor(
     private val dataStoreService: DataStoreService,
-    @IoDispatcher private val dispatcher: CoroutineDispatcher
+    @IoDispatcher private val dispatcher: CoroutineDispatcher,
 ) {
 
     companion object {
@@ -50,7 +48,7 @@ class GameSocket @Inject constructor(
 
     private lateinit var socket: Socket
 
-    fun connect() {
+    fun connect(uuid: String) {
         CoroutineScope(dispatcher).launch {
             try {
                 val headers = mapOf(
@@ -58,11 +56,12 @@ class GameSocket @Inject constructor(
                 )
                 val client = getUnsafeOkHttpClient()
                 val opts = IO.Options().apply {
+                    query = "uuid=$uuid"
                     callFactory = client
                     webSocketFactory = client
                     extraHeaders = headers
                 }
-                socket = IO.socket("https://192.168.1.8:8017", opts)
+                socket = IO.socket("https://192.168.1.11:8017", opts)
                 socket.connect()
                 socket.on(Socket.EVENT_CONNECT_ERROR) {
                     Log.e("Socket", "Connect error", it[0] as Exception)
@@ -97,16 +96,21 @@ class GameSocket @Inject constructor(
         socket.emit(RESULT, result.toJsonObject())
     }
 
-    fun onMatchSuccessful() : Flow<JsonObject> = socket.onEventFlow(MATCH_SUCCESSFUL)
-    fun onMove() : Flow<JsonObject> = socket.onEventFlow(MOVE)
-    fun onGameStart() : Flow<JsonObject> = socket.onEventFlow(GAME_START)
-    fun onWantToDraw() : Flow<JsonObject> = socket.onEventFlow(WANT_TO_DRAW)
-    fun onResult() : Flow<JsonObject> = socket.onEventFlow(RESULT)
+    fun onMatchSuccessful() : Flow<String> = socket.onEventFlow(MATCH_SUCCESSFUL)
+    fun onMove() : Flow<String> = socket.onEventFlow(MOVE)
+    fun onGameStart() : Flow<String> = socket.onEventFlow(GAME_START)
+    fun onWantToDraw() : Flow<String> = socket.onEventFlow(WANT_TO_DRAW)
+    fun onResult() : Flow<String> = socket.onEventFlow(RESULT)
 }
 
-fun Socket.onEventFlow(eventName: String) : Flow<JsonObject> = callbackFlow {
+fun Socket.onEventFlow(eventName: String): Flow<String> = callbackFlow {
     val listener = Emitter.Listener {
-        trySend(it[0] as JsonObject)
+        val raw = it[0]
+        if (raw is JSONObject) {
+            trySend(raw.toString()).isSuccess
+        } else if (raw is String) {
+            trySend(raw).isSuccess
+        }
     }
     this@onEventFlow.on(eventName, listener)
     awaitClose { this@onEventFlow.off(eventName, listener) }

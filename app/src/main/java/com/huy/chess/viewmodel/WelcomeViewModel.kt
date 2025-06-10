@@ -62,7 +62,7 @@ class WelcomeViewModel @Inject constructor(
                             .build()
                     }
                 }
-            socket.connect()
+            socket.connect(uuid)
             delay(1)
             sendEffect(WelcomeEffect.NavigateHome)
         }

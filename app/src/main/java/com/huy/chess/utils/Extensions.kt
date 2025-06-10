@@ -14,6 +14,7 @@ import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.enums.GameResultInfo
 import com.huy.chess.utils.enums.StockfishBotLevel
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.json.JSONObject
 
 fun String.toRequestBody(): RequestBody =
@@ -128,7 +129,9 @@ fun StockfishBotLevel.toInt() : Int {
 }
 
 inline fun <reified T> T.toJsonObject(): JSONObject {
-    val moshi = Moshi.Builder().build()
+    val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
     val adapter = moshi.adapter(T::class.java)
     val jsonString = adapter.toJson(this)
     return JSONObject(jsonString)
