@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.preferences.dailyPuzzleDataStore
+import com.huy.chess.data.preferences.userDataStore
 import com.huy.chess.ui.home.HomeAction
 import com.huy.chess.ui.home.HomeEffect
 import com.huy.chess.ui.home.HomeState
@@ -28,6 +29,15 @@ class HomeViewModel @Inject constructor(
                             totalSolved = puzzle.solvedCount
                         )
                     }
+            }
+        }
+        viewModelScope.launch {
+            context.userDataStore.data.collect {user ->
+                updateState {
+                    it.copy(
+                        isLogin = user.isLogin
+                    )
+                }
             }
         }
     }

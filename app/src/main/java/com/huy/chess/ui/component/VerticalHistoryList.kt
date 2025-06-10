@@ -1,11 +1,11 @@
 package com.huy.chess.ui.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.huy.chess.R
@@ -29,7 +29,8 @@ fun VerticalHistoryList(
     modifier: Modifier = Modifier
 ) {
     LazyColumn (
-        modifier = modifier
+        modifier = modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(5) {
             VerticalHistoryItem(
@@ -56,25 +57,20 @@ fun VerticalHistoryItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
-            .padding(16.dp)
             .clickable {  }
     ) {
         Icon(
             painter = iconTime,
-            contentDescription = "icon time"
+            contentDescription = "icon time",
+            tint = Color.Unspecified
         )
-        if (image.isNullOrEmpty()) {
-            Image(
-                painter = painterResource(R.drawable.noavatar),
-                contentDescription = "image"
-            )
-        } else {
-            AsyncImage(
-                model = image,
-                contentDescription = "image",
-                error = painterResource(R.drawable.noavatar)
-            )
-        }
+        AsyncImage(
+            model = image,
+            contentDescription = "image",
+            error = painterResource(R.drawable.noavatar),
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.size(48.dp)
+        )
         Text(
             text = stringResource(R.string.name_with_elo_text, name, elo),
             modifier = Modifier.weight(1f)
@@ -96,10 +92,4 @@ fun VerticalHistoryItem(
             modifier = Modifier.size(24.dp)
         )
     }
-}
-
-@Composable
-@Preview
-private fun Preview() {
-    VerticalHistoryList()
 }
