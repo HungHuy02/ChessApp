@@ -93,10 +93,11 @@ private fun Content(
         )
 
         ChessBoard(
+            side = state.side,
             onCapture = { onAction(PlayOnlineAction.PieceCaptured(it)) },
-            onMove = {move, fen -> onAction(PlayOnlineAction.Move(move, fen)) },
+            onMove = {move, moveMaterial -> onAction(PlayOnlineAction.OnMove(move, moveMaterial)) },
             onResult = { result, whiteSide -> onAction(PlayOnlineAction.Result(result, whiteSide)) },
-            nextMove = state.nextMove,
+            opponentMove = state.nextMove,
             modifier = Modifier
                 .constrainAs(board) {
                     top.linkTo(parent.top, margin = (-20).dp)
