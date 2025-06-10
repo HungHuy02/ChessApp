@@ -1,26 +1,70 @@
 package com.huy.chess.viewmodel
 
+import android.content.Context
 import android.util.Log
+import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
+import com.huy.chess.data.model.OnlinePlayer
+import com.huy.chess.data.network.socket.GameSocket
+import com.huy.chess.data.preferences.userDataStore
 import com.huy.chess.ui.component.parseFen
-import com.huy.chess.ui.playbot.PlayBotAction
-import com.huy.chess.ui.playbot.PlayBotEffect
-import com.huy.chess.ui.playbot.PlayBotState
 import com.huy.chess.ui.playonline.PlayOnlineAction
 import com.huy.chess.ui.playonline.PlayOnlineEffect
 import com.huy.chess.ui.playonline.PlayOnlineState
 import com.huy.chess.utils.Constants
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.increment
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayOnlineViewModel @Inject constructor() :
+class PlayOnlineViewModel @Inject constructor(
+    private val socket: GameSocket,
+    @ApplicationContext private val context: Context,
+) :
     BaseViewModel<PlayOnlineState, PlayOnlineAction, PlayOnlineEffect>(PlayOnlineState()) {
 
     init {
-        parseFen(Constants.START_FEN)
+        viewModelScope.launch {
+            parseFen(Constants.START_FEN)
+            socket.ready()
+            socket.onGameStart().collect { json ->
+                val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+
+                val playerAdapter = moshi.adapter(OnlinePlayer::class.java)
+
+                val root = JSONObject(json)
+
+                val side = root.getBoolean("side")
+                val player1Json = root.getJSONObject("player1").toString()
+                val player2Json = root.getJSONObject("player2").toString()
+
+                val player1 = playerAdapter.fromJson(player1Json)
+                val player2 = playerAdapter.fromJson(player2Json)
+                if (player1?.id == context.userDataStore.data.first().id) {
+                    updateState { it.copy(
+                        side = side,
+                        player1 = player1!!,
+                        player2 = player2!!
+                    ) }
+                } else {
+                    updateState { it.copy(
+                        side = !side,
+                        player1 = player2!!,
+                        player2 = player1!!
+                    ) }
+                }
+
+            }
+        }
     }
 
     override fun processAction(action: PlayOnlineAction) {

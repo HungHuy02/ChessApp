@@ -30,7 +30,7 @@ import com.huy.chess.viewmodel.NewGameViewModel
 @Composable
 fun NewGameScreen(
     viewModel: NewGameViewModel = hiltViewModel(),
-    navigateToPlayOnline: () -> Unit,
+    navigateToOnlineWaiting: () -> Unit,
     navigateToChangeTime: () -> Unit,
     navigateToSetupBot: () -> Unit,
     navigateToSetupTwoPeople: () -> Unit,
@@ -42,7 +42,7 @@ fun NewGameScreen(
             when(it) {
                 NewGameEffect.NavigateChangeTime -> navigateToChangeTime()
                 NewGameEffect.NavigateCustom -> {}
-                NewGameEffect.NavigatePlay -> navigateToPlayOnline()
+                NewGameEffect.NavigatePlay -> navigateToOnlineWaiting()
                 NewGameEffect.NavigateSetupBot -> navigateToSetupBot()
                 NewGameEffect.NavigateSetupTwo -> navigateToSetupTwoPeople()
                 NewGameEffect.PopBackStack -> popBackStack()

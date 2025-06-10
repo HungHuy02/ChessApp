@@ -25,7 +25,7 @@ fun NavGraphBuilder.playDestination(
                 navigateToSetupBot = { navController.navigate(SetupBot) },
                 navigateToSetupTwoPeople = { navController.navigate(SetupTwoPeople) },
                 popBackStack = { navController.popBackStack() },
-                navigateToPlayOnline = { navController.navigate(Online) }
+                navigateToOnlineWaiting = { navController.navigate(OnlineWaiting) }
             )
         }
         composable<ChangeTime> {
