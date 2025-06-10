@@ -1,9 +1,9 @@
 package com.huy.chess.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
+import com.huy.chess.data.model.Move
 import com.huy.chess.data.model.OnlinePlayer
 import com.huy.chess.data.network.socket.GameSocket
 import com.huy.chess.data.preferences.userDataStore
@@ -31,14 +31,13 @@ class PlayOnlineViewModel @Inject constructor(
     BaseViewModel<PlayOnlineState, PlayOnlineAction, PlayOnlineEffect>(PlayOnlineState()) {
 
     init {
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
         viewModelScope.launch {
             parseFen(Constants.START_FEN)
             socket.ready()
             socket.onGameStart().collect { json ->
-                val moshi = Moshi.Builder()
-                    .add(KotlinJsonAdapterFactory())
-                    .build()
-
                 val playerAdapter = moshi.adapter(OnlinePlayer::class.java)
 
                 val root = JSONObject(json)
@@ -50,19 +49,31 @@ class PlayOnlineViewModel @Inject constructor(
                 val player1 = playerAdapter.fromJson(player1Json)
                 val player2 = playerAdapter.fromJson(player2Json)
                 if (player1?.id == context.userDataStore.data.first().id) {
-                    updateState { it.copy(
-                        side = side,
-                        player1 = player1!!,
-                        player2 = player2!!
-                    ) }
+                    updateState {
+                        it.copy(
+                            side = side,
+                            player1 = player1!!,
+                            player2 = player2!!
+                        )
+                    }
                 } else {
-                    updateState { it.copy(
-                        side = !side,
-                        player1 = player2!!,
-                        player2 = player1!!
-                    ) }
+                    updateState {
+                        it.copy(
+                            side = !side,
+                            player1 = player2!!,
+                            player2 = player1!!
+                        )
+                    }
                 }
-
+            }
+        }
+        viewModelScope.launch {
+            socket.onMove().collect {json ->
+                val moveAdapter = moshi.adapter(Move::class.java)
+                val root = JSONObject(json).toString()
+                val move = moveAdapter.fromJson(root)
+                if(move!!.sourcePiece.toChar().isUpperCase() != state.value.side)
+                    updateState { it.copy(nextMove = move) }
             }
         }
     }
@@ -81,8 +92,10 @@ class PlayOnlineViewModel @Inject constructor(
                     it.copy(capturedPiece = map)
                 }
             }
-            is PlayOnlineAction.Move -> {
-                Log.e("tag", action.fen ?: "null")
+            is PlayOnlineAction.OnMove -> {
+                action.moveMaterial?.let {
+                    socket.move(it)
+                }
                 updateState {
                     val notation = state.value.notationList.toMutableList()
                     notation.add(action.move)
