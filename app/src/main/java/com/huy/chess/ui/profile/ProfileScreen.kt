@@ -1,12 +1,13 @@
 package com.huy.chess.ui.profile
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -23,15 +24,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.PopupProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
+import com.huy.chess.ui.component.VerticalHistoryList
 import com.huy.chess.ui.profile.composable.HorizontalFriendList
 import com.huy.chess.ui.profile.composable.ProfileRowButton
-import com.huy.chess.ui.component.VerticalHistoryList
 import com.huy.chess.viewmodel.ProfileViewModel
 
 @Composable
@@ -118,19 +118,22 @@ private fun Content(
             }
         )
         ConstraintLayout(
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxWidth()
         ) {
             val (image, name, regionIcon, region, date) = createRefs()
             AsyncImage(
                 model = state.user.avatar,
                 contentDescription = "image",
+                error = painterResource(R.drawable.noavatar),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .size(60.dp)
                     .clip(MaterialTheme.shapes.medium)
                     .constrainAs(image) {
                         top.linkTo(parent.top)
-                        start.linkTo(parent.start)
+                        start.linkTo(parent.start, margin = 16.dp)
                     }
             )
             Text(
@@ -140,47 +143,47 @@ private fun Content(
                     start.linkTo(image.end, margin = 16.dp)
                 }
             )
-            Icon(
-                painter = painterResource(R.drawable.vietnam),
-                contentDescription = "region icon",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .width(40.dp)
-                    .constrainAs(regionIcon) {
-                        start.linkTo(name.start)
-                        bottom.linkTo(image.bottom)
-                    }
-            )
-            Text(
-                text = "Vietnam",
-                modifier = Modifier.constrainAs(region) {
-                    start.linkTo(regionIcon.end, margin = 8.dp)
-                    top.linkTo(regionIcon.top)
-                    bottom.linkTo(regionIcon.bottom)
-                }
-            )
-            Text(
-                text = "Joined",
-                modifier = Modifier.constrainAs(date) {
-                    start.linkTo(image.start)
-                    top.linkTo(image.bottom, margin = 8.dp)
-                }
-            )
+//            Icon(
+//                painter = painterResource(R.drawable.vietnam),
+//                contentDescription = "region icon",
+//                tint = Color.Unspecified,
+//                modifier = Modifier
+//                    .width(40.dp)
+//                    .constrainAs(regionIcon) {
+//                        start.linkTo(name.start)
+//                        bottom.linkTo(image.bottom)
+//                    }
+//            )
+//            Text(
+//                text = "Vietnam",
+//                modifier = Modifier.constrainAs(region) {
+//                    start.linkTo(regionIcon.end, margin = 8.dp)
+//                    top.linkTo(regionIcon.top)
+//                    bottom.linkTo(regionIcon.bottom)
+//                }
+//            )
+//            Text(
+//                text = "Joined",
+//                modifier = Modifier.constrainAs(date) {
+//                    start.linkTo(image.start)
+//                    top.linkTo(image.bottom, margin = 8.dp)
+//                }
+//            )
         }
 
         ProfileRowButton(
-            text = "",
+            text = "Các ván đấu gần đây",
             number = 1
         ) {
             onAction(ProfileAction.ClickedRecentGames)
         }
         VerticalHistoryList()
-        ProfileRowButton(
-            text = "",
-            number = 1
-        ) {
-            onAction(ProfileAction.ClickedFriends)
-        }
-        HorizontalFriendList()
+//        ProfileRowButton(
+//            text = "",
+//            number = 1
+//        ) {
+//            onAction(ProfileAction.ClickedFriends)
+//        }
+//        HorizontalFriendList()
     }
 }

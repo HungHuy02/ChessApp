@@ -1,24 +1,32 @@
 package com.huy.chess.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
-import com.huy.chess.data.globalstate.UserState
+import com.huy.chess.data.model.User
+import com.huy.chess.data.preferences.userDataStore
 import com.huy.chess.ui.profile.ProfileAction
 import com.huy.chess.ui.profile.ProfileEffect
 import com.huy.chess.ui.profile.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val userState: UserState
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<ProfileState, ProfileAction, ProfileEffect>(ProfileState()) {
 
     init {
         viewModelScope.launch {
-            userState.state.collect { user ->
-                updateState { it.copy(user = user) }
+            context.userDataStore.data.collect { user ->
+                updateState { it.copy(user = User(
+                    name = user.name,
+                    email = user.email,
+                    avatar = user.avatar,
+                    elo = user.elo
+                )) }
             }
         }
     }
