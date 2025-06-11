@@ -18,6 +18,7 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
+import com.huy.chess.R
 
 object Utils {
 
@@ -170,5 +171,32 @@ object Utils {
         val today = LocalDate.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         return today.format(formatter)
+    }
+
+    fun getTimeControlDrawableRes(timeControl: String): Int {
+        return when (timeControl) {
+            "60+0" -> R.drawable.bullet
+            "60+1" -> R.drawable.bullet
+            "120+1" -> R.drawable.bullet
+            "180+0" -> R.drawable.blitz
+            "180+2" -> R.drawable.blitz
+            "300+0" -> R.drawable.blitz
+            "300+5" -> R.drawable.blitz
+            "300+2" -> R.drawable.blitz
+            "600+0" -> R.drawable.rapid
+            "600+5" -> R.drawable.rapid
+            "900+10" -> R.drawable.rapid
+            "1200+0" -> R.drawable.rapid
+            "1800+0" -> R.drawable.rapid
+            "3600+0" -> R.drawable.rapid
+            "86400+0" -> R.drawable.daily
+            "172800+0" -> R.drawable.daily
+            "259200+0" -> R.drawable.daily
+            "432000+0" -> R.drawable.daily
+            "604800+0" -> R.drawable.daily
+            "1209600+0" -> R.drawable.daily
+            "∞" -> R.drawable.rapid
+            else -> R.drawable.rapid
+        }
     }
 }

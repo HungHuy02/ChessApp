@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -149,17 +150,17 @@ private fun Content(
 //                    onClick = { onAction(HomeAction.ClickedStudy) }
 //                )
 //            }
-            if(state.isLogin) {
+            if(state.isLogin && state.listHistory.isNotEmpty()) {
                 item {
                     HomeRow(title = stringResource(R.string.game_archive_text))
                 }
-                items(5) {
+                items(state.listHistory) {
                     VerticalHistoryItem(
-                        iconTime = painterResource(R.drawable.timer_24px),
-                        image = null,
-                        name = "test",
-                        elo = 800,
-                        result = "0-1"
+                        iconTime = painterResource(Utils.getTimeControlDrawableRes(it.timeControl)),
+                        image = "",
+                        name = it.black,
+                        elo = it.blackElo,
+                        result = it.result
                     )
                 }
             }

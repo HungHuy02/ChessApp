@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenu
@@ -19,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,7 +28,6 @@ import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
 import com.huy.chess.ui.component.VerticalHistoryList
-import com.huy.chess.ui.profile.composable.HorizontalFriendList
 import com.huy.chess.ui.profile.composable.ProfileRowButton
 import com.huy.chess.viewmodel.ProfileViewModel
 
@@ -170,14 +167,15 @@ private fun Content(
 //                }
 //            )
         }
-
-        ProfileRowButton(
-            text = "Các ván đấu gần đây",
-            number = 1
-        ) {
-            onAction(ProfileAction.ClickedRecentGames)
+        if(state.histories.isNotEmpty()) {
+            ProfileRowButton(
+                text = "Các ván đấu gần đây",
+                number = 1
+            ) {
+                onAction(ProfileAction.ClickedRecentGames)
+            }
+            VerticalHistoryList(list = state.histories)
         }
-        VerticalHistoryList()
 //        ProfileRowButton(
 //            text = "",
 //            number = 1

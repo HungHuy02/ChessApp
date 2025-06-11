@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.huy.chess.R
 import com.huy.chess.ui.component.ChessTopAppBar
-import com.huy.chess.ui.editprofile.composable.TextWithRightIcon
 import com.huy.chess.ui.editprofile.composable.TextWithTextField
 import com.huy.chess.ui.theme.ChessGlyphFontFamily
 import com.huy.chess.viewmodel.EditProfileViewModel
@@ -83,59 +84,62 @@ private fun Content(
                 AsyncImage(
                     model = state.user.avatar,
                     contentDescription = "image",
-                    contentScale = ContentScale.Fit,
+                    error = painterResource(R.drawable.noavatar),
+                    contentScale = ContentScale.FillBounds,
                     modifier = Modifier.size(80.dp)
                         .clip(MaterialTheme.shapes.medium)
                 )
 
             }
+            HorizontalDivider()
 
-            TextWithTextField(
-                text = stringResource(R.string.flair_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedFlair) }
-            )
-            TextWithTextField(
-                text = stringResource(R.string.stats_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedStatus) }
-            )
-            TextWithTextField(
-                text = stringResource(R.string.username_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedUserName) }
-            )
+//            TextWithTextField(
+//                text = stringResource(R.string.flair_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedFlair) }
+//            )
+//            TextWithTextField(
+//                text = stringResource(R.string.stats_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedStatus) }
+//            )
+//            TextWithTextField(
+//                text = stringResource(R.string.username_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedUserName) }
+//            )
             TextWithTextField(
                 text = stringResource(R.string.first_name_text),
-                value = "",
+                value = state.user.name ?: "",
                 onValueChange = {},
                 onClick = { onAction(EditProfileAction.ClickedFirstName) }
             )
-            TextWithTextField(
-                text = stringResource(R.string.last_name_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedLastName) }
-            )
-            TextWithTextField(
-                text = stringResource(R.string.country_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedCountry) }
-            )
-            TextWithTextField(
-                text = stringResource(R.string.location_text),
-                value = "",
-                onValueChange = {},
-                onClick = { onAction(EditProfileAction.ClickedLocation) }
-            )
-            TextWithRightIcon (
-                text = stringResource(R.string.language_text),
-                onClick = { onAction(EditProfileAction.ClickedLanguage) }
-            )
+            HorizontalDivider()
+//            TextWithTextField(
+//                text = stringResource(R.string.last_name_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedLastName) }
+//            )
+//            TextWithTextField(
+//                text = stringResource(R.string.country_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedCountry) }
+//            )
+//            TextWithTextField(
+//                text = stringResource(R.string.location_text),
+//                value = "",
+//                onValueChange = {},
+//                onClick = { onAction(EditProfileAction.ClickedLocation) }
+//            )
+//            TextWithRightIcon (
+//                text = stringResource(R.string.language_text),
+//                onClick = { onAction(EditProfileAction.ClickedLanguage) }
+//            )
         }
     }
 }

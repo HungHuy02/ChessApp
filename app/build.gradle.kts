@@ -147,6 +147,10 @@ dependencies {
 
     // lottie
     implementation(libs.lottie.compose)
+
+    //room
+    implementation (libs.androidx.room.runtime)
+    ksp (libs.androidx.room.compiler)
 }
 
 protobuf {
