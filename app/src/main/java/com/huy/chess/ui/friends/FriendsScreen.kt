@@ -127,6 +127,6 @@ private fun Content(onAction: (FriendsAction) -> Unit) {
             }
         }
 
-        VerticalHistoryList()
+//        VerticalHistoryList()
     }
 }

@@ -10,6 +10,8 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import com.huy.chess.R
+import com.huy.chess.data.database.entities.HistoryEntity
+import com.huy.chess.data.model.History
 import com.huy.chess.utils.enums.GameResult
 import com.huy.chess.utils.enums.GameResultInfo
 import com.huy.chess.utils.enums.StockfishBotLevel
@@ -139,4 +141,22 @@ inline fun <reified T> T.toJsonObject(): JSONObject {
 
 fun <K> MutableMap<K, Int>.increment(key: K) {
     this[key] = (this[key] ?: 0) + 1
+}
+
+fun History.toHistoryEntity(): HistoryEntity {
+    return HistoryEntity(
+        ids = this.ids.joinToString(","),
+        white = this.white,
+        black = this.black,
+        result = this.result,
+        whiteElo = this.whiteElo,
+        blackElo = this.blackElo,
+        whiteRatingDiff = this.whiteRatingDiff, // String?
+        blackRatingDiff = this.blackRatingDiff, // String?
+        timeControl = this.timeControl,
+        notation = this.notation,
+        createdAt = this.createdAt,
+        updatedAt = this.updatedAt,
+        isSynced = true
+    )
 }

@@ -15,6 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 import com.huy.chess.BuildConfig
 import com.huy.chess.data.network.AuthInterceptor
+import com.huy.chess.data.network.api.HistoryApi
 import com.huy.chess.data.network.api.PuzzleApi
 import com.huy.chess.data.network.api.UserApi
 import java.security.cert.X509Certificate
@@ -41,6 +42,11 @@ object NetworkModule {
     @Provides
     fun provideAuthApi(retrofit: Retrofit) : AuthApi {
         return retrofit.create(AuthApi::class.java)
+    }
+
+    @Provides
+    fun provideHistoryApi(retrofit: Retrofit) : HistoryApi {
+        return retrofit.create(HistoryApi::class.java)
     }
 
     @Provides

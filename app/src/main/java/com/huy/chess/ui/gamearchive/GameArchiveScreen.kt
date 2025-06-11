@@ -52,6 +52,6 @@ private fun Content(onAction: (GameArchiveAction) -> Unit) {
                 )
             }
         )
-        VerticalHistoryList()
+        VerticalHistoryList(list = emptyList())
     }
 }

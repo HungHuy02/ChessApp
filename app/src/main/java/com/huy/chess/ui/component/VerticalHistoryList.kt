@@ -5,11 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,22 +23,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.huy.chess.R
+import com.huy.chess.data.database.entities.HistoryEntity
+import com.huy.chess.utils.Utils
 
 @Composable
 fun VerticalHistoryList(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    list: List<HistoryEntity>
 ) {
     LazyColumn (
         modifier = modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(5) {
+        items(list) {
             VerticalHistoryItem(
-                iconTime = painterResource(R.drawable.timer_24px),
-                image = null,
-                name = "test",
-                elo = 800,
-                result = "0-1"
+                iconTime = painterResource(Utils.getTimeControlDrawableRes(it.timeControl)),
+                image = "",
+                name = it.black,
+                elo = it.blackElo,
+                result = it.result
             )
         }
     }
