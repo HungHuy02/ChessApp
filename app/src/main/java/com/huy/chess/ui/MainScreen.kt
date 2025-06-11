@@ -51,7 +51,8 @@ fun MainScreen() {
                     navigateProfile = { navController.navigate(Profile) },
                     navigateNotification = { },
                     navigateDailyPuzzle = { navController.navigate(DailyPuzzle) },
-                    navigateSolvePuzzles = { navController.navigate(SolvePuzzles) }
+                    navigateSolvePuzzles = { navController.navigate(SolvePuzzles) },
+                    navigateSettings = { }
                 )
             }
             authDestination(navController)

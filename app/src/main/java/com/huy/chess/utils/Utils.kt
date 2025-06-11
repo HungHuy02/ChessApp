@@ -159,6 +159,7 @@ object Utils {
     }
 
     fun decodeAESCBC(input: ByteArray, alias: String) : String {
+        if(input.size < 5) return ""
         val iv: ByteArray = input.copyOfRange(0, 16)
         val encoded: ByteArray = input.copyOfRange(16, input.size)
         val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding")

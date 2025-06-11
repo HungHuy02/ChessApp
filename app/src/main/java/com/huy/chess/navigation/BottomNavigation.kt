@@ -57,7 +57,9 @@ fun NavGraphBuilder.bottomDestination(
     navController: NavController,
     navigatePlay: () -> Unit,
     navigateDailyPuzzle: () -> Unit,
-    navigateSolvePuzzles: () -> Unit
+    navigateSolvePuzzles: () -> Unit,
+    navigateSettings: () -> Unit,
+    navigateProfile: () -> Unit
 ) {
     composable<TopLevelDestination.Home> {
         HomeScreen(
@@ -85,7 +87,10 @@ fun NavGraphBuilder.bottomDestination(
     }
 
     composable<TopLevelDestination.MoreOptions> {
-        MoreOptionsScreen()
+        MoreOptionsScreen(
+            navigateSettings = navigateSettings,
+            navigateProfile = navigateProfile
+        )
     }
     dialog<PlayOnline>{
         PlayOnlineDialog(

@@ -158,4 +158,5 @@
     <string name="disable_board_rotation_text">Tắt chức năng xoay bàn cờ</string>
     <string name="enable_board_rotation_text">Cho Phép xoay bàn cờ</string>
     <string name="copy_pgn_text">Copy PGN</string>
+    <string name="log_out_text" >Log Out</string>
 </resources>
