@@ -6,9 +6,11 @@ import com.huy.chess.base.BaseRepository
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.data.network.api.AuthApi
 import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.request.LogoutRequest
 import com.huy.chess.data.model.request.RefreshRequest
 import com.huy.chess.data.model.request.RegisterRequest
 import com.huy.chess.data.model.response.LoginResponse
+import com.huy.chess.data.model.response.LogoutResponse
 import com.huy.chess.data.model.response.RefreshResponse
 import com.huy.chess.data.model.response.VerifyEmailResponse
 import com.huy.chess.data.service.DataStoreService
@@ -46,5 +48,9 @@ class AuthRepository @Inject constructor(
 
     suspend fun verifyEmail(email: String) : Result<VerifyEmailResponse> {
         return safeApiCall { authApi.verifyEmail(email) }
+    }
+
+    suspend fun logout() : Result<LogoutResponse> {
+        return safeApiCall { authApi.logout(LogoutRequest(dataStoreService.getUUID())) }
     }
 }

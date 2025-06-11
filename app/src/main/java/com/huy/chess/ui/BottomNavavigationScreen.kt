@@ -29,7 +29,8 @@ fun BottomNavigationScreen(
     navigateFriends: () -> Unit,
     navigateProfile: () -> Unit,
     navigateNotification: () -> Unit,
-    navigateSolvePuzzles: () -> Unit
+    navigateSolvePuzzles: () -> Unit,
+    navigateSettings: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
@@ -75,7 +76,9 @@ fun BottomNavigationScreen(
                 navController = navController,
                 navigatePlay = navigatePlay,
                 navigateDailyPuzzle = navigateDailyPuzzle,
-                navigateSolvePuzzles = navigateSolvePuzzles
+                navigateSolvePuzzles = navigateSolvePuzzles,
+                navigateProfile = navigateProfile,
+                navigateSettings = navigateSettings
             )
         }
     }

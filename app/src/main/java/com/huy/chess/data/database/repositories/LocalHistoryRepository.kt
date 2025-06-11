@@ -37,4 +37,6 @@ class LocalHistoryRepository @Inject constructor(private val historyDao: History
     suspend fun deleteHistory(entity: HistoryEntity) {
         historyDao.deleteHistory(entity)
     }
+
+    suspend fun clearAll() = historyDao.clearAll()
 }

@@ -159,7 +159,7 @@
     <string name="notifications_text" translatable="false">Notifications</string>
     <string name="board_text" translatable="false">Board</string>
     <string name="privacy_settings_text" translatable="false">Privacy Settings</string>
-    <string name="log_out_text" translatable="false">Log Out</string>
+    <string name="log_out_text" >Đăng xuất</string>
 
     <string name="show_featured_events_text" translatable="false">Show Featured Events</string>
     <string name="show_recommended_games_text" translatable="false">Show Recommended Games</string>

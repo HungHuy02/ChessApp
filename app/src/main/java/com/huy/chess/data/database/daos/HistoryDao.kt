@@ -32,4 +32,7 @@ interface HistoryDao {
 
     @Query("SELECT * FROM histories ORDER BY created_at DESC LIMIT :limit OFFSET :offset")
     fun getHistoriesPaged(limit: Int, offset: Int): Flow<List<HistoryEntity>>
+
+    @Query("DELETE FROM histories")
+    suspend fun clearAll()
 }

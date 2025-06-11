@@ -3,8 +3,10 @@ package com.huy.chess.data.network.api
 import com.huy.chess.base.BaseResponse
 import com.huy.chess.di.NoAuth
 import com.huy.chess.data.model.request.LoginRequest
+import com.huy.chess.data.model.request.LogoutRequest
 import com.huy.chess.data.model.request.RefreshRequest
 import com.huy.chess.data.model.response.LoginResponse
+import com.huy.chess.data.model.response.LogoutResponse
 import com.huy.chess.data.model.response.RefreshResponse
 import com.huy.chess.data.model.response.VerifyEmailResponse
 import okhttp3.MultipartBody
@@ -47,4 +49,7 @@ interface AuthApi {
     @NoAuth
     @POST("v1/auth/verify_email")
     suspend fun verifyEmail(@Body email: String) : Response<VerifyEmailResponse>
+
+    @POST("v1/auth/logout")
+    suspend fun logout(@Body logoutRequest: LogoutRequest) : Response<LogoutResponse>
 }
