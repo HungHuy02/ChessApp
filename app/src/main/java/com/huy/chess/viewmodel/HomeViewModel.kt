@@ -3,9 +3,14 @@ package com.huy.chess.viewmodel
 import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
+import com.huy.chess.data.database.entities.HistoryEntity
 import com.huy.chess.data.database.repositories.LocalHistoryRepository
 import com.huy.chess.data.preferences.dailyPuzzleDataStore
+import com.huy.chess.data.preferences.puzzleDataStore
 import com.huy.chess.data.preferences.userDataStore
+import com.huy.chess.proto.DailyPuzzle
+import com.huy.chess.proto.Puzzle
+import com.huy.chess.proto.User
 import com.huy.chess.ui.home.HomeAction
 import com.huy.chess.ui.home.HomeEffect
 import com.huy.chess.ui.home.HomeState
@@ -28,17 +33,19 @@ class HomeViewModel @Inject constructor(
             combine(
                 context.dailyPuzzleDataStore.data,
                 context.userDataStore.data,
-                localHistoryRepository.getHistoriesForPage(1)
-            ) { puzzle, user, histories ->
-                Triple(puzzle, user, histories)
-            }.collectLatest { (puzzle, user, histories) ->
+                localHistoryRepository.getHistoriesForPage(1),
+                context.puzzleDataStore.data
+            ) { dailyPuzzle, user, histories, puzzle ->
+                CombinedData(dailyPuzzle, user, histories, puzzle)
+            }.collectLatest { (dailyPuzzle, user, histories, puzzle) ->
                 val today = Utils.getToday()
                 updateState {
                     it.copy(
-                        dailyPuzzleFen = if (puzzle.date == today) puzzle.fen ?: "" else "",
-                        totalSolved = if (puzzle.date == today) puzzle.solvedCount else 0,
+                        dailyPuzzleFen = if (dailyPuzzle.date == today) dailyPuzzle.fen ?: "" else "",
+                        totalSolved = if (dailyPuzzle.date == today) dailyPuzzle.solvedCount else 0,
                         isLogin = user.isLogin,
-                        listHistory = histories
+                        listHistory = histories,
+                        puzzleFen = puzzle.fen ?: ""
                     )
                 }
             }
@@ -56,3 +63,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 }
+
+data class CombinedData(
+    val dailyPuzzle: DailyPuzzle,
+    val user: User,
+    val histories: List<HistoryEntity>,
+    val puzzle: Puzzle
+)

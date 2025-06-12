@@ -54,7 +54,7 @@ fun PuzzleBottomBar(
                 Item(
                     icon = "\u2026",
                     title = stringResource(R.string.continue_text),
-                    onClick = { onClick(SolvePuzzlesAction.ClickedContinue) }
+                    onClick = { onClick(SolvePuzzlesAction.ClickedForward) }
                 )
             }
             PuzzleDescriptionType.Correct -> {
@@ -91,6 +91,8 @@ fun PuzzleBottomBar(
                     onClick = { onClick(SolvePuzzlesAction.ClickedContinue) }
                 )
             }
+
+            PuzzleDescriptionType.NONE -> {}
         }
 
     }
@@ -134,6 +136,8 @@ private fun RowScope.Item(
         onClick = onClick,
         text = text,
         backgroundColor = color,
+        backgroundTopColor = color,
+        backgroundBottomColor = color,
         iconPosition = IconPosition.NONE
     )
 }

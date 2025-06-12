@@ -19,11 +19,13 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 import com.huy.chess.R
+import kotlin.math.ceil
 
 object Utils {
 
     fun fenToBoard(fen: String): Pair<List<MutableList<Piece>>, Boolean> {
         var list: List<MutableList<Piece>> = List(8) { mutableListOf() }
+        if(fen.isNullOrEmpty()) return list to true
         val strings = fen.split(" ")
         var rank = 0
         var file = 0
@@ -200,4 +202,6 @@ object Utils {
             else -> R.drawable.rapid
         }
     }
+
+    fun getMoveCount(moves: Int) = ceil(moves / 2f).toInt()
 }

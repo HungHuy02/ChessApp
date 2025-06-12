@@ -17,6 +17,7 @@ import com.huy.chess.ui.component.PuzzleTextWithColor
 import com.huy.chess.ui.component.PuzzleTextWithIcon
 
 sealed class PuzzleDescriptionType {
+    data object NONE: PuzzleDescriptionType()
     data object BlackMove: PuzzleDescriptionType()
     data object WhiteMove: PuzzleDescriptionType()
     data object Fail: PuzzleDescriptionType()
@@ -59,6 +60,7 @@ fun PuzzleDescription(
                     text = stringResource(R.string.white_player_turn_text)
                 )
             }
+            PuzzleDescriptionType.NONE -> {}
         }
     }
 }

@@ -55,13 +55,13 @@ class WelcomeViewModel @Inject constructor(
                             .setPuzzleElo(response.puzzleElo ?: 800)
                             .build()
                     }
-                    if (puzzle.fen == null) {
+                    if (puzzle.fen.isNullOrEmpty()) {
                         getPuzzle(response.puzzleElo ?: 800)
                     }
                 }
                 .onFailure {
-                    if (puzzle.fen == null) {
-                        getPuzzle(800)
+                    if (puzzle.fen.isNullOrEmpty()) {
+                        getPuzzleGuest(800)
                     }
                 }
             puzzleRepository.getDailyPuzzle(Utils.getToday())
@@ -94,6 +94,21 @@ class WelcomeViewModel @Inject constructor(
 
     private suspend fun getPuzzle(puzzleElo: Int) {
         puzzleRepository.getPuzzle(puzzleElo)
+            .onSuccess { puzzle ->
+                context.puzzleDataStore.updateData {
+                    Puzzle.newBuilder()
+                        .setId(puzzle.id)
+                        .setFen(puzzle.fen)
+                        .setMoves(puzzle.moves)
+                        .setRating(puzzle.rating)
+                        .setThemes(puzzle.themes)
+                        .build()
+                }
+            }
+    }
+
+    private suspend fun getPuzzleGuest(puzzleElo: Int) {
+        puzzleRepository.getPuzzleGuest(puzzleElo)
             .onSuccess { puzzle ->
                 context.puzzleDataStore.updateData {
                     Puzzle.newBuilder()

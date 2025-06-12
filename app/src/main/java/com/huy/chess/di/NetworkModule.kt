@@ -110,8 +110,10 @@ object NetworkModule {
             }
 
             return builder
-                .connectTimeout(5, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(false)
+                .connectTimeout(15, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
+                .writeTimeout(15, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
                 .addInterceptor(authInterceptor)
                 .addInterceptor(httpLoggingInterceptor)
                 .authenticator(tokenAuthenticator).build()

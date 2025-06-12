@@ -81,16 +81,23 @@ private fun Content(
                 width = Dimension.fillToConstraints
             }
         )
-        ChessBoard(
-            fen = state.puzzlesList[state.currentPuzzleIndex].fen,
-            onMove = { onAction(SolvePuzzlesAction.Move(it)) },
-            isPuzzleEnd = false,
-            modifier = Modifier.constrainAs(board) {
-                start.linkTo(parent.start)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }
-        )
+        state.fen?.let {
+            ChessBoard(
+                fen = it,
+                onMove = { onAction(SolvePuzzlesAction.Move(it)) },
+                isPuzzleEnd = false,
+                correctMove = if(state.showSuggest) state.correctMove else null,
+                nextMove = state.nextMove,
+                isReplay = state.isRePlay,
+                side = state.side,
+                modifier = Modifier.constrainAs(board) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                }
+            )
+        }
+
         PuzzleBottomBar(
             type = state.type,
             onClick = onAction,
