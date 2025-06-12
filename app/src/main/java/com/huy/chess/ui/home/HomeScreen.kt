@@ -25,11 +25,9 @@ import com.huy.chess.R
 import com.huy.chess.ui.component.AppButton
 import com.huy.chess.ui.component.IconPosition
 import com.huy.chess.ui.component.VerticalHistoryItem
-import com.huy.chess.ui.component.VerticalHistoryList
 import com.huy.chess.ui.component.getChessPieceBitmap
 import com.huy.chess.ui.home.composables.HomeItems
 import com.huy.chess.ui.home.composables.HomeRow
-import com.huy.chess.utils.Constants
 import com.huy.chess.utils.Utils
 import com.huy.chess.viewmodel.HomeViewModel
 

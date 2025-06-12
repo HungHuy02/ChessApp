@@ -43,6 +43,7 @@ import com.huy.chess.data.model.Move
 import com.huy.chess.data.model.MoveResult
 import com.huy.chess.data.model.Piece
 import com.huy.chess.utils.Utils
+import kotlinx.coroutines.delay
 
 private fun getPieceDrawableId(piece: Char): Int {
     return when (piece) {
@@ -1047,9 +1048,12 @@ fun ChessBoard(
 fun ChessBoard(
     modifier: Modifier = Modifier,
     nextMove: String? = null,
+    correctMove: String? = null,
     onMove: (String) -> Unit = {},
     isPuzzleEnd: Boolean = false,
-    fen: String
+    fen: String,
+    side: Boolean,
+    isReplay: Boolean = false
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -1059,11 +1063,12 @@ fun ChessBoard(
     val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
     val list = remember { getChessPiecePainters(context, cellSize) }
     var whiteSide: Boolean by remember { mutableStateOf(true) }
-    val board = remember {
+    var board by remember {
         val pair = Utils.fenToBoard(fen)
-        whiteSide = pair.second
-        pair.first
+        mutableStateOf(pair.first)
     }
+
+    LaunchedEffect(side) { whiteSide = side }
 
     var isPromoting: Boolean by remember { mutableStateOf(false) }
     var movedSpot: List<Piece> by remember { mutableStateOf(emptyList()) }
@@ -1073,9 +1078,22 @@ fun ChessBoard(
     val pieceOffset = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     var isMoving by remember { mutableStateOf(false) }
     var promotionPair by remember { mutableStateOf(0 to 0) }
+    var suggestMove: Pair<Int, Int>? by remember { mutableStateOf(null) }
 
-    nextMove?.let {
-        LaunchedEffect(Unit) {
+    LaunchedEffect(correctMove) {
+        correctMove?.let {
+            val sourceX = rankToRow(it[1])
+            val sourceY = fileToCol(it[0])
+            suggestMove = sourceX to sourceY
+        }
+    }
+
+    LaunchedEffect(fen, isReplay) {
+        val pair = Utils.fenToBoard(fen)
+        board = pair.first
+        movedSpot = emptyList()
+        promotionPair = 0 to 0
+        if(isReplay) nextMove?.let {
             val sourceX = rankToRow(it[1])
             val sourceY = fileToCol(it[0])
             val targetX = rankToRow(it[3])
@@ -1088,6 +1106,7 @@ fun ChessBoard(
                 it.getOrNull(4) ?: ' ',
                 true
             )
+            delay(300)
             isMoving = true
             pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
             pieceOffset.animateTo(
@@ -1098,8 +1117,49 @@ fun ChessBoard(
             )
 
             if (result.diffMove != 65) {
-                Log.e("tag", "source ${result.diffMove and 0x3f}")
-                Log.e("tag", "taget ${(result.diffMove and 0xfc0) shr 6}")
+                val source = result.diffMove and 0x3f
+                val diffSourceX = source / 8
+                val diffSourceY = source % 8
+                val target = (result.diffMove and 0xfc0) shr 6
+                val diffTargetX = target / 8
+                val diffTargetY = target % 8
+                board[diffTargetX][diffTargetY] =
+                    Piece(diffTargetX, diffTargetY, board[diffSourceX][diffSourceY].piece)
+                board[diffSourceX][diffSourceY] = Piece(diffSourceX, diffSourceY, ' ')
+            }
+            isMoving = false
+            board[targetX][targetY] = Piece(targetX, targetY, board[sourceX][sourceY].piece)
+            board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
+
+            movedSpot = listOf(board[sourceX][sourceY], board[targetX][targetY])
+        }
+    }
+
+    LaunchedEffect(nextMove) {
+        nextMove?.let {
+            val sourceX = rankToRow(it[1])
+            val sourceY = fileToCol(it[0])
+            val targetX = rankToRow(it[3])
+            val targetY = fileToCol(it[2])
+            val result = makeMove(
+                sourceX * 8 + sourceY,
+                board[sourceX][sourceY].piece,
+                targetX * 8 + targetY,
+                board[targetX][targetY].piece,
+                it.getOrNull(4) ?: ' ',
+                true
+            )
+            delay(300)
+            isMoving = true
+            pieceOffset.snapTo(Offset(sourceX * cellSize.toFloat(), sourceY * cellSize.toFloat()))
+            pieceOffset.animateTo(
+                Offset(
+                    targetX * cellSize.toFloat(),
+                    targetY * cellSize.toFloat()
+                ), animationSpec = tween(300)
+            )
+
+            if (result.diffMove != 65) {
                 val source = result.diffMove and 0x3f
                 val diffSourceX = source / 8
                 val diffSourceY = source % 8
@@ -1211,7 +1271,6 @@ fun ChessBoard(
                 ' ',
                 true
             )
-            Log.e("tag", result.notation)
             if (result.diffMove == 0) {
                 isMoving = true
                 pieceOffset.snapTo(Offset(startX, startY))
@@ -1229,8 +1288,6 @@ fun ChessBoard(
                     pieceOffset.snapTo(Offset(startX, startY))
                     pieceOffset.animateTo(Offset(endX, endY), animationSpec = tween(300))
                     if (result.diffMove != 65) {
-                        Log.e("tag", "source ${result.diffMove and 0x3f}")
-                        Log.e("tag", "taget ${(result.diffMove and 0xfc0) shr 6}")
                         val source = result.diffMove and 0x3f
                         val sourceX = source / 8
                         val sourceY = source % 8
@@ -1242,11 +1299,11 @@ fun ChessBoard(
                         board[sourceX][sourceY] = Piece(sourceX, sourceY, ' ')
                     }
                     isMoving = false
+                        board[desSpot!!.x][desSpot!!.y] =
+                            Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
+                        board[selectedPiece!!.x][selectedPiece!!.y] =
+                            Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
 
-                    board[desSpot!!.x][desSpot!!.y] =
-                        Piece(desSpot!!.x, desSpot!!.y, selectedPiece!!.piece)
-                    board[selectedPiece!!.x][selectedPiece!!.y] =
-                        Piece(selectedPiece!!.x, selectedPiece!!.y, ' ')
 
                     movedSpot = listOf(selectedPiece!!, desSpot!!)
                 }
@@ -1295,6 +1352,15 @@ fun ChessBoard(
                 size = Size(cellSize, cellSize)
             )
         }
+
+        suggestMove?.let {
+            drawRect(
+                color = Color.Yellow.copy(alpha = 0.8f),
+                topLeft = Offset(it.second * cellSize, it.first * cellSize),
+                size = Size(cellSize, cellSize)
+            )
+        }
+
         for (spot in movedSpot) {
             drawRect(
                 color = Color.Yellow.copy(alpha = 0.5f),
@@ -1351,10 +1417,6 @@ fun ChessBoard(
                 list = list
             )
         }
-        drawPath(
-            path = createArrowPath(2 * cellSize, 2 * cellSize, cellSize),
-            color = Color.Green
-        )
     }
 }
 

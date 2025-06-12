@@ -71,6 +71,7 @@ private fun Content(
                 nextMove = state.nextMove,
                 onMove = { onAction(DailyPuzzleAction.Move(it)) },
                 isPuzzleEnd = state.puzzleStatus == PuzzleStatus.FINISH,
+                side = true,
                 modifier = Modifier
                     .constrainAs(board) {
                         top.linkTo(parent.top, margin = (-20).dp)
