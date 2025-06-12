@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.Uri
 import com.huy.chess.base.BaseRepository
 import com.huy.chess.data.model.User
-import com.huy.chess.data.model.response.GetDetailsResponse
 import com.huy.chess.data.network.api.UserApi
 import com.huy.chess.utils.toMultipart
 import com.huy.chess.utils.toRequestBody
@@ -17,13 +16,13 @@ class UserRepository @Inject constructor(
     private val userApi: UserApi
 ) : BaseRepository() {
 
-    suspend fun getDetails(): Result<GetDetailsResponse> {
+    suspend fun getDetails(): Result<User> {
         return safeApiCall { userApi.getDetails() }
     }
 
     suspend fun updateUser(user: User): Result<User> {
-        val namePart = user?.name?.toRequestBody()
-        val avatar = user?.avatar?.let { context.uriToFile(Uri.parse(it))?.toMultipart("avatar") }
+        val namePart = user.name?.toRequestBody()
+        val avatar = user.avatar?.let { context.uriToFile(Uri.parse(it))?.toMultipart("avatar") }
         return safeApiCall { userApi.updateUser(namePart, avatar) }
     }
 }

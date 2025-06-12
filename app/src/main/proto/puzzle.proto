@@ -13,3 +13,11 @@ message DailyPuzzle {
   int32 commentCount = 7;
   bool isSolved = 8;
 }
+
+message Puzzle {
+  string id = 1;
+  string fen = 2;
+  string moves = 3;
+  int32 rating = 4;
+  string themes = 5;
+}

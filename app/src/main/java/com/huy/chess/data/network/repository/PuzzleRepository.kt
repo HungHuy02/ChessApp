@@ -9,4 +9,6 @@ class PuzzleRepository @Inject constructor(
 ) : BaseRepository() {
 
     suspend fun getDailyPuzzle(date: String) = safeApiCall { puzzleApi.getDailyPuzzle(date) }
+
+    suspend fun getPuzzle(elo: Int, themes: String? = null) = safeApiCall { puzzleApi.getPuzzle(elo, themes) }
 }

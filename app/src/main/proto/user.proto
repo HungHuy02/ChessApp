@@ -10,4 +10,5 @@ message User {
   string email = 4;
   string avatar = 5;
   int32 elo = 6;
+  int32 puzzleElo = 7;
 }

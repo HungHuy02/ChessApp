@@ -14,7 +14,7 @@ import retrofit2.http.Part
 interface UserApi {
 
     @GET("v1/users")
-    suspend fun getDetails() : Response<GetDetailsResponse>
+    suspend fun getDetails() : Response<User>
 
     @Multipart
     @PUT("v1/users")

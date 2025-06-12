@@ -85,7 +85,7 @@ fun BottomNavigationScreen(
 }
 
 data class BottomNavState(
-    val user: User = User(),
+    val user: User = User("", "", "", "", 800, 800),
     val isLogin: Boolean = false
 )
 
