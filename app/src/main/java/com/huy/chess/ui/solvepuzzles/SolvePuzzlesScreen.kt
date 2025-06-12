@@ -84,6 +84,7 @@ private fun Content(
         ChessBoard(
             fen = state.puzzlesList[state.currentPuzzleIndex].fen,
             onMove = { onAction(SolvePuzzlesAction.Move(it)) },
+            isPuzzleEnd = false,
             modifier = Modifier.constrainAs(board) {
                 start.linkTo(parent.start)
                 top.linkTo(parent.top)

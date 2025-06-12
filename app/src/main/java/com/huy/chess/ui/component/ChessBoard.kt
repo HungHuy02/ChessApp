@@ -1048,7 +1048,7 @@ fun ChessBoard(
     modifier: Modifier = Modifier,
     nextMove: String? = null,
     onMove: (String) -> Unit = {},
-    isGameEnd: Boolean = false,
+    isPuzzleEnd: Boolean = false,
     fen: String
 ) {
     val context = LocalContext.current
@@ -1261,7 +1261,7 @@ fun ChessBoard(
             .fillMaxWidth()
             .height(configuration.screenWidthDp.dp)
             .then(
-                if (!isGameEnd)
+                if (!isPuzzleEnd)
                     Modifier.pointerInput(Unit) {
                         detectTapGestures { offset ->
                             val row = (offset.y / cellSize).toInt()

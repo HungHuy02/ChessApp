@@ -24,10 +24,12 @@ class BottomNavViewModel @Inject constructor(
                 updateState { it.copy(
                     isLogin = user.isLogin,
                     user = User(
+                        id = user.id,
                         name = user.name,
                         email = user.email,
                         avatar = user.avatar,
-                        elo = user.elo
+                        elo = user.elo,
+                        puzzleElo = user.puzzleElo
                     )
                 ) }
             }
