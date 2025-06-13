@@ -25,6 +25,7 @@ bool parseFen(const char *fen);
 void initAll();
 int hasOneLegalMove();
 string fenOtherPart();
+string pgnToBoard(const string& pgn);
 
 #endif
 
