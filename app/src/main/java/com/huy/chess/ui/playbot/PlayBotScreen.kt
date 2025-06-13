@@ -23,12 +23,16 @@ import com.huy.chess.viewmodel.PlayBotViewModel
 @Composable
 fun PlayBotScreen(
     viewModel: PlayBotViewModel = hiltViewModel(),
+    level: Int,
+    enableSuggest: Boolean,
+    enableTakeBack: Boolean,
     showPlayOptionsDialog: () -> Unit,
     showEndGameDialog: (GameResult) -> Unit,
     popBackStack: () -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
+        viewModel.sendAction(PlayBotAction.AddSetup(level, enableSuggest, enableTakeBack))
         viewModel.event.collect {
             when(it) {
                 PlayBotEffect.PopBackStack -> popBackStack()
@@ -90,23 +94,23 @@ private fun Content(
                 }
         )
 
-        Timer(
-            time = 0,
-            isWhite = true,
-            modifier = Modifier.constrainAs(timerTop) {
-                top.linkTo(board.bottom, margin = 10.dp)
-                end.linkTo(parent.end)
-            }
-        )
+//        Timer(
+//            time = 0,
+//            isWhite = true,
+//            modifier = Modifier.constrainAs(timerTop) {
+//                top.linkTo(board.bottom, margin = 10.dp)
+//                end.linkTo(parent.end)
+//            }
+//        )
 
-        Timer(
-            time = 0,
-            isWhite = false,
-            modifier = Modifier.constrainAs(timerBottom) {
-                top.linkTo(timerTop.bottom, margin = 10.dp)
-                end.linkTo(timerTop.end)
-            }
-        )
+//        Timer(
+//            time = 0,
+//            isWhite = false,
+//            modifier = Modifier.constrainAs(timerBottom) {
+//                top.linkTo(timerTop.bottom, margin = 10.dp)
+//                end.linkTo(timerTop.end)
+//            }
+//        )
 
         PlayBotScreenBottomBar (
             onClick = onAction,

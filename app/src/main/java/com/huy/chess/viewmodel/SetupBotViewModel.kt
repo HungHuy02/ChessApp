@@ -51,7 +51,7 @@ class SetupBotViewModel @Inject constructor(
                 if(state.value.stockfishBotLevel != action.level)
                     updateState { it.copy(stockfishBotLevel = action.level) }
             }
-            SetupBotAction.ClickedPlay -> sendEffect(SetupBotEffect.NavigatePlayBot(state.value.stockfishBotLevel))
+            SetupBotAction.ClickedPlay -> sendEffect(SetupBotEffect.NavigatePlayBot(state.value.stockfishBotLevel, state.value.enableTakeback, state.value.enableSuggest))
             SetupBotAction.ToggleSuggestion -> {
                 val enableSuggest = !state.value.enableSuggest
                 updateState { it.copy(enableSuggest = enableSuggest) }

@@ -1,7 +1,10 @@
 package com.huy.chess.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
+import com.huy.chess.data.database.repositories.LocalHistoryRepository
+import com.huy.chess.data.preferences.userDataStore
 import com.huy.chess.ui.component.parseFen
 import com.huy.chess.ui.component.pgnToBoard
 import com.huy.chess.ui.history.HistoryAction
@@ -10,25 +13,22 @@ import com.huy.chess.ui.history.HistoryState
 import com.huy.chess.utils.Constants
 import com.huy.chess.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HistoryViewModel @Inject constructor() :
+class HistoryViewModel @Inject constructor(
+    private val localHistoryRepository: LocalHistoryRepository,
+    @ApplicationContext private val context: Context
+) :
     BaseViewModel<HistoryState, HistoryAction, HistoryEffect>(HistoryState()) {
 
     init {
         parseFen(Constants.START_FEN)
-        val pgn = "1. f4 d6 2. Nf3 g5 3. d4 g4 4. Ng5 a6 5. e3 f5 6. Bc4 b6 7. Bxg8 Rxg8 8. O-O h6 9. e4 hxg5 10. fxg5 Rh8 11. exf5 b5 12. Qxg4 e5 13. dxe5 Be7 14. exd6 Qxd6 15. Bf4 Qc5+ 16. Rf2 Rf8 17. Nd2 Rf6 18. gxf6 Bf8 19. Ne4 Ra7 20. Nxc5 Bxc5 21. Kf1 Bb7 22. Ke2 Nc6 23. c3 Nb8 24. b4 Nd7 25. g3 Bxb4 26. cxb4"
-        val moves = Utils.extractMovesFromPGN(pgn)
-        val fen = pgnToBoard(pgn)
         viewModelScope.launch {
-            updateState {
-                it.copy(
-                    fen = fen,
-                    currentFen = moves.size,
-                    notationList = moves
-                )
+            context.userDataStore.data.collect {
+                updateState { it.copy(id = it.id) }
             }
         }
     }
@@ -101,6 +101,37 @@ class HistoryViewModel @Inject constructor() :
                             fen = fen
                         )
                     }
+            }
+            is HistoryAction.UpdateId -> {
+                viewModelScope.launch {
+                    localHistoryRepository.getHistoryById(action.id).collect {
+                        it.let {entity ->
+                            val moves = Utils.extractMovesFromPGN(entity!!.notation)
+                            val fen = pgnToBoard(entity.notation)
+                            if(state.value.id == entity.ids.split(',')[0])
+                                updateState {
+                                    it.copy(
+                                        fen = fen,
+                                        currentFen = moves.size,
+                                        notationList = moves,
+                                        topName = entity.white,
+                                        bottomName = entity.black
+                                    )
+                                }
+                            else
+                                updateState {
+                                    it.copy(
+                                        fen = fen,
+                                        currentFen = moves.size,
+                                        notationList = moves,
+                                        topName = entity.black,
+                                        bottomName = entity.white
+                                    )
+                                }
+                        }
+
+                    }
+                }
             }
         }
     }

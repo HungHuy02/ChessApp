@@ -119,11 +119,11 @@ private fun Content(
         }
         if(state.showSocialLogin) {
             TextWithFullDivider()
-            AppButton(
-                onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
-                text = stringResource(R.string.login_with_facebook_text),
-                painter = painterResource(R.drawable.facebook)
-            )
+//            AppButton(
+//                onClick = { onAction(LoginAction.ClickedLoginFacebookButton) },
+//                text = stringResource(R.string.login_with_facebook_text),
+//                painter = painterResource(R.drawable.facebook)
+//            )
             AppButton(
                 onClick = { onAction(LoginAction.ClickedLoginGoogleButton) },
                 text = stringResource(R.string.login_with_google_text),

@@ -36,7 +36,7 @@ object Utils {
     fun extractMovesFromPGN(pgn: String): List<String> {
         return pgn
             .split(Regex("\\s+"))
-            .filter { !it.matches(Regex("\\d+\\.")) }
+            .filterNot { it.matches(Regex("\\d+\\.")) || it in setOf("1-0", "0-1", "1/2-1/2") }
     }
 
     fun generatePGNUpTo(moves: List<String>, upToMoveNumber: Int): String {

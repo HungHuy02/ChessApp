@@ -36,14 +36,18 @@ fun NavGraphBuilder.playDestination(
         composable<SetupBot> {
             SetupBotScreen(
                 popBackStack = { navController.popBackStack() },
-                navigatePlayBot = { navController.navigate(PlayBot(it)) }
+                navigatePlayBot = {l, s, t-> navController.navigate(PlayBot(l, s, t)) }
             )
         }
         composable<PlayBot> {
+            val route = it.toRoute<PlayBot>()
             PlayBotScreen(
                 showPlayOptionsDialog = { navController.navigate(PlayOptions) },
                 showEndGameDialog = {navController.navigate(EndGame(it)) },
-                popBackStack = { navController.popBackStack() }
+                popBackStack = { navController.popBackStack() },
+                level = route.level,
+                enableSuggest = route.enableSuggest,
+                enableTakeBack = route.enableTakeBack
             )
         }
         composable<SetupTwoPeople> {

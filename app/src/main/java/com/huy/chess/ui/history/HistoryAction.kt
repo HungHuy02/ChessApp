@@ -9,4 +9,5 @@ sealed class HistoryAction {
     data object ClickedRotate: HistoryAction()
     data object CloseDialog: HistoryAction()
     data class ClickedNotation(val index: Int): HistoryAction()
+    data class UpdateId(val id: Long): HistoryAction()
 }

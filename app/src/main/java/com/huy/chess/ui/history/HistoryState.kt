@@ -10,5 +10,6 @@ data class HistoryState (
     val topAvatar: String = "",
     val showDialog: Boolean = false,
     val currentFen: Int = 0,
-    val fen: String? = null
+    val fen: String? = null,
+    val id: String = ""
 )

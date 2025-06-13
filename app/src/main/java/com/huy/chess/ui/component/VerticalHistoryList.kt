@@ -41,7 +41,8 @@ fun VerticalHistoryList(
                 image = "",
                 name = it.black,
                 elo = it.blackElo,
-                result = it.result
+                result = it.result,
+                onClick = {}
             )
         }
     }
@@ -54,18 +55,20 @@ fun VerticalHistoryItem(
     image: String?,
     name: String,
     elo: Int,
-    result: String
+    result: String,
+    onClick: () -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
-            .clickable {  }
+            .clickable { onClick() }
     ) {
         Icon(
             painter = iconTime,
             contentDescription = "icon time",
-            tint = Color.Unspecified
+            tint = Color.Unspecified,
+            modifier = Modifier.size(40.dp)
         )
         AsyncImage(
             model = image,
@@ -85,8 +88,10 @@ fun VerticalHistoryItem(
                 "0-1" -> "-"
                 else -> result },
             modifier = Modifier
-                .background(Color.Red)
-                .padding(2.dp)
+                .background(when(result) {
+                    "1-0" -> Color.Green
+                    "0-1" -> Color.Red
+                    else -> Color.DarkGray})
 
         )
         Icon(

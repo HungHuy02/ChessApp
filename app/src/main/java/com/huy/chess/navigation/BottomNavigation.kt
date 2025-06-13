@@ -60,7 +60,8 @@ fun NavGraphBuilder.bottomDestination(
     navigateSolvePuzzles: () -> Unit,
     navigateSettings: () -> Unit,
     navigateProfile: () -> Unit,
-    navigateHistory: () -> Unit
+    navigateHistory: (Long) -> Unit,
+    navigateSetupBot: () -> Unit
 
 ) {
     composable<TopLevelDestination.Home> {
@@ -69,7 +70,7 @@ fun NavGraphBuilder.bottomDestination(
             navigateToHistory = navigateHistory,
             navigateToGameArchive = { },
             navigateToDailyPuzzle = navigateDailyPuzzle,
-            navigateToBot = navigateHistory,
+            navigateToBot = navigateSetupBot,
             navigateToPuzzle = {  },
             navigateToStudy = { },
             showPlayOnlineDialog = { navController.navigate(PlayOnline) }
