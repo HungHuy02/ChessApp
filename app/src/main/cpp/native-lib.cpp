@@ -59,6 +59,14 @@ Java_com_huy_chess_ui_component_ChessBoardKt_fenOtherPart(JNIEnv *env, jobject t
     return env->NewStringUTF(result.c_str());
 }
 
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_huy_chess_ui_component_ChessBoardKt_pgnToBoard(JNIEnv *env, jobject thiz, jstring jPgn) {
+    const char *pgn = env->GetStringUTFChars(jPgn, 0);
+    string result = pgnToBoard(pgn);
+    return env->NewStringUTF(result.c_str());
+}
+
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     initAll();
     return JNI_VERSION_1_6;

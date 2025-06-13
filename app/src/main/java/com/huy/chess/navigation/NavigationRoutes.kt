@@ -61,6 +61,8 @@ data class PlayBot(val level: Int)
 data object OnlineWaiting
 @Serializable
 data object Online
+@Serializable
+data object History
 
 sealed class TopLevelDestination {
     @Serializable

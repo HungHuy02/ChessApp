@@ -144,7 +144,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'P',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -172,7 +172,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'p',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -472,7 +472,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'P',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -500,7 +500,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'p',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -798,7 +798,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'P',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -835,7 +835,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'p',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target
                             )
                             board[x][y] = Piece(x, y, target)
@@ -1198,7 +1198,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'P',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target,
                                 true
                             )
@@ -1227,7 +1227,7 @@ fun ChessBoard(
                                 promotionPair.first,
                                 'p',
                                 promotionPair.second,
-                                ' ',
+                                board[x][y].piece,
                                 target,
                                 true
                             )
@@ -1420,6 +1420,75 @@ fun ChessBoard(
     }
 }
 
+// Chess board for history
+@Composable
+fun ChessBoard(
+    modifier: Modifier = Modifier,
+    autoRotate: Boolean = true,
+    fen: String? = null
+) {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current.density
+    val boardSize = (configuration.screenWidthDp * density).toInt()
+    val cellSize = boardSize / 8
+    val boardBitmap = remember { Utils.loadImageBimap(context, R.drawable.chess_board, boardSize) }
+    val list = remember { getChessPiecePainters(context, cellSize) }
+    var board by remember { mutableStateOf(Utils.initBoard()) }
+
+    var movedSpot: List<Piece> by remember { mutableStateOf(emptyList()) }
+    val pieceOffset = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+    var isMoving by remember { mutableStateOf(false) }
+
+    fen?.let {
+        LaunchedEffect(it) {
+            val result = Utils.fenToBoard(it)
+            board = result.first
+        }
+    }
+
+    Canvas(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(configuration.screenWidthDp.dp)
+    ) {
+        val cellSize = size.width / 8
+        val haflCellSize = cellSize / 2
+//        val (pieceRotate, boardRotate) = if (autoRotate) 0f to 180f else if (!autoRotate) 180f to 0f else 0f to 0f
+        val (pieceRotate, boardRotate) =  0f to 0f
+        rotate(boardRotate) {
+            drawImage(
+                image = boardBitmap,
+                topLeft = Offset(0f, 0f)
+            )
+            for (spot in movedSpot) {
+                drawRect(
+                    color = Color.Yellow.copy(alpha = 0.5f),
+                    topLeft = Offset(spot.y * cellSize, spot.x * cellSize),
+                    size = Size(cellSize, cellSize)
+                )
+            }
+            for (row in 0 until 8) {
+                for (col in 0 until 8) {
+                    val piece = board[row][col]
+                    if (piece.piece != ' ') {
+                        val offset = Offset(
+                            col * cellSize,
+                            row * cellSize
+                        )
+                        rotate(pieceRotate, offset + Offset(haflCellSize, haflCellSize)) {
+                            drawImage(
+                                image = list[getPieceDrawableId(piece.piece)],
+                                topLeft = offset
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 private fun DrawScope.drawPawnPromoteSelection(
     promotionPair: Pair<Int, Int>,
     whiteSide: Boolean,
@@ -1600,3 +1669,4 @@ external fun getLegalMoves(square: Int): IntArray
 external fun parseFen(fen: String): Boolean
 external fun hasOneLegalMove(): Int
 external fun fenOtherPart(): String
+external fun pgnToBoard(pgn: String) : String

@@ -1,10 +1,13 @@
 package com.huy.chess.utils
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.graphics.ImageBitmap
@@ -22,6 +25,32 @@ import com.huy.chess.R
 import kotlin.math.ceil
 
 object Utils {
+
+    fun copyToClipboard(context: Context, label: String = "PGN", text: String) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText(label, text)
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(context, "Đã sao chép vào bộ nhớ tạm", Toast.LENGTH_SHORT).show()
+    }
+
+    fun extractMovesFromPGN(pgn: String): List<String> {
+        return pgn
+            .split(Regex("\\s+"))
+            .filter { !it.matches(Regex("\\d+\\.")) }
+    }
+
+    fun generatePGNUpTo(moves: List<String>, upToMoveNumber: Int): String {
+        val builder = StringBuilder()
+
+        for (i in 0 until minOf(upToMoveNumber, moves.size)) {
+            if (i % 2 == 0) {
+                builder.append("${i / 2 + 1}. ")
+            }
+            builder.append("${moves[i]} ")
+        }
+
+        return builder.toString().trim()
+    }
 
     fun fenToBoard(fen: String): Pair<List<MutableList<Piece>>, Boolean> {
         var list: List<MutableList<Piece>> = List(8) { mutableListOf() }

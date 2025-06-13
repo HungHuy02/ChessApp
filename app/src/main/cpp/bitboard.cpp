@@ -10,7 +10,8 @@
 #include "bitboard.h"
 #include <android/log.h>
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "MyNative", __VA_ARGS__)
-
+#include <string_view>
+#include <sstream>
 
 using namespace std;
 
@@ -127,31 +128,35 @@ void initCharPieces() {
 #define GET_BIT(board, square) (board & (1ULL << square))
 #define POP_BIT(board, square) (GET_BIT(board, square) ? board ^= (1ULL << square) : 0)
 
+#define FILE_NOTATION_TO_INT(file) (file - 'a')
+#define RANK_NOTATION_TO_INT(rank) ('8' - rank)
+
 U64 bitboards[12];
 U64 occupancies[3];
 int side;
 int enpassant = no_sq;
 int castle;
-int halfMoveClock;
+int halfMove;
 int fullMove;
 
 
 U64 zobristTable[12][64];
 static unordered_map<U64, int> history;
 
-#define COPY_BOARD()                                                                    \
-    U64 bitboards_copy[12], occupancies_copy[3];                                        \
-    int side_copy, enpassant_copy, castle_copy, halfMoveClock_copy, fullMove_copy;      \
-    memcpy(bitboards_copy, bitboards, 96);                                              \
-    memcpy(occupancies_copy, occupancies, 24);                                          \
-    side_copy = side, enpassant_copy = enpassant, castle_copy = castle;                 \
-    halfMoveClock_copy = halfMoveClock, fullMove_copy = fullMove;
+#define COPY_BOARD()                                                            \
+    U64 bitboards_copy[12], occupancies_copy[3];                                \
+    int side_copy, enpassant_copy, castle_copy, halfMove_copy, fullMove_copy;   \
+    memcpy(bitboards_copy, bitboards, 96);                                      \
+    memcpy(occupancies_copy, occupancies, 24);                                  \
+    side_copy = side, enpassant_copy = enpassant, castle_copy = castle;         \
+    halfMove_copy = halfMove, fullMove_copy = fullMove;
+
 
 #define TAKE_BACK()                                                       \
     memcpy(bitboards, bitboards_copy, 96);                                \
     memcpy(occupancies, occupancies_copy, 24);                            \
     side = side_copy, enpassant = enpassant_copy, castle = castle_copy;   \
-    halfMoveClock = halfMoveClock_copy, fullMove = fullMove_copy;
+    halfMove = halfMove_copy, fullMove = fullMove_copy;
 /*
 8   0 1 1 1 1 1 1 1
 7   0 1 1 1 1 1 1 1
@@ -469,8 +474,6 @@ bool parseFen(const char *fen) {
     side = 0;
     enpassant = no_sq;
     castle = 0;
-    halfMoveClock = 0;
-    fullMove = 0;
     for(int rank = 0; rank < 8; rank++) {
         for (int file = 0; file < 8; file++) {
             int square = rank * 8 + file;
@@ -518,17 +521,17 @@ bool parseFen(const char *fen) {
 
     fen += 2;
 
-    int i = 0;
-    while (isdigit(fen[i])) {
-        halfMoveClock = halfMoveClock * 10 + (fen[i] - '0');
-        i++;
+    halfMove = 0;
+    while (isdigit(*fen)) {
+        halfMove = halfMove * 10 + (*fen - '0');
+        fen++;
     }
-    fen += i + 1;
+    fen++;
 
-    i = 0;
-    while (isdigit(fen[i])) {
-        fullMove = fullMove * 10 + (fen[i] - '0');
-        i++;
+    fullMove = 0;
+    while (isdigit(*fen)) {
+        fullMove = fullMove * 10 + (*fen - '0');
+        fen++;
     }
 
     for(int piece = P; piece <= K; piece++) {
@@ -541,6 +544,76 @@ bool parseFen(const char *fen) {
     occupancies[both] |= occupancies[black];
     recordPosition(computeZobristHash());
     return side == white;
+}
+
+string toFen() {
+    stringstream ss;
+    U64 bitboard = occupancies[both];
+    int lastSquare = 0;
+    int rowCount = 0;
+    while(bitboard) {
+        int square = getLastSignificant1stBit(bitboard);
+        POP_BIT(bitboard, square);
+        int duration = square - lastSquare;
+        if(duration > 0) {
+            lastSquare += duration;
+            if(rowCount + duration >= 8) {
+                int value = 8 - rowCount;
+                duration -= value;
+                ss << value;
+                rowCount = 0;
+                ss << '/';
+            }
+            while(duration >= 8) {
+                duration -= 8;
+                ss << 8 << '/';
+            }
+            if (duration != 0) {
+                ss << duration;
+                rowCount += duration;
+            };
+        }
+        if(GET_BIT(occupancies[white], square)) {
+            for(int piece = P; piece <= K; piece++)
+                if(GET_BIT(bitboards[piece], square)) {
+                    ss << asciiPieces[piece];
+                    break;
+                }
+        } else {
+            for(int piece = p; piece <= k; piece++)
+                if(GET_BIT(bitboards[piece], square)) {
+                    ss << asciiPieces[piece];
+                    break;
+                }
+        }
+        rowCount++;
+        if(rowCount == 8 && square < 63) {
+            rowCount = 0;
+            ss << '/';
+        }
+        lastSquare++;
+        if (!bitboard && square < 63) ss << 64 - lastSquare;
+    }
+
+    ss << ' ' << (side == white ? 'w' : 'b');
+
+    ss << ' ';
+    if (!castle) ss << '-';
+    else {
+        if (castle & KS) ss << 'K';
+        if (castle & QS) ss << 'Q';
+        if (castle & ks) ss << 'k';
+        if (castle & qs) ss << 'q';
+    }
+
+    ss << ' ';
+
+    if (enpassant != no_sq) ss << squareToCoordinate[enpassant];
+    else ss << '-';
+
+    ss << ' ' << halfMove << ' ' << fullMove;
+
+    return ss.str();
 }
 
 string fenOtherPart() {
@@ -561,7 +634,7 @@ string fenOtherPart() {
         result += char('1' + rank);
         result += ' ';
     }
-    result += to_string(halfMoveClock) + ' ';
+    result += to_string(halfMove) + ' ';
     result += to_string(fullMove);
     return result;
 }
@@ -809,14 +882,15 @@ static inline int makeMove(int move, int move_flag) {
         int enpass = GET_MOVE_ENPASSANT(move);
         int castling = GET_MOVE_CASTLING(move);
 
+        halfMove++;
+
+        if(piece == p || piece == P) halfMove = 0;
+
         POP_BIT(bitboards[piece], sourceSquare);
         SET_BIT(bitboards[piece], targetSquare);
 
-        if(piece == p || piece == P) halfMoveClock = 0;
-        else halfMoveClock++;
-
         if (capture) {
-            halfMoveClock = 0;
+            halfMove = 0;
             int start_piece, end_piece;
             if (side == white) {
                 start_piece = p;
@@ -840,6 +914,7 @@ static inline int makeMove(int move, int move_flag) {
         }
 
         if (enpass) {
+            halfMove = 0;
             (side == white) ? POP_BIT(bitboards[p], (targetSquare + 8)) :
             POP_BIT(bitboards[P], (targetSquare - 8));
         }
@@ -884,7 +959,7 @@ static inline int makeMove(int move, int move_flag) {
         occupancies[both] |= occupancies[white];
         occupancies[both] |= occupancies[black];
 
-        if(side == black) fullMove++;
+        if (side) fullMove++;
         side ^= 1;
         if (isSquareAttacked((side == white) ? getLastSignificant1stBit(bitboards[k]) : getLastSignificant1stBit(bitboards[K]), side)) {
             TAKE_BACK()
@@ -1216,8 +1291,7 @@ int hasOneLegalMove() {
     return isKingChecked ? 2 : 3;
 }
 
-static inline vector<int> getOtherSamePieceSquares(U64 bitboard, int square) {
-    POP_BIT(bitboard, square);
+static inline vector<int> getOtherSamePieceSquares(U64 bitboard) {
     vector<int> squares;
     while(bitboard) {
         squares.push_back(getLastSignificant1stBit(bitboard));
@@ -1227,84 +1301,58 @@ static inline vector<int> getOtherSamePieceSquares(U64 bitboard, int square) {
 }
 
 int checkSamePieceCanMoveToOneSpot(int source, int piece, int target) {
-    vector<U64> attackMask;
-    U64 pieceBoard = bitboards[piece];
+    U64 pieceBoard = 0ULL;
     int rank = source / 8;
     int file = source % 8;
     bool sameCol = false;
     bool sameRow = false;
     int count = 0;
-    vector<int> squares = getOtherSamePieceSquares(pieceBoard, source);
+    switch (piece) {
+        case N:
+            pieceBoard = knightAttacks[target] & bitboards[N];
+            break;
+        case n:
+            pieceBoard = knightAttacks[target] & bitboards[n];
+            break;
+        case R:
+            pieceBoard = getRookAttacks(target, occupancies[both]) & bitboards[R];
+            break;
+        case r:
+            pieceBoard = getRookAttacks(target, occupancies[both]) & bitboards[r];
+            break;
+        case B:
+            pieceBoard = getBishopAttacks(target, occupancies[both]) & bitboards[B];
+            break;
+        case b:
+            pieceBoard = getBishopAttacks(target, occupancies[both]) & bitboards[b];
+            break;
+        case Q:
+            pieceBoard = getQueenAttacks(target, occupancies[both]) & bitboards[Q];
+            break;
+        case q:
+            pieceBoard = getQueenAttacks(target, occupancies[both]) & bitboards[q];
+            break;
+
+    }
+    vector<int> squares = getOtherSamePieceSquares(pieceBoard);
     if(squares.size() > 0) {
-        switch (piece) {
-            case N:
-            case n:
-                for(int square: squares) {
-                    if(knightAttacks[square] & (1ULL << target)) {
-                        count++;
-                        if(square % 8 == file) {
-                            sameCol = true;
-                            continue;
-                        }
-                        if(square / 8 == rank) {
-                            sameRow = true;
-                        }
-                    }
-                }
-                break;
-            case R:
-            case r:
-                for(int square: squares) {
-                    if(getRookAttacks(source, occupancies[both]) & (1ULL << target)) {
-                        count++;
-                        if(square % 8 == file) {
-                            sameCol = true;
-                            continue;
-                        }
-                        if(square / 8 == rank) {
-                            sameRow = true;
-                        }
-                    }
-                }
-                break;
-            case B:
-            case b:
-                for(int square: squares) {
-                    if(getBishopAttacks(source, occupancies[both]) & (1ULL << target)) {
-                        count++;
-                        if(square % 8 == file) {
-                            sameCol = true;
-                            continue;
-                        }
-                        if(square / 8 == rank) {
-                            sameRow = true;
-                        }
-                    }
-                }
-                break;
-            case Q:
-            case q:
-                for(int square: squares) {
-                    if(getQueenAttacks(source, occupancies[both]) & (1ULL << target)) {
-                        count++;
-                        if(square % 8 == file) {
-                            sameCol = true;
-                            continue;
-                        }
-                        if(square / 8 == rank) {
-                            sameRow = true;
-                        }
-                    }
-                }
-                break;
+        for(int square: squares) {
+            count++;
+            if(square % 8 == file) {
+                sameCol = true;
+                continue;
+            }
+            if(square / 8 == rank) {
+                sameRow = true;
+            }
         }
-        if(sameCol && sameRow) {
-            return all;
-        } else if(sameCol) {
-            return column;
-        } else if (sameRow || count > 0) {
-            return row;
-        }
+    }
+    if(sameCol && sameRow) {
+        return all;
+    } else if(sameCol) {
+        return column;
+    } else if (sameRow || count > 0) {
+        return row;
     }
     return only_one;
 }
@@ -1385,9 +1433,13 @@ string generateAlgebraicNotation(int move) {
     }
     if(capture) notation += "x";
     notation += squareToCoordinate[targetSquare];
+    if (promoted_piece) {
+        notation += "=";
+        notation += asciiPieces[promoted_piece];
+    }
+    if(isSquareAttacked(getLastSignificant1stBit(bitboards[side ? k : K]), !side)) notation += "+";
     return notation;
 }
-
 
 MoveResult makeMove(int source, char sP, int target, char tP, char toP, bool isPuzzle) {
     MoveResult moveResult;
@@ -1420,9 +1472,10 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP, bool isP
         case P:
             if (source >= a7 && source <= h7) {
                 if(toP != ' ') {
-                    int move = ENCODE_MOVE(source, target, P, charPieces[toP], 0, 0, 0, 0);
+                    int move = ENCODE_MOVE(source, target, P, charPieces[toP], (targetPiece != -1), 0, 0, 0);
                     if (makeMove(move, all_moves)) {
-                        moveResult.diffMove = 0;
+                        moveResult.diffMove = 65;
+                        moveResult.notation = generateAlgebraicNotation(move);
                         return moveResult;
                     }
                 } else {
@@ -1494,9 +1547,10 @@ MoveResult makeMove(int source, char sP, int target, char tP, char toP, bool isP
         case p:
             if (source >= a2 && source <= h2) {
                 if(toP != ' ') {
-                    int move = ENCODE_MOVE(source, target, P, charPieces[toP], 0, 0, 0, 0);
+                    int move = ENCODE_MOVE(source, target, P, charPieces[toP], (targetPiece != -1), 0, 0, 0);
                     if (makeMove(move, all_moves)) {
-                        moveResult.diffMove = 0;
+                        moveResult.diffMove = 65;
+                        moveResult.notation = generateAlgebraicNotation(move);
                         TAKE_BACK()
                         return moveResult;
                     }
@@ -1730,6 +1784,440 @@ vector<int> getLegalMoves(int encodeSquare) {
 
     TAKE_BACK()
     return legalMoves;
+}
+
+int notationToMove(string_view notation) {
+    char firstChar = notation[0];
+    int length = notation.size();
+    if (notation[length - 1] == '+' || notation[length - 1] == '#') length--;
+    int move, file, rank, target, source, piece, checkValue;
+    char check;
+    switch(firstChar) {
+        case 'N':
+            piece = side ? n : N;
+            switch(length) {
+                case 3:
+                    file = FILE_NOTATION_TO_INT(notation[1]);
+                    rank = RANK_NOTATION_TO_INT(notation[2]);
+                    target = rank * 8 + file;
+                    source = getLastSignificant1stBit(bitboards[piece] & knightAttacks[target]);
+                    return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    break;
+                case 4:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    check = notation[1];
+                    if (check == 'x') {
+                        source = getLastSignificant1stBit(bitboards[piece] & knightAttacks[target]);
+                        return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    } else if (check < 'a') {
+                        int sourceRank = RANK_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & knightAttacks[target];
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square / 8 == sourceRank) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & knightAttacks[target];
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square % 8 == sourceFile) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    }
+                    break;
+                case 5:
+                    file = FILE_NOTATION_TO_INT(notation[3]);
+                    rank = RANK_NOTATION_TO_INT(notation[4]);
+                    target = rank * 8 + file;
+                    if (notation[2] == 'x') {
+                        check = notation[1];
+                        if (check < 'a') {
+                            int sourceRank = RANK_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & knightAttacks[target];
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square / 8 == sourceRank) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        } else {
+                            int sourceFile = FILE_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & knightAttacks[target];
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square % 8 == sourceFile) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                        int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                        int source = sourceRank * 8 + sourceFile;
+                        return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    }
+                    break;
+                case 6:
+                    file = FILE_NOTATION_TO_INT(notation[4]);
+                    rank = RANK_NOTATION_TO_INT(notation[5]);
+                    target = rank * 8 + file;
+
+                    int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                    int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                    source = sourceRank * 8 + sourceFile;
+                    return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    break;
+            }
+            break;
+        case 'B':
+            piece = side ? b : B;
+            switch(length) {
+                case 3:
+                    file = FILE_NOTATION_TO_INT(notation[1]);
+                    rank = RANK_NOTATION_TO_INT(notation[2]);
+                    target = rank * 8 + file;
+                    source = getLastSignificant1stBit(bitboards[piece] & getBishopAttacks(target, occupancies[both]));
+                    return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    break;
+                case 4:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    check = notation[1];
+                    if (check == 'x') {
+                        source = getLastSignificant1stBit(bitboards[piece] & getBishopAttacks(target, occupancies[both]));
+                        return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    } else if (check < 'a') {
+                        int sourceRank = RANK_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getBishopAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square / 8 == sourceRank) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getBishopAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square % 8 == sourceFile) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    }
+                    break;
+                case 5:
+                    file = FILE_NOTATION_TO_INT(notation[3]);
+                    rank = RANK_NOTATION_TO_INT(notation[4]);
+                    target = rank * 8 + file;
+                    if (notation[2] == 'x') {
+                        check = notation[1];
+                        if (check < 'a') {
+                            int sourceRank = RANK_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getBishopAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square / 8 == sourceRank) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        } else {
+                            int sourceFile = FILE_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getBishopAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square % 8 == sourceFile) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                        int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                        int source = sourceRank * 8 + sourceFile;
+                        return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    }
+                    break;
+                case 6:
+                    file = FILE_NOTATION_TO_INT(notation[4]);
+                    rank = RANK_NOTATION_TO_INT(notation[5]);
+                    target = rank * 8 + file;
+
+                    int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                    int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                    source = sourceRank * 8 + sourceFile;
+                    return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    break;
+            }
+            break;
+        case 'Q':
+            piece = side ? q : Q;
+            switch(length) {
+                case 3:
+                    file = FILE_NOTATION_TO_INT(notation[1]);
+                    rank = RANK_NOTATION_TO_INT(notation[2]);
+                    target = rank * 8 + file;
+                    source = getLastSignificant1stBit(bitboards[piece] & getQueenAttacks(target, occupancies[both]));
+                    return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    break;
+                case 4:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    check = notation[1];
+                    if (check == 'x') {
+                        source = getLastSignificant1stBit(bitboards[piece] & getQueenAttacks(target, occupancies[both]));
+                        return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    } else if (check < 'a') {
+                        int sourceRank = RANK_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getQueenAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square / 8 == sourceRank) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getQueenAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square % 8 == sourceFile) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    }
+                    break;
+                case 5:
+                    file = FILE_NOTATION_TO_INT(notation[3]);
+                    rank = RANK_NOTATION_TO_INT(notation[4]);
+                    target = rank * 8 + file;
+                    if (notation[2] == 'x') {
+                        check = notation[1];
+                        if (check < 'a') {
+                            int sourceRank = RANK_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getQueenAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square / 8 == sourceRank) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        } else {
+                            int sourceFile = FILE_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getQueenAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square % 8 == sourceFile) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                        int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                        int source = sourceRank * 8 + sourceFile;
+                        return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    }
+                    break;
+                case 6:
+                    file = FILE_NOTATION_TO_INT(notation[4]);
+                    rank = RANK_NOTATION_TO_INT(notation[5]);
+                    target = rank * 8 + file;
+
+                    int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                    int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                    source = sourceRank * 8 + sourceFile;
+                    return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    break;
+            }
+            break;
+        case 'R':
+            piece = side ? r : R;
+            switch(length) {
+                case 3:
+                    file = FILE_NOTATION_TO_INT(notation[1]);
+                    rank = RANK_NOTATION_TO_INT(notation[2]);
+                    target = rank * 8 + file;
+                    source = getLastSignificant1stBit(bitboards[piece] & getRookAttacks(target, occupancies[both]));
+                    return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    break;
+                case 4:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    check = notation[1];
+                    if (check == 'x') {
+                        source = getLastSignificant1stBit(bitboards[piece] & getRookAttacks(target, occupancies[both]));
+                        return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    } else if (check < 'a') {
+                        int sourceRank = RANK_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getRookAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square / 8 == sourceRank) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(check);
+                        U64 knightPositionsBoard = bitboards[piece] & getRookAttacks(target, occupancies[both]);
+                        while(knightPositionsBoard) {
+                            int square = getLastSignificant1stBit(knightPositionsBoard);
+                            if (square % 8 == sourceFile) {
+                                return ENCODE_MOVE(square, target, piece, 0, 0, 0, 0, 0);
+                            }
+                            POP_BIT(knightPositionsBoard, square);
+                        }
+                    }
+                    break;
+                case 5:
+                    file = FILE_NOTATION_TO_INT(notation[3]);
+                    rank = RANK_NOTATION_TO_INT(notation[4]);
+                    target = rank * 8 + file;
+                    if (notation[2] == 'x') {
+                        check = notation[1];
+                        if (check < 'a') {
+                            int sourceRank = RANK_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getRookAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square / 8 == sourceRank) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        } else {
+                            int sourceFile = FILE_NOTATION_TO_INT(check);
+                            U64 knightPositionsBoard = bitboards[piece] & getRookAttacks(target, occupancies[both]);
+                            while(knightPositionsBoard) {
+                                int square = getLastSignificant1stBit(knightPositionsBoard);
+                                if (square % 8 == sourceFile) {
+                                    return ENCODE_MOVE(square, target, piece, 0, 1, 0, 0, 0);
+                                }
+                                POP_BIT(knightPositionsBoard, square);
+                            }
+                        }
+                    } else {
+                        int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                        int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                        int source = sourceRank * 8 + sourceFile;
+                        return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    }
+                    break;
+                case 6:
+                    file = FILE_NOTATION_TO_INT(notation[4]);
+                    rank = RANK_NOTATION_TO_INT(notation[5]);
+                    target = rank * 8 + file;
+
+                    int sourceFile = FILE_NOTATION_TO_INT(notation[1]);
+                    int sourceRank = RANK_NOTATION_TO_INT(notation[2]);
+                    source = sourceRank * 8 + sourceFile;
+                    return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    break;
+            }
+            break;
+        case 'K':
+            file = FILE_NOTATION_TO_INT(notation[length - 2]);
+            rank = RANK_NOTATION_TO_INT(notation[length - 1]);
+            target = rank * 8 + file;
+            source = getLastSignificant1stBit(bitboards[(side ? k : K)]);
+            return ENCODE_MOVE(source, target, (side ? k : K), 0, (notation[1] == 'x' ? 1 : 0), 0, 0, 0);
+            break;
+        case 'O':
+            if(notation.size() == 3) {
+                if (side == white) {
+                    int source = getLastSignificant1stBit(bitboards[K]);
+                    return ENCODE_MOVE(source, g1, K, 0, 0, 0, 0, 1);
+                } else {
+                    int source = getLastSignificant1stBit(bitboards[k]);
+                    return ENCODE_MOVE(source, g8, k, 0, 0, 0, 0, 1);
+                }
+            } else {
+                if (side == white) {
+                    int source = getLastSignificant1stBit(bitboards[K]);
+                    return ENCODE_MOVE(source, c1, K, 0, 0, 0, 0, 1);
+                } else {
+                    int source = getLastSignificant1stBit(bitboards[k]);
+                    return ENCODE_MOVE(source, c8, k, 0, 0, 0, 0, 1);
+                }
+            }
+            break;
+        default:
+            if (notation[0] < 'a' && notation[0] > 'h') return -1;
+            piece = side ? p : P;
+            switch(length) {
+                case 2:
+                    file = FILE_NOTATION_TO_INT(notation[0]);
+                    rank = RANK_NOTATION_TO_INT(notation[1]);
+                    target = rank * 8 + file;
+                    checkValue = side ? -8 : 8;
+                    source = target + checkValue;
+                    if (GET_BIT(bitboards[piece], source)) {
+                        return ENCODE_MOVE(source, target, piece, 0, 0, 0, 0, 0);
+                    } else {
+                        return ENCODE_MOVE(source + checkValue, target, piece, 0, 0, 1, 0, 0);
+                    }
+                    break;
+                case 4:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    check = notation[1];
+                    if(check == 'x') {
+                        int sourceFile = FILE_NOTATION_TO_INT(notation[0]);
+                        int sourceRank = rank + (side ? -1 : 1);
+                        source = sourceRank * 8 + sourceFile;
+                        if (enpassant == target) {
+                            return ENCODE_MOVE(source, target, piece, 0, 0, 0, 1, 0);
+                        } else
+                            return ENCODE_MOVE(source, target, piece, 0, 1, 0, 0, 0);
+                    } else {
+                        return ENCODE_MOVE(target + (side ? -8 : 8), target, piece, charPieces[notation[5]], 0, 0, 0, 0);
+                    }
+                    break;
+                case 6:
+                    file = FILE_NOTATION_TO_INT(notation[2]);
+                    rank = RANK_NOTATION_TO_INT(notation[3]);
+                    target = rank * 8 + file;
+                    source = (side ? (rank - 1) : (rank + 1)) * 8 + FILE_NOTATION_TO_INT(notation[0]);
+                    return ENCODE_MOVE(source, target, piece, charPieces[notation[5]], 1, 0, 0, 0);
+                    break;
+            }
+    }
+    return -1;
+}
+
+string pgnToBoard(const string& pgn) {
+    istringstream iss(pgn);
+    string part;
+    while(iss >> part) {
+        if(isdigit(part[0])) continue;
+        if(part == "1-0" || part == "0-1" || part == "1/2-1/2") continue;
+        int move = notationToMove(part);
+        if (move != -1) makeMove(move, all_moves);
+    }
+    return toFen();
 }
 
 void initAll() {
