@@ -2,7 +2,6 @@ package com.huy.chess.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.data.service.StockfishService
 import com.huy.chess.ui.component.parseFen
@@ -24,9 +23,6 @@ class PlayBotViewModel @Inject constructor(
 
     init {
         parseFen(Constants.START_FEN)
-        viewModelScope.launch {
-            stockfishService.setupNewGame(level = 2)
-        }
     }
 
     override fun processAction(action: PlayBotAction) {
@@ -44,7 +40,6 @@ class PlayBotViewModel @Inject constructor(
                 }
             }
             is PlayBotAction.Move -> {
-                Log.e("tag", action.fen ?: "null")
                 updateState {
                     val notation = state.value.notationList.toMutableList()
                     notation.add(action.move)
@@ -66,6 +61,12 @@ class PlayBotViewModel @Inject constructor(
                     else -> GameResult.DRAW_INSUFFICIENT_MATERIAL
                 }
                 sendEffect(PlayBotEffect.ShowEndGameDialog(gameResult))
+            }
+            is PlayBotAction.AddSetup -> {
+                viewModelScope.launch {
+                    stockfishService.setupNewGame(level = action.level, enableSuggestion = action.enableSuggest)
+                }
+                updateState { it.copy(enableTakeBack = action.enableTakeBack) }
             }
         }
     }

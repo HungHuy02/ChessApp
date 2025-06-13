@@ -4,5 +4,6 @@ data class PlayBotState (
     val notationList: List<String> = emptyList(),
     val capturedPiece: MutableMap<Char, Int> = mutableMapOf(),
     val nextMove: String? = null,
-    val listFen: MutableList<String> = mutableListOf()
+    val listFen: MutableList<String> = mutableListOf(),
+    val enableTakeBack: Boolean = false
 )

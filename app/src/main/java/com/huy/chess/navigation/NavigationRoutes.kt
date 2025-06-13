@@ -56,13 +56,13 @@ object PlayOnline
 @Serializable
 object SolvePuzzles
 @Serializable
-data class PlayBot(val level: Int)
+data class PlayBot(val level: Int, val enableTakeBack: Boolean, val enableSuggest: Boolean)
 @Serializable
 data object OnlineWaiting
 @Serializable
 data object Online
 @Serializable
-data object History
+data class History(val id: Long)
 
 sealed class TopLevelDestination {
     @Serializable

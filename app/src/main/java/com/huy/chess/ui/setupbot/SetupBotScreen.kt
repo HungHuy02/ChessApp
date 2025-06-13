@@ -38,14 +38,14 @@ import com.huy.chess.viewmodel.SetupBotViewModel
 fun SetupBotScreen(
     viewModel: SetupBotViewModel = hiltViewModel(),
     popBackStack: () -> Unit,
-    navigatePlayBot: (Int) -> Unit
+    navigatePlayBot: (Int, Boolean, Boolean) -> Unit
 ) {
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.event.collect {
             when(it) {
                 SetupBotEffect.PopBackStack -> popBackStack()
-                is SetupBotEffect.NavigatePlayBot -> navigatePlayBot(it.level.toInt())
+                is SetupBotEffect.NavigatePlayBot -> navigatePlayBot(it.level.toInt(), it.suggest, it.tackBack)
             }
         }
     }

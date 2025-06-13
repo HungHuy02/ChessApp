@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.huy.chess.base.BaseViewModel
 import com.huy.chess.base.NoAction
 import com.huy.chess.data.database.repositories.LocalHistoryRepository
+import com.huy.chess.data.model.History
 import com.huy.chess.data.network.repository.HistoryRepository
 import com.huy.chess.data.network.repository.PuzzleRepository
 import com.huy.chess.data.network.repository.UserRepository
@@ -79,10 +80,11 @@ class WelcomeViewModel @Inject constructor(
                     }
                 }
             historyRepository.getHistories(1)
-                .onSuccess {
+                .onSuccess { list ->
+                    val histories: List<History> = list
                     localHistoryRepository.insertAll(
-                        it.historyItems.map { history ->
-                            history.toHistoryEntity()
+                        histories.map { item ->
+                            item.toHistoryEntity()
                         }
                     )
                 }

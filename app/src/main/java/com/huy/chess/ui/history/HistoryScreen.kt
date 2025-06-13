@@ -28,11 +28,13 @@ import com.huy.chess.viewmodel.HistoryViewModel
 @Composable
 fun HistoryScreen(
     viewModel: HistoryViewModel = hiltViewModel(),
+    id: Long,
     popBackStack: () -> Unit
 ) {
     val context = LocalContext.current
     val state = viewModel.state.collectAsState().value
     LaunchedEffect(Unit) {
+        viewModel.sendAction(HistoryAction.UpdateId(id))
         viewModel.event.collect {
             when(it) {
                 HistoryEffect.PopBackStack -> popBackStack()

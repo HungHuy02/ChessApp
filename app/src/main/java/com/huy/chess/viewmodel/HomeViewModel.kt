@@ -60,6 +60,7 @@ class HomeViewModel @Inject constructor(
             HomeAction.ClickedPuzzle -> sendEffect(HomeEffect.NavigatePuzzle)
             HomeAction.ClickedStudy -> sendEffect(HomeEffect.NavigateStudy)
             HomeAction.ClickedPlay -> sendEffect(HomeEffect.NavigatePlay)
+            is HomeAction.ClickedHistory -> sendEffect(HomeEffect.NavigateHistory(action.id))
         }
     }
 }

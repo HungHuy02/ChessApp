@@ -52,6 +52,7 @@ class SolvePuzzlesViewModel @Inject constructor(
                         nextMove = if(isOpponentMoveFirst) moves[0] else null,
                         side = isOpponentMoveFirst && !side,
                         puzzleStep = if(isOpponentMoveFirst) 1 else 0,
+                        userElo = user.elo
                     ) }
                 } else {
                     updateState { it.copy(

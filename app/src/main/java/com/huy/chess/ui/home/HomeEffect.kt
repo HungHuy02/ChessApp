@@ -6,7 +6,7 @@ sealed class HomeEffect {
     data object NavigateDailyPuzzle: HomeEffect()
     data object NavigatePlayBot: HomeEffect()
     data object NavigateStudy: HomeEffect()
-    data object NavigateHistory: HomeEffect()
+    data class NavigateHistory(val id: Long): HomeEffect()
     data object NavigateGameArchive: HomeEffect()
     data object NavigatePlay: HomeEffect()
 }

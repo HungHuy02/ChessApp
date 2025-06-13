@@ -7,4 +7,5 @@ sealed class HomeAction {
     data object ClickedBot: HomeAction()
     data object ClickedStudy: HomeAction()
     data object ClickedPlay: HomeAction()
+    data class ClickedHistory(val id: Long): HomeAction()
 }

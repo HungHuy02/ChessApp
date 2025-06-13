@@ -35,7 +35,7 @@ import com.huy.chess.viewmodel.HomeViewModel
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToPlay: () -> Unit,
-    navigateToHistory: () -> Unit,
+    navigateToHistory: (Long) -> Unit,
     navigateToGameArchive: () -> Unit,
     navigateToDailyPuzzle: () -> Unit,
     navigateToBot: () -> Unit,
@@ -49,7 +49,7 @@ fun HomeScreen(
             when (it) {
                 HomeEffect.NavigateDailyPuzzle -> navigateToDailyPuzzle()
                 HomeEffect.NavigateGameArchive -> navigateToGameArchive()
-                HomeEffect.NavigateHistory -> navigateToHistory()
+                is HomeEffect.NavigateHistory -> navigateToHistory(it.id)
                 HomeEffect.NavigatePlay -> navigateToPlay()
                 HomeEffect.NavigatePlayBot -> navigateToBot()
                 HomeEffect.NavigatePuzzle -> navigateToPuzzle()
@@ -158,7 +158,8 @@ private fun Content(
                         image = "",
                         name = it.black,
                         elo = it.blackElo,
-                        result = it.result
+                        result = it.result,
+                        onClick = { onAction(HomeAction.ClickedHistory(it.id)) }
                     )
                 }
             }

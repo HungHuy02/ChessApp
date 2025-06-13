@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.huy.chess.navigation.DailyPuzzle
 import com.huy.chess.navigation.EditProfile
 import com.huy.chess.navigation.Friends
@@ -18,6 +19,7 @@ import com.huy.chess.navigation.Profile
 import com.huy.chess.navigation.Register
 import com.huy.chess.navigation.RegisterDialog
 import com.huy.chess.navigation.SelectDate
+import com.huy.chess.navigation.SetupBot
 import com.huy.chess.navigation.SolvePuzzles
 import com.huy.chess.navigation.Welcome
 import com.huy.chess.navigation.authDestination
@@ -55,7 +57,8 @@ fun MainScreen() {
                     navigateDailyPuzzle = { navController.navigate(DailyPuzzle) },
                     navigateSolvePuzzles = { navController.navigate(SolvePuzzles) },
                     navigateSettings = { },
-                    navigateHistory = { navController.navigate(History) }
+                    navigateHistory = { navController.navigate(History(it)) },
+                    navigateSetupBot = { navController.navigate(SetupBot) }
                 )
             }
             authDestination(navController)
@@ -119,8 +122,10 @@ fun MainScreen() {
                 }
             }
             composable<History> {
+                val route = it.toRoute<History>()
                 HistoryScreen(
-                    popBackStack = { navController.popBackStack() }
+                    popBackStack = { navController.popBackStack() },
+                    id = route.id
                 )
             }
         }

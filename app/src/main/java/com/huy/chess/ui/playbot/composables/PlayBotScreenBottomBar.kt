@@ -75,11 +75,11 @@ sealed class PlayScreenBottomBarItem(
         playAction = PlayBotAction.ClickedMore
     )
 
-    data object Add : PlayScreenBottomBarItem(
-        icon = R.drawable.add_24px,
-        label = R.string.more_options_text,
-        playAction = PlayBotAction.ClickedAdd
-    )
+//    data object Add : PlayScreenBottomBarItem(
+//        icon = R.drawable.add_24px,
+//        label = R.string.more_options_text,
+//        playAction = PlayBotAction.ClickedAdd
+//    )
 
     data object Back : PlayScreenBottomBarItem(
         icon = R.drawable.chevron_left_24px,
@@ -94,6 +94,6 @@ sealed class PlayScreenBottomBarItem(
     )
 
     companion object {
-        val itemList = listOf(Options, Add, Back, Forward)
+        val itemList = listOf(Options, Back, Forward)
     }
 }

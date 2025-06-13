@@ -71,12 +71,12 @@ private fun Content(
                 iconPosition = IconPosition.NONE,
                 modifier = Modifier.fillMaxWidth()
             )
-            PuzzleButton(
-                text = stringResource(R.string.puzzle_rush_text),
-                painter = painterResource(R.drawable.rush)
-            ) {
-                onAction(PuzzleAction.ClickedPuzzleRush)
-            }
+//            PuzzleButton(
+//                text = stringResource(R.string.puzzle_rush_text),
+//                painter = painterResource(R.drawable.rush)
+//            ) {
+//                onAction(PuzzleAction.ClickedPuzzleRush)
+//            }
             PuzzleButton(
                 text = stringResource(R.string.daily_puzzle_text),
                 painter = painterResource(R.drawable.dailypuzzle)
